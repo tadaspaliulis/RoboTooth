@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">RoboTooth</string>
+    <string name="button_label_connect">Connect</string>
+    <string name="button_label_move_forward">Forward</string>
+    <string name="button_label_move_reverse">Reverse</string>
+    <string name="button_label_enable_motors">Enable motors</string>
+    <string name="text_connection_label_disconnected">Not connected to Robot</string>
+    <string name="text_connection_label_connected">Connection Established</string>
+    <string name="text_connection_label_searching">Searching for the Robot</string>
+    <string name="button_label_turn_left">Left</string>
+    <string name="button_label_turn_right">Right</string>
+    <string name="button_label_backwards">Backwards</string>
+</resources>
