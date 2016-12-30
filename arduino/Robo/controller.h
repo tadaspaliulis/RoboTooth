@@ -55,7 +55,7 @@ protected:
 
 private:
 	countdownTimer echoSensorCountdown;
-	countdownTimer magnetometerCountdown;
+	countdownTimer magnetometerSensorCountdown;
 	
 	state* pState;
 

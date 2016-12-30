@@ -254,24 +254,8 @@ void magnetometerSensor::initialise()
 	
 }
 
-int magnetometerSensor::read2Bytes()
-{
-
-	if(Wire.available() >= 2)
-	{
-		x = Wire.read() << 8;
-		x |= Wire.read();
-	} 
-}
-
 void magnetometerSensor::updateMeasurement()
 {
-	Wire.beginTransmission(deviceAddress);
-
-	Wire.write()
-
-	Wire.endTransmission();
-
 	Wire.beginTransmission(deviceAddress);
 	Wire.write((byte)0x01); //register address, this is where we're gonna start reading
 	Wire.requestFrom(deviceAddress, 6);
@@ -291,6 +275,7 @@ void magnetometerSensor::updateMeasurement()
 //Helper function, to read 2 sequential bytes out of the i2c bus
 int magnetometerSensor::read2Bytes(bool& dataAvailable)
 {
+	int x = 0;
 	if(Wire.available() >= 2)
 	{
 		dataAvailable = true;
@@ -301,4 +286,6 @@ int magnetometerSensor::read2Bytes(bool& dataAvailable)
 	{
 		dataAvailable = false;
 	}
+
+	return x;
 }
