@@ -36,20 +36,12 @@
         android:layout_alignTop="@+id/button_connect"
         android:layout_centerHorizontal="true" />
 
-    <SeekBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/seekBar_motorSpeed"
-        android:layout_marginTop="87dp"
-        android:layout_below="@+id/text_display_distance"
-        android:layout_alignParentStart="true" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Distance:"
         android:id="@+id/text_display_distance"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="124dp"
         android:layout_below="@+id/button_turn_left"
         android:layout_alignParentStart="true" />
 
@@ -77,8 +69,18 @@
         android:layout_height="wrap_content"
         android:text="@string/button_label_backwards"
         android:id="@+id/button_move_back"
-        android:layout_alignBottom="@+id/text_display_distance"
-        android:layout_alignStart="@+id/button_move_forward"
-        android:enabled="false" />
+        android:enabled="false"
+        android:layout_centerVertical="true"
+        android:layout_alignStart="@+id/button_move_forward" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="X:  Y:  Z:"
+        android:id="@+id/text_display_magnetometer"
+        android:layout_marginTop="27dp"
+        android:layout_below="@+id/text_display_distance"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/button_turn_left" />
 
 </RelativeLayout>

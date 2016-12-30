@@ -213,9 +213,17 @@ public class MainActivity extends Activity {
                     {
                         float f = ByteBuffer.wrap(message.data).order(ByteOrder.LITTLE_ENDIAN).getFloat();
                         distanceDisplay.setText("Distance: " + Float.toString(f));
+                    } else if (message.messageId == 1) //TEMP, REPLACE WITH A CONSTANT
+                    {
+                        int x = ByteBuffer.wrap(message.data, 0, 4).order(ByteOrder.LITTLE_ENDIAN).getInt();
+                        int y = ByteBuffer.wrap(message.data, 4, 4).order(ByteOrder.LITTLE_ENDIAN).getInt();
+                        int z = ByteBuffer.wrap(message.data, 8, 4).order(ByteOrder.LITTLE_ENDIAN).getInt();
+
+                        TextView magnetometerDisplay = (TextView) findViewById(R.id.text_display_magnetometer);
+                        magnetometerDisplay.setText("X: " + Integer.toString(x)
+                                + "Y: " + Integer.toString(y)
+                                + "Z: " + Integer.toString(z));
                     }
-
-
                     break;
                 default:
                     break;

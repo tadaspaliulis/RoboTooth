@@ -81,7 +81,12 @@ class state
     void setAllMotorSpeed( byte speed );
 
     float getDistance();
+    int getMagnetometerOrientationX();
+    int getMagnetometerOrientationY();
+    int getMagnetometerOrientationZ();
+
     void updateDistanceMeasurement();
+    void updateMagnetometerMeasurement();
 
     messagingService* getMessenger() { return &messenger; }
 
@@ -89,6 +94,7 @@ class state
     motorState* getMotor( motor motorNode );
     
     echoSensor distanceUltraSoundSensor;
+    magnetometerSensor magnetometer;
 
     motorState leftMotor;
     motorState rightMotor;
@@ -96,3 +102,24 @@ class state
     messagingService messenger;
 };
 
+/*Class for controlling MAG3110 magnetometer*/
+class magnetometerSensor
+{
+public:
+  magnetometerSensor();
+  void initialise();
+  void updateMeasurement();
+
+  int getLastReadingX() { return lastReadX; }
+  int getLastReadingY() { return lastReadY; }
+  int getLastReadingZ() { return lastReadZ; }
+
+  const int deviceAddress;
+private:
+  //Helper function, to read 2 sequential bytes out of the i2c bus
+  int read2Bytes(bool& dataAvailable);
+
+  int lastReadX;
+  int lastReadY;
+  int lastReadZ;
+};

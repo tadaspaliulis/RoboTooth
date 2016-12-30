@@ -42,6 +42,10 @@ public:
 	//Prompts state sensors to get new data
 	void updateSensorData();
 
+	//Comms
+	void sendEchoDistanceData(float& distances);
+	void sendMagnetometerData(int x, int y, int z);
+
 	//Main logic function
 	void act();
 
@@ -51,6 +55,8 @@ protected:
 
 private:
 	countdownTimer echoSensorCountdown;
+	countdownTimer magnetometerCountdown;
+	
 	state* pState;
 
 	//Message handlers

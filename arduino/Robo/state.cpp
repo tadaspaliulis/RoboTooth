@@ -1,4 +1,5 @@
 #include "state.h"
+#include "Wire.h" //I2C library
 
 /* Ultra sound distance sensor */
 
@@ -26,11 +27,13 @@ float echoSensor::getLastDistanceReading()
 float echoSensor::measureDistance()
 {
 	//Trigger  the echo
+	digitalWrite(triggerPin, LOW); //Make sure the
+	delayMicroseconds(3);
     digitalWrite(triggerPin, HIGH);
-    delay(1);
+    delayMicroseconds(11);
     digitalWrite(triggerPin, LOW);
 
-    //Time till echo turns high
+    //Time till echo turns high, in microseconds DIVIDE BY 58 FOR CENTIMETERS
     lastDistanceReading = (float)pulseIn(echoPin, HIGH) / 2;
    
 	return lastDistanceReading;
@@ -109,6 +112,7 @@ void state::initialise()
 	leftMotor.initialise( pinMapping.motors.leftLogic1, pinMapping.motors.leftLogic2, pinMapping.motors.leftSpeed );
 	rightMotor.initialise( pinMapping.motors.rightLogic1, pinMapping.motors.rightLogic2, pinMapping.motors.rightSpeed );
 	distanceUltraSoundSensor.initialise( pinMapping.sensors.echoTrig, pinMapping.sensors.echoReceive );
+	magnetometer.initialise();
 }
 
 motorState* state::getMotor( motor motorNode )
@@ -198,4 +202,103 @@ void state::setAllMotorSpeed( byte speed )
 void state::updateDistanceMeasurement()
 {
 	distanceUltraSoundSensor.measureDistance();
+}
+
+void state::updateMagnetometerMeasurement()
+{
+	magnetometer.updateMeasurement();
+}
+
+int state::getMagnetometerOrientationX()
+{
+	return magnetometer.getLastReadingX();
+}
+
+int state::getMagnetometerOrientationY()
+{
+	return magnetometer.getLastReadingY();
+}
+int state::getMagnetometerOrientationZ()
+{
+	return magnetometer.getLastReadingZ();
+}
+
+//===========Magnetometer sensor implementation
+magnetometerSensor::magnetometerSensor() : lastReadX(0.0f), lastReadY(0.0f), lastReadZ(0.0f), deviceAddress(0xc4)
+{
+}
+
+void magnetometerSensor::initialise()
+{
+	Wire.begin(); //Join the I2C bus as a master
+	//Might have to move this if more devices are added to the same bus
+
+	Wire.beginTransmission(deviceAddress);
+	
+	//We want to write to Control register (CTRL_REG1)
+	Wire.write((byte)0x10);
+
+	Wire.endTransmission();
+
+	//Set up the device behaviour here
+	Wire.beginTransmission(deviceAddress);
+	//OR[2;0]=100/5Hz
+	//OSR[1;0]=00/16
+	//FR=0
+	//TM=0
+	//AC=1
+	byte controlByte = 0;
+	controlByte = (1 << 7) | 1; //Only need to enable 2 bits!
+	Wire.write(controlByte); 
+	Wire.endTransmission();
+	
+}
+
+int magnetometerSensor::read2Bytes()
+{
+
+	if(Wire.available() >= 2)
+	{
+		x = Wire.read() << 8;
+		x |= Wire.read();
+	} 
+}
+
+void magnetometerSensor::updateMeasurement()
+{
+	Wire.beginTransmission(deviceAddress);
+
+	Wire.write()
+
+	Wire.endTransmission();
+
+	Wire.beginTransmission(deviceAddress);
+	Wire.write((byte)0x01); //register address, this is where we're gonna start reading
+	Wire.requestFrom(deviceAddress, 6);
+
+	bool dataAvailable; //False if there was no data available
+	int x = read2Bytes(dataAvailable);
+	int y = read2Bytes(dataAvailable);
+	int z = read2Bytes(dataAvailable);
+
+	Wire.endTransmission();
+
+	lastReadX = x;
+	lastReadY = y;
+	lastReadZ = z;
+}
+
+//Helper function, to read 2 sequential bytes out of the i2c bus
+int magnetometerSensor::read2Bytes(bool& dataAvailable)
+{
+	if(Wire.available() >= 2)
+	{
+		dataAvailable = true;
+		x = Wire.read() << 8;
+		x |= Wire.read();
+	}
+	else
+	{
+		dataAvailable = false;
+	}
 }

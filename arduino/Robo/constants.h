@@ -32,13 +32,15 @@ struct
     const static int maximumMessageDataLength = 24;
     struct
     {
-      const static unsigned int echoDistancePeriod = 100; //Every 100ms
+      const static unsigned int echoDistancePeriod = 100; //10Hz or every 100ms
+      const static unsigned int magnetometerPeriod = 200; //5Hz or every 200ms
     } timers;
 
     struct 
     {
-      const static byte heartbeatMsg = 0;
-      
+      const static byte heartbeatMsg = 0; //NOT USED
+      const static byte echoDistanceMsg = 0;
+      const static byte magnetometerDataMsg = 1;
     } messageIdTx;
 
     struct 

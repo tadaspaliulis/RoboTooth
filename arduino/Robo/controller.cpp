@@ -55,15 +55,22 @@ void controller::updateSensorData()
 		echoSensorCountdown.resetTimer( constants.timers.echoDistancePeriod );
 
 		//Send message to the master to let it know the ultrasound sensor distance
-		message messageDistance;
-		messageDistance.id = 0;
-		messageDistance.dataLength = sizeof(float);
 		float distance = getState()->getDistance();
-
-		memcpy(messageDistance.messageData, &distance, sizeof(float));
-		getState()->getMessenger()->sendMessage(messageDistance);
+		sendEchoDistanceData(distance);
 	}
 	
+	if( magnetometerSensorCountdown.updateTimer( elapsedTime ) )
+	{
+		getState()->updateMagnetometerMeasurement();
+		magnetometerSensorCountdown.resetTimer( constants.timers.magnetometerPeriod );
+
+		//DO SOMETHING WITH THE DATA HERE
+		int orientationX = getState()->getMagnetometerOrientationX();
+		int orientationY = getState()->getMagnetometerOrientationY();
+		int orientationZ = getState()->getMagnetometerOrientationZ();
+
+		sendMagnetometerData(orientationX, orientationY, orientationZ);
+	}
 }
 
 state* controller::getState() { return pState; }
@@ -97,6 +104,30 @@ bool controller::handleMoveMessage( message* msg )
 	getState()->setAllMotorSpeed( movementSpeed );
 
 	return true;
+}
+
+void controller::sendEchoDistanceData(float& distance)
+{
+	//Send message to the master to let it know the ultrasound sensor distance
+	message messageDistance;
+	messageDistance.id = constants.messageIdTx.echoDistanceMsg;
+	messageDistance.dataLength = sizeof(float);
+
+	memcpy(messageDistance.messageData, &distance, sizeof(float));
+	getState()->getMessenger()->sendMessage(messageDistance);
+}
+
+void controller::sendMagnetometerData(int x, int y, int z)
+{
+	message magnetoMessage;
+	magnetoMessage.id = constants.messageIdTx.magnetometerDataMsg;
+	magnetoMessage.dataLength = sizeof(int) * 3; //xyz, hence times 3
+
+	memcpy(magnetoMessage.messageData, x, sizeof(int));
+	memcpy(magnetoMessage.messageData + sizeof(int), y, sizeof(int));
+	memcpy(magnetoMessage.messageData + sizeof(int) * 2, z, sizeof(int));
+
+	getState()->getMessenger()->sendMessage(magnetoMessage);
 }
 
 /**** Timer implementation ****/
