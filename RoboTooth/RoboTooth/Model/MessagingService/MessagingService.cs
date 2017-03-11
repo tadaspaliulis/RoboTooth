@@ -50,10 +50,8 @@ namespace RoboTooth.Model.MessagingService
                 byte[] bytes = new byte[/*dataStream.Length +*/ 100];
                 while (EnableReceiving)
                 {
-                    int numBytesRead = 0;
-
                     // Read may return anything from 0 to 10.
-                    int n = dataStream.Read(bytes, numBytesRead, 15);
+                    int numBytesRead = dataStream.Read(bytes, 0, 15);
 
                     _receivedDataBuffer.Add(bytes, numBytesRead);
                     if (_receivedDataBuffer.getAvailableDataSize() >= RawMessage.MessageHeaderLength + 1)
@@ -96,6 +94,8 @@ namespace RoboTooth.Model.MessagingService
             if (messageLength + 1 > (_receivedDataBuffer.getAvailableDataSize() - readLocation))
                 return;
 
+            if (messageLength == 0)
+                Console.WriteLine("Message length zero???");
             byte messageId = _receivedDataBuffer.Read(readLocation++);
 
             var messageData = _receivedDataBuffer.copy(readLocation, messageLength);

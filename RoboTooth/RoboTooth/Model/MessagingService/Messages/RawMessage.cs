@@ -26,6 +26,11 @@ namespace RoboTooth.Model.MessagingService.Messages
             this.rawData = other.rawData;
         }
 
+        public int GetRawDataLength()
+        {
+            return rawData.Length;
+        }
+
         public byte[] ToByteArray()
         {
             int byteArrayLength = rawData.Length + MessageHeaderLength;
@@ -52,9 +57,9 @@ namespace RoboTooth.Model.MessagingService.Messages
             string s = string.Empty;
             for (int i = 0; i < (rawData.Length - 1); ++i)
             {
-                s += rawData[i].ToString("x") + " ";
+                s += string.Format("{0:X2}", rawData[i]) + " ";
             }
-            s += rawData[rawData.Length - 1].ToString("x");
+            s += string.Format("{0:X2}", rawData[rawData.Length - 1]);
             
             return s;
         }

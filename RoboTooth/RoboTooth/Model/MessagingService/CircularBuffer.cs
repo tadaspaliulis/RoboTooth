@@ -60,10 +60,10 @@ namespace RoboTooth.Model.MessagingService
         {
             if (length > dataBlock.Length)
                 throw new Exception("length is greater than the length of the dataBlock.");
-            if (dataBlock.Length > getMaximumSize())
-                throw new Exception("Provided dataBlock (size: " + dataBlock.Length + ") is too big. Available size: " + getMaximumSize());
+            if (length > getMaximumSize())
+                throw new Exception("Requested dataBlock Add length" + length + " is too big. Available size: " + getMaximumSize());
 
-            for (int i = 0; i < dataBlock.Length; ++i)
+            for (int i = 0; i < length; ++i)
             {
                 Add(dataBlock[i]);
             }
