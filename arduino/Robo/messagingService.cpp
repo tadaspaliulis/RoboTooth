@@ -2,7 +2,6 @@
 
 
 const byte messagingService::startOfFrame = 0xbb;
-const byte messagingService::endOfFrame =  0xcc;
 
 messagingService::messagingService() : dataReceived ( 0 ), currentReadLocation ( 0 ), currentWriteLocation ( 0 ), totalDataReceived ( 0 ) 
 {

@@ -30,7 +30,6 @@ class messagingService
   private:
 
   	const static byte startOfFrame;
-  	const static byte endOfFrame;
 
     const static int bufferSize;
 
