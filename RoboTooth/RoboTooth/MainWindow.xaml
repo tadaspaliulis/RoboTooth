@@ -5,9 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RoboTooth"
         mc:Ignorable="d"
-        Title="RoboController" Height="460" Width="600">
-    <Grid>
+        Title="RoboController" Height="460" Width="600"
+        xmlns:ViewModel="clr-namespace:RoboTooth.ViewModel">
 
+    <Window.Resources>
+        <Style TargetType="Border" x:Key="HeaderBorderStyle">
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+        </Style>
+        <Style TargetType="Border" x:Key="CellBorderStyle">
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+        </Style>
+        <ViewModel:IdColourValueConverter x:Key="IdColourValueConverter"/>
+    </Window.Resources>
+
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -18,25 +31,23 @@
             <Button x:Name="ConnectionButton" IsEnabled="{Binding ConnectionManagement.ConnectionButton.Enabled, UpdateSourceTrigger=PropertyChanged}" Content="{Binding ConnectionManagement.ConnectionButton.Content, UpdateSourceTrigger=PropertyChanged}" Command="{Binding ConnectionManagement.ConnectionButton.Command}" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top" Width="75" Height="19"/>
         </StackPanel>
 
-        <Canvas Grid.Column="1">
-            <ListBox  Height="200" Width="300" SelectionMode="Single" ItemsSource="{Binding Path=RawMessageList, UpdateSourceTrigger=PropertyChanged}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Margin="0" Background="AntiqueWhite">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" SharedSizeGroup="Key" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                        <!--<StackPanel Orientation="Horizontal" Background="AntiqueWhite">-->
-
-                            <TextBlock Grid.Column="0" Text="{Binding Path=Id}"/>
-                            <TextBlock Grid.Column="1" Text="{Binding Path=RawData}"/>
-                        
-                        </Grid>
-                        
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </Canvas>
+        <StackPanel Grid.IsSharedSizeScope="True" Grid.Column="1">
+            <ListView  Height="200" Width="300" SelectionMode="Single" HorizontalAlignment="Left" ItemsSource="{Binding Path=RawMessageList, UpdateSourceTrigger=PropertyChanged}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="ID" Width="Auto">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="-6,0,-6,0" Background="{Binding Id, Converter={StaticResource IdColourValueConverter}}">
+                                        <TextBlock Text="{Binding Id}" Margin="6,0,6,0"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Raw Data" DisplayMemberBinding="{Binding RawData}" Width="Auto"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </StackPanel>
     </Grid>
 </Window>
