@@ -17,5 +17,18 @@ namespace RoboTooth.Model.MessagingService.Messages
         {
 
         }
+
+        /// <summary>
+        /// Gets the distance carried by the message
+        /// </summary>
+        /// <returns>Echo Distance sensor distance value</returns>
+        public float GetDistance()
+        {
+            //var dataCopy = new byte[rawData.Length];
+            //rawData.CopyTo(dataCopy, 0);
+            //Array.Reverse(dataCopy);
+            return BitConverter.ToSingle(rawData, 0);
+        }
+
     }
 }

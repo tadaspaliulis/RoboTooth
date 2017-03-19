@@ -17,5 +17,20 @@ namespace RoboTooth.Model.MessagingService.Messages
         {
 
         }
+
+        public short GetX()
+        {
+            return BitConverter.ToInt16(rawData, 0);
+        }
+
+        public short GetY()
+        {
+            return BitConverter.ToInt16(rawData, sizeof(short));
+        }
+
+        public short GetZ()
+        {
+            return BitConverter.ToInt16(rawData, sizeof(short) * 2);
+        }
     }
 }
