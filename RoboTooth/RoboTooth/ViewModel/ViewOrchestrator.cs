@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RoboTooth.Model.MessagingService.Messages;
 using System.Collections.ObjectModel;
+using RoboTooth.ViewModel.DataDisplayVM;
 
 namespace RoboTooth.ViewModel
 {
@@ -46,6 +47,11 @@ namespace RoboTooth.ViewModel
             InitialiseControllers();
 
             _connectionManagement = new ConnectionManagementView(_mainController.GetCommunicationInterface());
+
+            _intDataDisplay = new InternalDataDisplay();
+            _mainController.GetMessageSorter().EchoDistanceMessages.MessageReceived += IntDataDisplay.HandleEchoDistanceMessage;
+            _mainController.GetMessageSorter().MagnetometerOrientationMessages.MessageReceived += IntDataDisplay.HandleMagnetometerOrientationMessage;
+
             _rawMessageList = new ObservableCollection<MessageListItem>();
             _mainController.GetMessageSorter().UnfilteredMessages += HandleReceivedMessages;
         }
@@ -70,7 +76,7 @@ namespace RoboTooth.ViewModel
 
         private void HandleReceivedMessages(object sender, RawMessage message)
         {
-            App.Current.Dispatcher.Invoke((Action)delegate
+            App.Current.Dispatcher.Invoke(delegate
             {
                 _rawMessageList.Add(new MessageListItem(message));
             });
@@ -89,6 +95,20 @@ namespace RoboTooth.ViewModel
             set
             {
                 _connectionManagement = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private InternalDataDisplay _intDataDisplay;
+        public InternalDataDisplay IntDataDisplay
+        {
+            get
+            {
+                return _intDataDisplay;
+            }
+            set
+            {
+                _intDataDisplay = value;
                 NotifyPropertyChanged();
             }
         }

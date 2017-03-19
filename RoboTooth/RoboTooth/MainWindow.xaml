@@ -31,7 +31,7 @@
             <Button x:Name="ConnectionButton" IsEnabled="{Binding ConnectionManagement.ConnectionButton.Enabled, UpdateSourceTrigger=PropertyChanged}" Content="{Binding ConnectionManagement.ConnectionButton.Content, UpdateSourceTrigger=PropertyChanged}" Command="{Binding ConnectionManagement.ConnectionButton.Command}" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top" Width="75" Height="19"/>
         </StackPanel>
 
-        <StackPanel Grid.IsSharedSizeScope="True" Grid.Column="1">
+        <StackPanel Grid.Column="1">
             <ListView  Height="200" Width="300" SelectionMode="Single" HorizontalAlignment="Left" ItemsSource="{Binding Path=RawMessageList, UpdateSourceTrigger=PropertyChanged}">
                 <ListView.View>
                     <GridView>
@@ -48,6 +48,19 @@
                     </GridView>
                 </ListView.View>
             </ListView>
+
+            <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
+                <Label Content="Distance:"/>
+                <TextBox IsReadOnly="True" MinWidth="40" VerticalContentAlignment="Center" Text="{Binding IntDataDisplay.EchoDistanceValue}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
+                <Label Content="X:"/>
+                <TextBox IsReadOnly="True" MinWidth="20" VerticalContentAlignment="Center" Text="{Binding IntDataDisplay.MagnetometerOrientationXValue}"/>
+                <Label Content="Y:"/>
+                <TextBox IsReadOnly="True" MinWidth="20" VerticalContentAlignment="Center" Text="{Binding IntDataDisplay.MagnetometerOrientationYValue}"/>
+                <Label Content="Z:"/>
+                <TextBox IsReadOnly="True" MinWidth="20" VerticalContentAlignment="Center" Text="{Binding IntDataDisplay.MagnetometerOrientationZValue}"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>

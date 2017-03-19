@@ -59,10 +59,10 @@ namespace RoboTooth.Model.MessagingService
         private void Initialise()
         {
             //Initialisation of all the recognisers here
-            EchoDistanceMessages = new MessageRecogniser<EchoDistanceMessage>((byte)RxMessageIdsEnum.EEchoDistance, 
-                (RawMessage m) => { return new EchoDistanceMessage(m); });
-            MagnetometerOrientationMessages = new MessageRecogniser<MagnetometerOrientationMessage>((byte)RxMessageIdsEnum.EMagnetometerOrientation,
-                (RawMessage m) => { return new MagnetometerOrientationMessage(m); } );
+            AddRecogniser(EchoDistanceMessages = new MessageRecogniser<EchoDistanceMessage>((byte)RxMessageIdsEnum.EEchoDistance, 
+                (RawMessage m) => { return new EchoDistanceMessage(m); }));
+            AddRecogniser(MagnetometerOrientationMessages = new MessageRecogniser<MagnetometerOrientationMessage>((byte)RxMessageIdsEnum.EMagnetometerOrientation,
+                (RawMessage m) => { return new MagnetometerOrientationMessage(m); }));
         }
 
         #region Message recognisers
