@@ -34,3 +34,7 @@ captures/
 
 # Intellij
 *.iml 
+*.pdb
+/RoboTooth/RoboTooth/obj/Debug
+/RoboTooth/RoboTooth/obj/Release
+/RoboTooth/.vs/RoboTooth/v14/*.suo
