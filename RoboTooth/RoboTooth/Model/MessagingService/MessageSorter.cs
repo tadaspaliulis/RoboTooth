@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RoboTooth.Model.MessagingService.Messages;
+using RoboTooth.Model.MessagingService.Messages.RxMessages;
 
 namespace RoboTooth.Model.MessagingService
 {

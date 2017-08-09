@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RoboTooth.Model.MessagingService.Messages;
+using RoboTooth.Model.MessagingService.Messages.RxMessages;
 namespace RoboTooth.ViewModel.DataDisplayVM
 {
     public class InternalDataDisplay : ObservableObject

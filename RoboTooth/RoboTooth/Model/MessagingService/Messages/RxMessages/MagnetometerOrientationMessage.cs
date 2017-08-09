@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RoboTooth.Model.MessagingService.Messages
+namespace RoboTooth.Model.MessagingService.Messages.RxMessages
 {
     public class MagnetometerOrientationMessage : RawMessage
     {

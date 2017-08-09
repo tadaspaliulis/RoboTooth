@@ -63,8 +63,8 @@
     <Compile Include="Model\ICommunicationInterface.cs" />
     <Compile Include="Model\MessagingService\CircularBuffer.cs" />
     <Compile Include="Model\MessagingService\MessageSorter.cs" />
-    <Compile Include="Model\MessagingService\Messages\EchoDistanceMessage.cs" />
-    <Compile Include="Model\MessagingService\Messages\MagnetometerOrientationMessage.cs" />
+    <Compile Include="Model\MessagingService\Messages\RxMessages\EchoDistanceMessage.cs" />
+    <Compile Include="Model\MessagingService\Messages\RxMessages\MagnetometerOrientationMessage.cs" />
     <Compile Include="Model\MessagingService\Messages\MessageIdsEnum.cs" />
     <Compile Include="Model\MessagingService\Messages\RawMessage.cs" />
     <Compile Include="Model\MessagingService\MessagingService.cs" />
@@ -117,7 +117,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Model\MessagingService\Messages\TxMessages\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
