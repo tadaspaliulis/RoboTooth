@@ -23,6 +23,7 @@ void controller::processMessage( message* msg )
 
 void controller::act()
 {
+	
 	//If close to obstacles, low Fspeed
 	/*if( getState()->getDistance() < 250 )
 	{
@@ -123,9 +124,9 @@ void controller::sendMagnetometerData(int x, int y, int z)
 	magnetoMessage.id = constants.messageIdTx.magnetometerDataMsg;
 	magnetoMessage.dataLength = sizeof(int) * 3; //xyz, hence times 3
 
-	memcpy(magnetoMessage.messageData, x, sizeof(int));
-	memcpy(magnetoMessage.messageData + sizeof(int), y, sizeof(int));
-	memcpy(magnetoMessage.messageData + sizeof(int) * 2, z, sizeof(int));
+	memcpy(magnetoMessage.messageData, &x, sizeof(int));
+	memcpy(magnetoMessage.messageData + sizeof(int), &y, sizeof(int));
+	memcpy(magnetoMessage.messageData + sizeof(int) * 2, &z, sizeof(int));
 
 	getState()->getMessenger()->sendMessage(magnetoMessage);
 }
