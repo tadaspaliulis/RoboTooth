@@ -71,7 +71,9 @@ namespace RoboTooth.Model.MessagingService
             MessageReceivedEvent?.Invoke(this, message);
         }
 
-        //Looks for Raw Message frames and then passes them on for further recognition/processing
+        /// <summary>
+        /// Looks for Raw Message frames and then passes them on for further recognition/processing
+        /// </summary>
         private void LookForMessages()
         {
             var availableData = _receivedDataBuffer.getAvailableDataSize();
