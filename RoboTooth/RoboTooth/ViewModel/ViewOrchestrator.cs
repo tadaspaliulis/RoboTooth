@@ -54,6 +54,12 @@ namespace RoboTooth.ViewModel
 
             _rawMessageList = new ObservableCollection<MessageListItem>();
             _mainController.GetMessageSorter().UnfilteredMessages += HandleReceivedMessages;
+
+            MoveLeftButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => _mainController.GetRoboController().TurnLeft()), null);
+            MoveRightButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => _mainController.GetRoboController().TurnRight()), null);
+            MoveForwardButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => _mainController.GetRoboController().MoveForward()), null);
+            MoveBackwardsButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => _mainController.GetRoboController().MoveBackwards()), null);
+            MoveStopButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => _mainController.GetRoboController().StopMovement()), null);
         }
             
         private void InitialiseControllers()
@@ -99,6 +105,78 @@ namespace RoboTooth.ViewModel
             }
         }
 
+        #region Movement buttons
+
+        private ObservableButton _moveLeftButton;
+        public ObservableButton MoveLeftButton
+        {
+            get
+            {
+                return _moveLeftButton;
+            }
+            set
+            {
+                _moveLeftButton = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private ObservableButton _moveRightButton;
+        public ObservableButton MoveRightButton
+        {
+            get
+            {
+                return _moveRightButton;
+            }
+            set
+            {
+                _moveRightButton = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private ObservableButton _moveBackwardsButton;
+        public ObservableButton MoveBackwardsButton
+        {
+            get
+            {
+                return _moveBackwardsButton;
+            }
+            set
+            {
+                _moveBackwardsButton = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private ObservableButton _moveForwardButton;
+        public ObservableButton MoveForwardButton
+        {
+            get
+            {
+                return _moveForwardButton;
+            }
+            set
+            {
+                _moveForwardButton = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private ObservableButton _moveStopButton;
+        public ObservableButton MoveStopButton
+        {
+            get
+            {
+                return _moveStopButton;
+            }
+            set
+            {
+                _moveStopButton = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         private InternalDataDisplay _intDataDisplay;
         public InternalDataDisplay IntDataDisplay
         {
@@ -112,5 +190,7 @@ namespace RoboTooth.ViewModel
                 NotifyPropertyChanged();
             }
         }
+
+        #endregion
     }
 }

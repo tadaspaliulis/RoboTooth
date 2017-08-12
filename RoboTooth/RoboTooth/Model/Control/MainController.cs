@@ -18,6 +18,7 @@ namespace RoboTooth.Model.Control
             _messagingService = new MessagingService.MessagingService(_communicationInterface);
             _messageSorter = new MessageSorter();
             _messagingService.MessageReceivedEvent += _messageSorter.HandleRawMessage;
+            _roboController = new RoboController(_messagingService, _messageSorter);
         }
 
         internal ICommunicationInterface GetCommunicationInterface()
@@ -35,8 +36,14 @@ namespace RoboTooth.Model.Control
             return _messageSorter;
         }
 
+        internal RoboController GetRoboController()
+        {
+            return _roboController;
+        }
+
         private MessagingService.MessagingService _messagingService;
         private ICommunicationInterface _communicationInterface;
         private MessageSorter _messageSorter;
+        private RoboController _roboController;
     }
 }

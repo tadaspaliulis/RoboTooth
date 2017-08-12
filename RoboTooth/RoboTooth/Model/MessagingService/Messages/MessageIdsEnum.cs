@@ -20,6 +20,6 @@ namespace RoboTooth.Model.MessagingService.Messages
     /// </summary>
     internal enum TxMessageIdsEnum : byte
     {
-        EMovementMessage,
+        EMoveControlIndefinite = 1,
     }
 }

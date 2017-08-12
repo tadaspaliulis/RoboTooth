@@ -19,8 +19,7 @@ namespace RoboTooth.ViewModel
             comms.ConnectionEvent += ConnectionEventHandler;
 
             //Initialise connection button
-            Func<object, bool> connectionCanExecuteAction = CanExecuteConnectButton;
-            var connectionCommand = new AsyncCommand(connectionCanExecuteAction, (object a) => _comms.EstablishConnection());
+            var connectionCommand = new AsyncCommand(new Func<object, bool>(CanExecuteConnectButton), (object a) => _comms.EstablishConnection());
 
             ConnectionEventOccured += connectionCommand.StateChangeHandler; //External event monitor for potential can execute chhanges
 

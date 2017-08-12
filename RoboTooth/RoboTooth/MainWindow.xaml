@@ -32,6 +32,7 @@
         </StackPanel>
 
         <StackPanel Grid.Column="1">
+            <!-- Received message list view-->
             <ListView  Height="200" Width="300" SelectionMode="Single" HorizontalAlignment="Left" ItemsSource="{Binding Path=RawMessageList, UpdateSourceTrigger=PropertyChanged}">
                 <ListView.View>
                     <GridView>
@@ -60,7 +61,15 @@
                 <TextBox IsReadOnly="True" MinWidth="20" VerticalContentAlignment="Center" Text="{Binding IntDataDisplay.MagnetometerOrientationYValue}"/>
                 <Label Content="Z:"/>
                 <TextBox IsReadOnly="True" MinWidth="20" VerticalContentAlignment="Center" Text="{Binding IntDataDisplay.MagnetometerOrientationZValue}"/>
+                
             </StackPanel>
+            <DockPanel Margin="5" HorizontalAlignment="Left" VerticalAlignment="Bottom" LastChildFill="True">
+                <Button Content="Left" DockPanel.Dock="Left" IsEnabled="{Binding MoveLeftButton.Enabled, UpdateSourceTrigger=PropertyChanged}" Command="{Binding MoveLeftButton.Command}"/>
+                <Button Content="Right" DockPanel.Dock="Right" IsEnabled="{Binding MoveRightButton.Enabled, UpdateSourceTrigger=PropertyChanged}" Command="{Binding MoveRightButton.Command}"/>
+                <Button Content ="Forward" DockPanel.Dock="Top" IsEnabled="{Binding MoveForwardButton.Enabled, UpdateSourceTrigger=PropertyChanged}" Command="{Binding MoveForwardButton.Command}"/>
+                <Button Content ="Backwards" DockPanel.Dock="Bottom" IsEnabled="{Binding MoveBackwardsButton.Enabled, UpdateSourceTrigger=PropertyChanged}" Command="{Binding MoveBackwardsButton.Command}"/>
+                <Button Content="Stop" IsEnabled="{Binding MoveStopButton.Enabled, UpdateSourceTrigger=PropertyChanged}" Command="{Binding MoveStopButton.Command}"/>
+            </DockPanel>
         </StackPanel>
     </Grid>
 </Window>

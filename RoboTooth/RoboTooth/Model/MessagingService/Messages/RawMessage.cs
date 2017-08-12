@@ -36,7 +36,7 @@ namespace RoboTooth.Model.MessagingService.Messages
             int byteArrayLength = rawData.Length + MessageHeaderLength;
             byte[] byteArray = new byte[byteArrayLength];
 
-            Array.Copy(rawData, 0, byteArray, MessageHeaderLength, byteArray.Length);
+            Array.Copy(rawData, 0, byteArray, MessageHeaderLength, rawData.Length);
 
             //Message Framing
             byteArray[0] = byteArray[1] = StartOfFrame;
