@@ -224,7 +224,7 @@ int state::getMagnetometerOrientationZ()
 }
 
 //===========Magnetometer sensor implementation
-magnetometerSensor::magnetometerSensor() : lastReadX(0.0f), lastReadY(0.0f), lastReadZ(0.0f), deviceAddress(0xc4)
+magnetometerSensor::magnetometerSensor() : lastReadX(0.0f), lastReadY(0.0f), lastReadZ(0.0f), deviceAddress(0x0e)
 {
 }
 
@@ -232,15 +232,13 @@ void magnetometerSensor::initialise()
 {
 	//Might have to move this if more devices are added to the same bus
 	Wire.begin(); //Join the I2C bus as a master
+	delayMicroseconds(1000);
 	Wire.beginTransmission(deviceAddress);
 	
 	//We want to write to Control register (CTRL_REG1)
 	Wire.write((byte)0x10);
 
-	lastReadY = Wire.endTransmission();
-
 	//Set up the device behaviour here
-	Wire.beginTransmission(deviceAddress);
 	//OR[2;0]=100/5Hz	
 	//OSR[1;0]=00/16
 	//FR=0
@@ -257,8 +255,7 @@ void magnetometerSensor::updateMeasurement()
 {
 	Wire.beginTransmission(deviceAddress);
 	Wire.write((byte)0x01); //register address, this is where we're gonna start reading
-	
-	int rez = Wire.endTransmission();
+	Wire.endTransmission();
 
 	Wire.requestFrom(deviceAddress, 6);
 
