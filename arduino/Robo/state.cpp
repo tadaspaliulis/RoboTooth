@@ -127,7 +127,7 @@ motorState* state::getMotor( motor motorNode )
     return &rightMotor;
 }
 
-void state::moveForward()
+void state::moveForward(byte movementSpeed)
 {
 	motorState* pLeft = getMotor(eMotorLeft);
 	motorState* pRight = getMotor(eMotorRight);
@@ -137,9 +137,11 @@ void state::moveForward()
 		pLeft->setMotorState(eMotorForward);
 		pRight->setMotorState(eMotorForward);
 	}
+
+	setAllMotorSpeed(movementSpeed);
 }
 
-void state::moveBack()
+void state::moveBack(byte movementSpeed)
 {
 	motorState* pLeft = getMotor(eMotorLeft);
 	motorState* pRight = getMotor(eMotorRight);
@@ -149,9 +151,11 @@ void state::moveBack()
 		pLeft->setMotorState(eMotorBackward);
 		pRight->setMotorState(eMotorBackward);
 	}
+
+	setAllMotorSpeed(movementSpeed);
 }
 
-void state::turnLeft()
+void state::turnLeft(byte movementSpeed)
 {
 	motorState* pLeft = getMotor(eMotorLeft);
 	motorState* pRight = getMotor(eMotorRight);
@@ -160,10 +164,12 @@ void state::turnLeft()
 	{
 		pLeft->setMotorState(eMotorBackward);
 		pRight->setMotorState(eMotorForward);
-	}	
+	}
+
+	setAllMotorSpeed(movementSpeed);	
 }
 
-void state::turnRight()
+void state::turnRight(byte movementSpeed)
 {
 	motorState* pLeft = getMotor(eMotorLeft);
 	motorState* pRight = getMotor(eMotorRight);
@@ -172,11 +178,13 @@ void state::turnRight()
 	{
 		pLeft->setMotorState(eMotorForward);
 		pRight->setMotorState(eMotorBackward);
-	}	
+	}
+
+	setAllMotorSpeed(movementSpeed);	
 }
 
 
-void state::stop()
+void state::stop(byte movementSpeed)
 {
 	motorState* pLeft = getMotor(eMotorLeft);
 	motorState* pRight = getMotor(eMotorRight);

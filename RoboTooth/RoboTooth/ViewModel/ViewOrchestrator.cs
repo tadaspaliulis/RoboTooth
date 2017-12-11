@@ -55,10 +55,10 @@ namespace RoboTooth.ViewModel
             _rawMessageList = new ObservableCollection<MessageListItem>();
             _mainController.GetMessageSorter().UnfilteredMessages += HandleReceivedMessages;
 
-            MoveLeftButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => _mainController.GetRoboController().TurnLeft()), null);
-            MoveRightButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => _mainController.GetRoboController().TurnRight()), null);
-            MoveForwardButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => _mainController.GetRoboController().MoveForward()), null);
-            MoveBackwardsButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => _mainController.GetRoboController().MoveBackwards()), null);
+            MoveLeftButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => _mainController.GetRoboController().TurnLeftIndefinite()), null);
+            MoveRightButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => _mainController.GetRoboController().TurnRightIndefinite()), null);
+            MoveForwardButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => _mainController.GetRoboController().MoveForwardIndefinite()), null);
+            MoveBackwardsButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => _mainController.GetRoboController().MoveBackwardsIndefinite()), null);
             MoveStopButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => _mainController.GetRoboController().StopMovement()), null);
         }
             

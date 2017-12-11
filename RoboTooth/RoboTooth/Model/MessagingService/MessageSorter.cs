@@ -64,6 +64,8 @@ namespace RoboTooth.Model.MessagingService
                 (RawMessage m) => { return new EchoDistanceMessage(m); }));
             AddRecogniser(MagnetometerOrientationMessages = new MessageRecogniser<MagnetometerOrientationMessage>((byte)RxMessageIdsEnum.EMagnetometerOrientation,
                 (RawMessage m) => { return new MagnetometerOrientationMessage(m); }));
+            AddRecogniser(ActionCompletedMessages = new MessageRecogniser<ActionCompletedMessage>((byte)RxMessageIdsEnum.EActionCompleted,
+                (RawMessage m) => { return new ActionCompletedMessage(m); }));
         }
 
         #region Message recognisers
@@ -71,6 +73,8 @@ namespace RoboTooth.Model.MessagingService
         public MessageRecogniser<EchoDistanceMessage> EchoDistanceMessages { get; private set; }
 
         public MessageRecogniser<MagnetometerOrientationMessage> MagnetometerOrientationMessages { get; private set; }
+
+        public MessageRecogniser<ActionCompletedMessage> ActionCompletedMessages { get; private set; }
 
         #endregion
 

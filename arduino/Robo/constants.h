@@ -41,6 +41,7 @@ struct
       const static byte heartbeatMsg = 0; //NOT USED
       const static byte echoDistanceMsg = 0;
       const static byte magnetometerDataMsg = 1;
+      const static byte actionCompletedMsg = 2;
     } messageIdTx;
 
     struct 

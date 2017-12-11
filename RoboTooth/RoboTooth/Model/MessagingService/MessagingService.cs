@@ -62,6 +62,7 @@ namespace RoboTooth.Model.MessagingService
                 //Maybe callback here on completion?
             } catch (Exception e)
             {
+                Console.WriteLine(e.ToString());
                 //Exception handling, is this even necessary?
             }
         }

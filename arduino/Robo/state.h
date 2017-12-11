@@ -95,11 +95,11 @@ class state
     
     void initialise();
 
-    void moveForward();
-    void moveBack();
-    void turnLeft();
-    void turnRight();
-	  void stop();
+    void moveForward(byte movementSpeed);
+    void moveBack(byte movementSpeed);
+    void turnLeft(byte movementSpeed);
+    void turnRight(byte movementSpeed);
+	  void stop(byte movementSpeed);
     void setAllMotorSpeed( byte speed );
 
     float getDistance();

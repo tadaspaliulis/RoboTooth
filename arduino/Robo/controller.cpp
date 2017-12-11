@@ -1,6 +1,10 @@
 #include "controller.h"
 #include "constants.h"
-controller::controller() : pState( NULL )
+#include "actionQueue.h"
+#include "motorAction.h"
+/**** controller implementation ****/
+
+controller::controller() : pState( NULL ), motorActionQueue(0)
 {
 }
 
@@ -23,32 +27,23 @@ void controller::processMessage( message* msg )
 
 void controller::act()
 {
-	
-	//If close to obstacles, low Fspeed
-	/*if( getState()->getDistance() < 250 )
+	//Q: Does it have to be a separate timer or can it reuse the time from general controller timer?
+	//A: Don't think there can be a guarantee that the actions performed between this and the previous
+	//timestamp will always take up a constant period of time. 
+	//Thefore it's probably best to have a seperate timer just for this
+	unsigned int elapsedTime = actionQueueTimer.timeStamp();
+	if(motorActionQueue.UpdateQueue(elapsedTime, getState())) 
 	{
-		getState()->setAllMotorSpeed( 150 );
+		//If update queue returns true, it means that an action was completed
+		//Inform the control applicaition
+		sendActionQueueActionCompleted(motorActionQueue.actionQueueId, motorActionQueue.GetLastFinishedActionId());
 	}
-	else
-	{
-		getState()->setAllMotorSpeed( 255 );
-	}
-
-	//If too close to obstacle, rotate
-	if( getState()->getDistance() <= 200 )
-	{
-		getState()->turnRight();
-	} 
-	else
-	{
-		getState()->moveForward();
-	}*/	
 }
 
 void controller::updateSensorData()
 {
 	//Time elapsed since last sensor update
-	unsigned int elapsedTime = timer.timeStamp();
+	unsigned int elapsedTime = sensorTimer.timeStamp();
 	getState()->getMessenger()->receiveIncomingData();
 	if( echoSensorCountdown.updateTimer( elapsedTime ) ) //If true, countdown time over, do the operation and reset
 	{
@@ -79,31 +74,46 @@ state* controller::getState() { return pState; }
 //**********************Message Handlers**********************//
 bool controller::handleMoveMessage( message* msg )
 {
+	getState()->moveForward(255);
+	return;
 	//Extract message data contents
-	byte movementCommand  = msg->messageData[0];
-	byte movementSpeed = msg->messageData[1];
-	//char textMessage [100];
-	//sprintf(textMessage, "Movement command: %d, movement speed: %d", movementCommand, movementSpeed );
- 	//Serial.println(textMessage);
+	byte readPosition = 0;
+	byte movementCommand  = msg->messageData[readPosition++];
+	byte movementSpeed = msg->messageData[readPosition++];
 
-	if( movementCommand == 0 ) //0 is stop
-		getState()->stop();
-	else if ( movementCommand == 1 ) //1 is move forward
-		getState()->moveForward();
-	else if ( movementCommand == 2 ) //2 is move backwards
-		getState()->moveBack();
-	else if ( movementCommand == 3 ) //3 is move left
-		getState()->turnLeft();
-	else if ( movementCommand == 4 ) //4 is move right
-		getState()->turnRight();
-	else
+	unsigned int executionTimeMs;
+	memcpy(&executionTimeMs, msg->messageData + readPosition, sizeof(int));
+
+	readPosition += sizeof(int);
+	byte actionId = msg->messageData[readPosition++];
+
+	motorAction::movementActionFunction action = nullptr;
+
+	//TODO: Should change this to an enum
+	//Figure out what the RoboApp is asking the robot to do and store the function pointer
+	switch(movementCommand)
 	{
-		//Serial.println("No movement command match.");
-		return false; //Invalid command
-	} 
+		case 0: //0 is stop
+			action = &state::stop; //Should stop be treaded differently and override everything else?
+		break;
+		case 1: //1 is move forward
+			action = &state::moveForward;
+		break;
+		case 2: //2 is move backwards
+			action = &state::moveBack;
+		break;
+		case 3: //3 is turn left
+			action = &state::turnLeft;
+		break;
+		case 4: //4 is turn right
+			action = &state::turnRight;
+		break;
+		default:
+			return false; //Invalid command
+	}
 	
-	getState()->setAllMotorSpeed( movementSpeed );
-
+	motorAction tempMotorAction(action, actionId, executionTimeMs, movementSpeed);
+	motorActionQueue.addNewAction(tempMotorAction);
 	return true;
 }
 
@@ -131,39 +141,15 @@ void controller::sendMagnetometerData(int x, int y, int z)
 	getState()->getMessenger()->sendMessage(magnetoMessage);
 }
 
-/**** Timer implementation ****/
-
-timeMeasurement::timeMeasurement() : timeSinceLastTimestamp(0)
+void controller::sendActionQueueActionCompleted(byte queueId, byte actionId)
 {
-	lastTimestamp = millis();
+	message actionCompletedMessage;
+	actionCompletedMessage.id = constants.messageIdTx.actionCompletedMsg;
+	actionCompletedMessage.dataLength = sizeof(byte) * 2;
+
+	memcpy(actionCompletedMessage.messageData, &queueId, sizeof(byte));
+	memcpy(actionCompletedMessage.messageData + sizeof(byte), &actionId, sizeof(byte));
+
+
+	getState()->getMessenger()->sendMessage(actionCompletedMessage);
 }
-
-unsigned int timeMeasurement::timeStamp()
-{
-	//Store timestamp and calculate elapsed time since last one
-	unsigned int tempTS = lastTimestamp;
-	lastTimestamp = millis();
-
-	timeSinceLastTimestamp = lastTimestamp - tempTS;
-
-	return timeSinceLastTimestamp;
-}
-
-countdownTimer::countdownTimer() : timeLeft(0)
-{
-}
-
-bool countdownTimer::updateTimer(unsigned int timeElapsed)
-{
-	timeLeft -= (int) timeElapsed;
-
-	//Timer reached the end
-	return timeLeft <= 0;
-}
-
-void countdownTimer::resetTimer(unsigned int timerDuration)
-{
-	timeLeft += (int) timerDuration;
-}
-
-

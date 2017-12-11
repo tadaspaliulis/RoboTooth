@@ -104,7 +104,7 @@ message* messagingService::processMessage()
 		//Message longer than expected
 		if( tempMessage.dataLength > constants.maximumMessageDataLength )
 		{
-			char buffertextmessage[50];
+			//char buffertextmessage[50];
   			//sprintf(buffertextmessage, "Message length too large: %d", tempMessage.dataLength );
  	 		//Serial.println(buffertextmessage);
 			

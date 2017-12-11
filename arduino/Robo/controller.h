@@ -1,35 +1,12 @@
 #pragma once
+
 #include "state.h"
-
-class timeMeasurement
-{
-public:
-	timeMeasurement();
-
-	//Returns time elapsed
-	unsigned int timeStamp();
-
-	//In milliseconds
-	unsigned int getTimeElapsed() { return timeSinceLastTimestamp; }
-	unsigned int getLastTimestamp() { return lastTimestamp; } 
-private:
-	unsigned int lastTimestamp;
-	unsigned int timeSinceLastTimestamp;
-};
-
-class countdownTimer
-{
-public:
-	countdownTimer();
-	bool updateTimer(unsigned int timeElapsed);
-	void resetTimer(unsigned int timerDuration);
-private:
-	int timeLeft;
-};
+#include "actionQueue.h"
+#include "motorAction.h"
+#include "timeMeasurement.h"
 
 /*Controller deals with inputs from the Master Device,
 sensory data as well as some basic behavioural logic.*/
-
 class controller
 {
 public:
@@ -45,15 +22,19 @@ public:
 	//Comms
 	void sendEchoDistanceData(float& distances);
 	void sendMagnetometerData(int x, int y, int z);
+	void sendActionQueueActionCompleted(byte queueId, byte actionId);
+
 
 	//Main logic function
 	void act();
 
 protected:
     state* getState();
-    timeMeasurement timer;
-
+    timeMeasurement sensorTimer;
+    timeMeasurement actionQueueTimer;
 private:
+	actionQueue<motorAction> motorActionQueue;
+
 	countdownTimer echoSensorCountdown;
 	countdownTimer magnetometerSensorCountdown;
 	

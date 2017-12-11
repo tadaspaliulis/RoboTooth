@@ -13,6 +13,7 @@ namespace RoboTooth.Model.MessagingService.Messages
     {
         EEchoDistance = 0,
         EMagnetometerOrientation = 1,
+        EActionCompleted = 2,
     }
 
     /// <summary>
@@ -20,6 +21,6 @@ namespace RoboTooth.Model.MessagingService.Messages
     /// </summary>
     internal enum TxMessageIdsEnum : byte
     {
-        EMoveControlIndefinite = 1,
+        EMoveControlAction = 1,
     }
 }
