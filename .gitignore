@@ -38,3 +38,9 @@ captures/
 /RoboTooth/RoboTooth/obj/Debug
 /RoboTooth/RoboTooth/obj/Release
 /RoboTooth/.vs/RoboTooth/v14/*.suo
+*.lock
+/RoboTooth/.vs/RoboTooth/v15/*.suo
+/RoboTooth/.vs/RoboTooth/v15/Server/sqlite3/*.ide
+/RoboTooth/.vs/RoboTooth/v15/Server/sqlite3/*.ide-shm
+/RoboTooth/.vs/RoboTooth/v15/Server/sqlite3/*.ide-wal
+/.gitattributes

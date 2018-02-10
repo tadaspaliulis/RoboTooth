@@ -23,6 +23,7 @@ namespace RoboTooth.Model.Control
             _messageSorter.EchoDistanceMessages.MessageReceived += handleEchoDistanceMessage;
             _messageSorter.MagnetometerOrientationMessages.MessageReceived += handleMagnetometerOrientationMessage;
             _messageSorter.ActionCompletedMessages.MessageReceived += handleActionCompletedMessage;
+            _messageSorter.DebugStringMessages.MessageReceived += handleDebugStringMessage;
         }
         #region Robot Message handlers
         private void handleEchoDistanceMessage(object sender, EchoDistanceMessage message) { }
@@ -44,6 +45,12 @@ namespace RoboTooth.Model.Control
                 //Could be an opportunity for the controller to react to this action being completed here
             }
         }
+
+        private void handleDebugStringMessage(object sender, DebugStringMessage message)
+        {
+            System.Diagnostics.Debug.WriteLine(message.GetDebugString());
+        }
+
         #endregion
 
         #region Robot Actions

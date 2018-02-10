@@ -1,5 +1,6 @@
 #include "state.h"
 #include "Wire.h" //I2C library
+#include <string.h>
 
 /* Ultra sound distance sensor */
 
@@ -229,6 +230,19 @@ int state::getMagnetometerOrientationY()
 int state::getMagnetometerOrientationZ()
 {
 	return magnetometer.getLastReadingZ();
+}
+
+void state::sendDebugMessage(const char* debugMessage)
+{
+	size_t stringLength = strlen(debugMessage);
+	if(stringLength >= constants.maximumMessageDataLength)
+		stringLength = constants.maximumMessageDataLength - 1;
+
+	message msg;
+	msg.id = constants.messageIdTx.debugStringMsg;
+	msg.dataLength = stringLength;
+	memcpy(msg.messageData, debugMessage, stringLength);
+	getMessenger()->sendMessage(msg);
 }
 
 //===========Magnetometer sensor implementation

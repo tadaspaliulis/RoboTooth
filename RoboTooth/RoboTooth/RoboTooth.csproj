@@ -68,6 +68,7 @@
     <Compile Include="Model\MessagingService\CircularBuffer.cs" />
     <Compile Include="Model\MessagingService\MessageSorter.cs" />
     <Compile Include="Model\MessagingService\Messages\RxMessages\ActionCompletedMessage.cs" />
+    <Compile Include="Model\MessagingService\Messages\RxMessages\DebugStringMessage.cs" />
     <Compile Include="Model\MessagingService\Messages\RxMessages\EchoDistanceMessage.cs" />
     <Compile Include="Model\MessagingService\Messages\RxMessages\MagnetometerOrientationMessage.cs" />
     <Compile Include="Model\MessagingService\Messages\MessageIdsEnum.cs" />

@@ -14,6 +14,7 @@ namespace RoboTooth.Model.MessagingService.Messages
         EEchoDistance = 0,
         EMagnetometerOrientation = 1,
         EActionCompleted = 2,
+        EDebugString = 3,
     }
 
     /// <summary>

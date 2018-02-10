@@ -110,6 +110,8 @@ class state
     void updateDistanceMeasurement();
     void updateMagnetometerMeasurement();
 
+    void sendDebugMessage(const char* debugMessage);
+
     messagingService* getMessenger() { return &messenger; }
 
   private:

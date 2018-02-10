@@ -8,7 +8,7 @@ struct message
 {
 	byte dataLength;
 	byte id;
-	byte messageData[24];
+	byte messageData[constants.maximumMessageDataLength];
 };
 
 

@@ -42,6 +42,7 @@ struct
       const static byte echoDistanceMsg = 0;
       const static byte magnetometerDataMsg = 1;
       const static byte actionCompletedMsg = 2;
+      const static byte debugStringMsg = 3;
     } messageIdTx;
 
     struct 
