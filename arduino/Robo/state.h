@@ -110,9 +110,7 @@ class state
     void updateDistanceMeasurement();
     void updateMagnetometerMeasurement();
 
-    void sendDebugMessage(const char* debugMessage);
-
-    messagingService* getMessenger() { return &messenger; }
+    messagingService* getMessenger() { return messagingService::getMessenger(); }
 
   private:
     motorState* getMotor( motor motorNode );
@@ -122,7 +120,5 @@ class state
 
     motorState leftMotor;
     motorState rightMotor;
-
-    messagingService messenger;
 };
 

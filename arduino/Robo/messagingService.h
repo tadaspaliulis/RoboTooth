@@ -12,10 +12,11 @@ struct message
 };
 
 
+//Singleton for communicating with the application
 class messagingService
 {
   public:
-    messagingService();
+    static messagingService* getMessenger();
 
     void initialise();
 
@@ -28,6 +29,9 @@ class messagingService
    	message* processMessage();
 
   private:
+    messagingService();
+
+    static messagingService* messengerSingleton;
 
   	const static byte startOfFrame;
 

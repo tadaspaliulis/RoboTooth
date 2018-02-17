@@ -3,6 +3,16 @@
 
 const byte messagingService::startOfFrame = 0xbb;
 
+static messagingService* messagingService::messengerSingleton = nullptr;
+
+messagingService* messagingService::getMessenger()
+{
+	if(messengerSingleton == nullptr)
+		messengerSingleton = new messagingService();
+
+	return messengerSingleton;
+}
+
 messagingService::messagingService() : dataReceived ( 0 ), currentReadLocation ( 0 ), currentWriteLocation ( 0 ), totalDataReceived ( 0 ) 
 {
 	

@@ -2,8 +2,6 @@
 #include "state.h"
 #include "controller.h"
 
-#define SERIAL_DEBUG
-
 state State;
 controller Controller;
 
@@ -29,9 +27,9 @@ void loop()
 	{
 		Controller.processMessage( newMessage ); 
 	}
-			
+
 	//Behave based on inputs and messages
-	//Controller.act();
+	Controller.act();
 
 	delay(10);
   

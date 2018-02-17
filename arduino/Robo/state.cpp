@@ -107,7 +107,7 @@ state::state()
 void state::initialise()
 {
 	//Start the bluetooth service
-	messenger.initialise();
+	getMessenger()->initialise();
 
 	//Map classes to hardware pins
 	leftMotor.initialise( pinMapping.motors.leftLogic1, pinMapping.motors.leftLogic2, pinMapping.motors.leftSpeed );
@@ -230,19 +230,6 @@ int state::getMagnetometerOrientationY()
 int state::getMagnetometerOrientationZ()
 {
 	return magnetometer.getLastReadingZ();
-}
-
-void state::sendDebugMessage(const char* debugMessage)
-{
-	size_t stringLength = strlen(debugMessage);
-	if(stringLength >= constants.maximumMessageDataLength)
-		stringLength = constants.maximumMessageDataLength - 1;
-
-	message msg;
-	msg.id = constants.messageIdTx.debugStringMsg;
-	msg.dataLength = stringLength;
-	memcpy(msg.messageData, debugMessage, stringLength);
-	getMessenger()->sendMessage(msg);
 }
 
 //===========Magnetometer sensor implementation
