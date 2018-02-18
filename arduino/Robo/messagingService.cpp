@@ -107,7 +107,7 @@ message* messagingService::processMessage()
 		tempMessage.dataLength = readByte(startOfMessage + 1);
 
 		//Check if the full message has been received
-		if(tempMessage.dataLength  + 4 >= dataReceived)
+		if(tempMessage.dataLength  + 4 > dataReceived)
 			return NULL;
 
 
