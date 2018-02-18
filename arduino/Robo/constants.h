@@ -1,9 +1,9 @@
 #pragma once
 #include "Arduino.h"
 
-struct
+struct pinMappingStruct
 {
-    struct
+    struct motorsConstants
     {
 
       const static byte leftLogic1 = 12;
@@ -16,27 +16,28 @@ struct
 
     } motors;
 
-    struct 
+    struct sensorsConstants
     {
       const static byte echoTrig = 7;
       const static byte echoReceive = 8;
     } sensors;
     
- } pinMapping;
+ };
 
- struct
+ struct constantsStruct
  {
     const static int sendBufferSize = 28;//24 + 2 + 1 + 1;
     const static int bufferSize = 256;
     const static int minimumMessageLength = 6;
     const static int maximumMessageDataLength = 24;
-    struct
+
+    struct timersConstants
     {
       const static unsigned int echoDistancePeriod = 100; //10Hz or every 100ms
       const static unsigned int magnetometerPeriod = 200; //5Hz or every 200ms
     } timers;
 
-    struct 
+    struct messageIdTxConstants
     {
       const static byte heartbeatMsg = 0; //NOT USED
       const static byte echoDistanceMsg = 0;
@@ -45,9 +46,12 @@ struct
       const static byte debugStringMsg = 3;
     } messageIdTx;
 
-    struct 
+    struct messageIdRxConstants
     {
       const static byte moveControl = 1;
     } messageIdRx;
 
- } constants;
+ };
+
+ static constantsStruct constants;
+ static pinMappingStruct pinMapping;

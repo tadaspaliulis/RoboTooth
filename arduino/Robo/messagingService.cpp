@@ -3,7 +3,7 @@
 
 const byte messagingService::startOfFrame = 0xbb;
 
-static messagingService* messagingService::messengerSingleton = nullptr;
+messagingService* messagingService::messengerSingleton = nullptr;
 
 messagingService* messagingService::getMessenger()
 {
