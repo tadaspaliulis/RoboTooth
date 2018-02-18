@@ -74,8 +74,6 @@ state* controller::getState() { return pState; }
 //**********************Message Handlers**********************//
 bool controller::handleMoveMessage( message* msg )
 {
-	getState()->moveForward(255);
-	return;
 	//Extract message data contents
 	byte readPosition = 0;
 	byte movementCommand  = msg->messageData[readPosition++];
