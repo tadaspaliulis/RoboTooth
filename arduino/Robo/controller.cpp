@@ -2,6 +2,7 @@
 #include "constants.h"
 #include "actionQueue.h"
 #include "motorAction.h"
+#include "Debug.h"
 /**** controller implementation ****/
 
 controller::controller() : pState( NULL ), motorActionQueue(0)
@@ -21,6 +22,7 @@ void controller::processMessage( message* msg )
 			handleMoveMessage(msg);
 			break;
 		default:
+			Serial.println("Unknown msg");
 			break;
 	};
 }
@@ -45,6 +47,7 @@ void controller::updateSensorData()
 	//Time elapsed since last sensor update
 	unsigned int elapsedTime = sensorTimer.timeStamp();
 	getState()->getMessenger()->receiveIncomingData();
+	return;
 	if( echoSensorCountdown.updateTimer( elapsedTime ) ) //If true, countdown time over, do the operation and reset
 	{
 		getState()->updateDistanceMeasurement();
@@ -96,17 +99,22 @@ bool controller::handleMoveMessage( message* msg )
 		break;
 		case 1: //1 is move forward
 			action = &state::moveForward;
+			SendStringToApp("Rx fwd");
 		break;
 		case 2: //2 is move backwards
 			action = &state::moveBack;
+			SendStringToApp("Rx back");
 		break;
 		case 3: //3 is turn left
 			action = &state::turnLeft;
+			SendStringToApp("Rx left");
 		break;
 		case 4: //4 is turn right
 			action = &state::turnRight;
+			SendStringToApp("Rx right");
 		break;
 		default:
+			Serial.println("Unknown move type");
 			return false; //Invalid command
 	}
 	

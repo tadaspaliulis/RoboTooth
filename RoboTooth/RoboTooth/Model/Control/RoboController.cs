@@ -34,7 +34,7 @@ namespace RoboTooth.Model.Control
             //    val = -val;
 
             val = val * 180 / Math.PI;
-            System.Diagnostics.Debug.WriteLine(val);
+            //System.Diagnostics.Debug.WriteLine(val);
         }
         private void handleActionCompletedMessage(object sender, ActionCompletedMessage message)
         {
@@ -63,12 +63,16 @@ namespace RoboTooth.Model.Control
 
         public void TurnLeftIndefinite()
         {
-            performRobotMovementAction(new IndefiniteMoveMessage(MoveDirection.ETurnLeft, 255));
+            for (int i = 0; i != 10; ++i)
+            {
+                performRobotMovementAction(new IndefiniteMoveMessage(MoveDirection.ETurnLeft, 255));
+                Task.Delay(20);
+            }
         }
 
         public void TurnRightIndefinite()
         {
-            performRobotMovementAction(new IndefiniteMoveMessage(MoveDirection.ETurnRight, 255));
+            performRobotMovementAction(new TimedMoveMessage(MoveDirection.ETurnRight, 255, 5000));
         }
 
         public void MoveForwardIndefinite()

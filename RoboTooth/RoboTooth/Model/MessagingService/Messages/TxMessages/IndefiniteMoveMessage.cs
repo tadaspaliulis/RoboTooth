@@ -25,17 +25,17 @@ namespace RoboTooth.Model.MessagingService.Messages.TxMessages
 
     public class TimedMoveMessage : RawMessage, IActionInitiationMessage
     {
-        public TimedMoveMessage(MoveDirection moveDirection, byte speed, ushort timeInMicroSeconds, byte actionId = 0) 
-            : base((byte)TxMessageIdsEnum.EMoveControlAction, CreateRawData(moveDirection, speed, timeInMicroSeconds, actionId)){ }
+        public TimedMoveMessage(MoveDirection moveDirection, byte speed, ushort timeInMiliseconds, byte actionId = 0) 
+            : base((byte)TxMessageIdsEnum.EMoveControlAction, CreateRawData(moveDirection, speed, timeInMiliseconds, actionId)){ }
 
         /// <summary>
         /// Creates the raw data to be used by base constructor
         /// </summary>
         /// <param name=""></param>
         /// <returns></returns>
-        static protected byte[] CreateRawData(MoveDirection moveDirection, byte speed, ushort timeInMicroSeconds, byte actionId)
+        static protected byte[] CreateRawData(MoveDirection moveDirection, byte speed, ushort timeInMiliseconds, byte actionId)
         {
-            var timeBytes = BitConverter.GetBytes(timeInMicroSeconds);
+            var timeBytes = BitConverter.GetBytes(timeInMiliseconds);
             return new byte[] { (byte)moveDirection, speed, timeBytes[0], timeBytes[1], actionId }; //The last 2 bytes are duration in microseconds
         }
 

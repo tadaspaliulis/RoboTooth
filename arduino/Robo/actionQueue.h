@@ -2,6 +2,8 @@
 
 #include "state.h"
 #include "timeMeasurement.h"
+#include "Debug.h"
+#include <stdio.h>
 
 enum movevementStateEnum
 {
@@ -79,7 +81,7 @@ actionQueue<T>::actionQueue(byte ActionQueueId): currentActionIndex(0), nextInse
 template<class T>
 T* actionQueue<T>::getAction(int index)
 {
-	auto normalizedIndex = currentActionIndex + index % queueLength; //Avoid trying to access elements out of bounds
+	auto normalizedIndex = (currentActionIndex + index) % queueLength; //Avoid trying to access elements out of bounds
 	//[2] [3n] [4] [c0] [1]
 	return &queue[normalizedIndex];
 }
@@ -93,20 +95,23 @@ int actionQueue<T>::getQueuedActionsCount()
 
 	if(currentActionIndex > nextInsertSlotIndex)
 	{
-		return queueLength - (currentActionIndex + 1) + nextInsertSlotIndex; //[] [n] [] [c] []
+		//[] [n] [] [c] []
+		return queueLength - (currentActionIndex + 1) + nextInsertSlotIndex;
 	}
 	else
 	{
-		return nextInsertSlotIndex - currentActionIndex; //[] [c] [] [n] []
+		//[] [c] [] [n] []
+		return nextInsertSlotIndex - currentActionIndex;
 	}
 }
 
 template<class T>
 void actionQueue<T>::addNewAction(const T& action)
 {
+	Serial.println("Adding action!");
 	//There's no protective mechanism from queue 'overflowing', it's possible for th/e currently executed action to be overwritten
 	//if too many actions get queued in a row. Leave it up to roboApp to manage this..? Maybe
-	auto lastQueueAction = getQueuedActionsCount() - 1;
+	/*auto lastQueueAction = getQueuedActionsCount() - 1; //Is this correct??
 
 	//If the currently queued action is permanent, and a new action is added, this action needs to be removed from
 	//the queue and the newly added action needs to be started immediately
@@ -115,13 +120,32 @@ void actionQueue<T>::addNewAction(const T& action)
 
 	//Check if the last action in the queue is permanent, and replace it if it is
 	//If it's the current action, the new action will start on the next update
-	if(lastQueueAction >= 0 && getAction(lastQueueAction)->isIndefinite())
+	if(lastQueueAction >= 0 && getAction(lastQueueAction)->isIndefinite()) 
 	{
+		Serial.println("Ovrwrite indef act");
 		//Decrement while making sure we don't get negative numbers here
-		nextInsertSlotIndex = ((nextInsertSlotIndex - 1) < 0 ) ? 0 : nextInsertSlotIndex - 1;
+		nextInsertSlotIndex = lastQueueAction;
+	}*/
+
+	//Assuming getQueuedActionsCount works ok
+	//getAction is normalized, so it effectively gets the current action when passed 0
+	// So when there was 1 timed action and and 1 indef action, the count should return 1, and with -1 the idx ends up being 0
+	//So when it's check for indef, it checks current (which is in fact indefinite)
+	//But then the overwrite would happen at actual 0, which was infact timed action
+	//And since the insert index was 0, nexInsertSLot and currentIndex end up being the same, which means it does not even attempt to start any action
+	//BUT WHY does it start working at ID 5 and not ID 3??
+
+
+	if(AnyActionsQueued() && GetCurrentAction()->isIndefinite())
+	{
+		nextInsertSlotIndex = currentActionIndex;
 	}
 
 	queue[nextInsertSlotIndex] = action;
+
+	char charBuffer[30];
+	sprintf(charBuffer, "Added at:%d,tm:%d", nextInsertSlotIndex, action.getExecutionTimeMs());
+	Serial.println(charBuffer);
 	++nextInsertSlotIndex;
 	nextInsertSlotIndex = nextInsertSlotIndex % queueLength;
 }
@@ -141,8 +165,10 @@ T* actionQueue<T>::GetCurrentAction()
 template<class T>
 void actionQueue<T>::CompleteCurrentAction()
 {
-	lastFinishedActionId = currentActionIndex;
-
+	lastFinishedActionId = GetCurrentAction()->getActionId();//currentActionIndex; //Is this correct? Action and Id?
+	char charBuffer[24];
+	sprintf(charBuffer, "Completed id:%d", lastFinishedActionId);
+	Serial.println(charBuffer);
 	++currentActionIndex;
 	currentActionIndex = currentActionIndex % queueLength;
 }
@@ -151,13 +177,24 @@ template<class T>
 bool actionQueue<T>::StartNextAction(state* pState)
 {
 	auto currAction = GetCurrentAction();
+
+	char charBuffer2[40]; //Is this it????
+	sprintf(charBuffer2, "Attempt start, id:%d idx:%d", currAction->getActionId(), currentActionIndex);
+	Serial.println(charBuffer2);
 	if(!currAction->isStarted())
 	{
+		char charBuffer[30]; //Is this it????
+		sprintf(charBuffer, "Action start, time:%d", currAction->getExecutionTimeMs());
+		Serial.println(charBuffer);
+		//SendStringToApp(charBuffer);
 		currAction->start(pState);
 
 		//If execTime is 0 the action will be performed indefinitely or till a timed action supercedes it
-		if(currAction->isIndefinite())
+		if(!currAction->isIndefinite())
+		{
+			Serial.println("Act is indef");
 			timer.resetTimer(currAction->getExecutionTimeMs());
+		}
 
 		return true;
 	}
@@ -175,6 +212,8 @@ bool actionQueue<T>::UpdateQueue(unsigned int elapsedTime, state* pState)
 	//2.2 If it hasn't been started, set the flag to true, start the timer and start the action
 	if(AnyActionsQueued())
 	{
+		Serial.println("Actions queued");
+
 		if(StartNextAction(pState))
 			return false; //We just started a new action, so no need to do anything else
 

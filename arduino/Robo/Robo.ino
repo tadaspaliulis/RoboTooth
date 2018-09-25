@@ -1,6 +1,8 @@
 #include "Arduino.h"
 #include "state.h"
 #include "controller.h"
+#include "Debug.h"
+#include <stdio.h>
 
 state State;
 controller Controller;
@@ -25,6 +27,9 @@ void loop()
 
 	while ( ( newMessage = State.getMessenger()->processMessage() ) != NULL )
 	{
+		//char charBuffer[24];
+		//sprintf(charBuffer, "Msg rx id:%d,l:%d", newMessage->id, newMessage->dataLength);
+		//SendStringToApp(charBuffer);
 		Controller.processMessage( newMessage ); 
 	}
 

@@ -82,7 +82,7 @@ namespace RoboTooth.ViewModel
 
         private void HandleReceivedMessages(object sender, RawMessage message)
         {
-            App.Current.Dispatcher.Invoke(delegate
+            App.Current?.Dispatcher.Invoke(delegate
             {
                 _rawMessageList.Add(new MessageListItem(message));
             });

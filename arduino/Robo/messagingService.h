@@ -58,7 +58,12 @@ class messagingService
     //Looks for 2 instances of token in a row, returns -1 if not found
     int findFrameLimitersInBuffer(byte token, int readStartPosition, int &dataRead);
 
+    void discardData(int byteCount);
+
     //Reads the specific byte in the buffer, applies mod to make sure index is never out of bounds
     byte readByte(int readPosition);
+
+
+    bool readByte(int readPosition, byte& outputByte);
 };
 
