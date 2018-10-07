@@ -51,17 +51,22 @@ namespace RoboTooth.Model
             _localComponent.DiscoverDevicesAsync(255, true, true, true, true, null);
         }
 
+        /// <summary>
+        /// The pin used to authenticate the connection.
+        /// </summary>
+        private const string RoboPin = "1234";
+
         private void ConnectToDevice(BluetoothDeviceInfo device)
         {
-            // check if device is paired
-            //if (device.Authenticated)
-            //{
-                // set pin of device to connect with
-                //_bluetoothClient.SetPin("1234");
-                // async connection method
-                _bluetoothClient.BeginConnect(device.DeviceAddress, BluetoothService.SerialPort, new AsyncCallback(connectionCallback), device);
-            //}
-            
+            // Check if device is paired
+            if (!device.Authenticated)
+            {
+                // Set pin of device to connect with.
+                _bluetoothClient.SetPin(RoboPin);
+            }
+
+            // Initiate the connection.
+            _bluetoothClient.BeginConnect(device.DeviceAddress, BluetoothService.SerialPort, new AsyncCallback(connectionCallback), device);
         }
 
         private void RecordDiscoveredDevices(DiscoverDevicesEventArgs e)
