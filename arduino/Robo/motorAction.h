@@ -14,11 +14,11 @@ public:
 	motorAction(movementActionFunction Action, byte ActionId, unsigned int ExecutionTimeMs, byte speed);
 
 	//void initialise(movementActionFunction Action, byte ActionId, unsigned int ExecutionTimeMs);
-	bool isStarted() { return started; }
+	bool isStarted() const { return started; }
 	
-	unsigned int getExecutionTimeMs() { return executionTimeMs; }
-	byte getActionId() { return actionId; }
-	bool isIndefinite() { return getExecutionTimeMs() == 0; }
+	unsigned int getExecutionTimeMs() const { return executionTimeMs; }
+	byte getActionId() const { return actionId; }
+	bool isIndefinite() const { return getExecutionTimeMs() == 0; }
 	//Starts the action
 	void start(state* pState);
 
