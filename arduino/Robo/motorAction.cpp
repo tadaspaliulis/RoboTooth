@@ -16,6 +16,7 @@ motorAction::motorAction(movementActionFunction Action, byte ActionId, unsigned 
 {
 }
 
+//Should rename this to onLastQueueAction
 void motorAction::onActionCompleted(state* pState)
 {
 	//Called only if there's no further actions queued

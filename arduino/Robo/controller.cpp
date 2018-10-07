@@ -36,8 +36,8 @@ void controller::act()
 	unsigned int elapsedTime = actionQueueTimer.timeStamp();
 	if(motorActionQueue.UpdateQueue(elapsedTime, getState())) 
 	{
-		//If update queue returns true, it means that an action was completed
-		//Inform the control applicaition
+		//If update queue returns true, it means that an action was completed.
+		//Inform the control application.
 		sendActionQueueActionCompleted(motorActionQueue.actionQueueId, motorActionQueue.GetLastFinishedActionId());
 	}
 }
@@ -95,7 +95,7 @@ bool controller::handleMoveMessage( message* msg )
 	switch(movementCommand)
 	{
 		case 0: //0 is stop
-			action = &state::stop; //Should stop be treaded differently and override everything else?
+			action = &state::stop; //Should stop be treated differently and override everything else?
 		break;
 		case 1: //1 is move forward
 			action = &state::moveForward;

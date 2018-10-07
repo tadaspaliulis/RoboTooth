@@ -135,7 +135,7 @@ void actionQueue<T>::addNewAction(const T& action)
 	//And since the insert index was 0, nexInsertSLot and currentIndex end up being the same, which means it does not even attempt to start any action
 	//BUT WHY does it start working at ID 5 and not ID 3??
 
-
+	//IF the current action is indefinite, we want to override it with the new one.
 	if(AnyActionsQueued() && GetCurrentAction()->isIndefinite())
 	{
 		nextInsertSlotIndex = currentActionIndex;
@@ -146,6 +146,9 @@ void actionQueue<T>::addNewAction(const T& action)
 	char charBuffer[30];
 	sprintf(charBuffer, "Added at:%d,tm:%d", nextInsertSlotIndex, action.getExecutionTimeMs());
 	Serial.println(charBuffer);
+
+	//Increment the index controlling where the next action will be insterted
+	//and make sure its not outside the queue.
 	++nextInsertSlotIndex;
 	nextInsertSlotIndex = nextInsertSlotIndex % queueLength;
 }
@@ -181,25 +184,26 @@ bool actionQueue<T>::StartNextAction(state* pState)
 	char charBuffer2[40]; //Is this it????
 	sprintf(charBuffer2, "Attempt start, id:%d idx:%d", currAction->getActionId(), currentActionIndex);
 	Serial.println(charBuffer2);
-	if(!currAction->isStarted())
+
+	//An action has already been started, do nothing.
+	if(currAction->isStarted())
+		return false;
+
+	//There's an action that can be started.
+	char charBuffer[30]; //Is this it????
+	sprintf(charBuffer, "Action start, time:%d", currAction->getExecutionTimeMs());
+	Serial.println(charBuffer);
+	//SendStringToApp(charBuffer);
+	currAction->start(pState);
+
+	//If execTime is 0 the action will be performed indefinitely or till a timed action supercedes it
+	if(!currAction->isIndefinite())
 	{
-		char charBuffer[30]; //Is this it????
-		sprintf(charBuffer, "Action start, time:%d", currAction->getExecutionTimeMs());
-		Serial.println(charBuffer);
-		//SendStringToApp(charBuffer);
-		currAction->start(pState);
-
-		//If execTime is 0 the action will be performed indefinitely or till a timed action supercedes it
-		if(!currAction->isIndefinite())
-		{
-			Serial.println("Act is indef");
-			timer.resetTimer(currAction->getExecutionTimeMs());
-		}
-
-		return true;
+		Serial.println("Act is indef");
+		timer.resetTimer(currAction->getExecutionTimeMs());
 	}
 
-	return false; //Did not start an action
+	return true;	
 }
 
 template<class T>
@@ -210,30 +214,65 @@ bool actionQueue<T>::UpdateQueue(unsigned int elapsedTime, state* pState)
 	//2.1 If it has been started, update its timer and check if it's completed yet,
 	//2.1.1 If it has completed, remove it from the queue and send a message to the control application to let it know
 	//2.2 If it hasn't been started, set the flag to true, start the timer and start the action
-	if(AnyActionsQueued())
+	if(!AnyActionsQueued())
 	{
-		Serial.println("Actions queued");
-
-		if(StartNextAction(pState))
-			return false; //We just started a new action, so no need to do anything else
-
-		//Get current action before we 'dispose' of it
-		auto currentAction = GetCurrentAction();
-
-		//Check if time for the current action has run out, if so, check if we can start a new one
-		if(!currentAction->isIndefinite() && timer.updateTimer(elapsedTime))
-		{
-			CompleteCurrentAction();
-			
-			//Check again if we still have any actions and then start the next action
-			if(AnyActionsQueued())
-				StartNextAction(pState);
-			else
-				currentAction->onActionCompleted(pState); //We completed an action, and there was nothing else queued
-
-			return true; //We have finished an action
-		}
+		//No actions completed.
+		return false; 
 	}
 
-	return false; //No actions completed
+	Serial.println("Actions queued");
+
+	//Attempt to start a new action.
+	if(StartNextAction(pState))
+	{
+		//We just started a new action, so no need to do anything else.
+		return false; 
+	}
+
+	//Get current action before we 'dispose' of it
+	auto currentAction = GetCurrentAction();
+
+	//Check if time for the current action has run out, if so, check if we can start a new one.
+	if(currentAction->isIndefinite() || !timer.updateTimer(elapsedTime))
+		return false;
+
+	CompleteCurrentAction();
+			
+	//Check again if we still have any actions and then start the next action
+	if(AnyActionsQueued())
+	{
+		StartNextAction(pState);
+	}
+	else
+	{
+		//We completed an action, and there was nothing else queued.
+		//Normally an action is simply replaced by another action, but since this is the last one,
+		//we need to make sure that all on-going processes related to the action (such as motors spinning) are stopped.
+		currentAction->onActionCompleted(pState); 
+	}
+
+	return true; //We have finished an action
+
+	/*if(!currentAction->isIndefinite() && timer.updateTimer(elapsedTime))
+	{
+		CompleteCurrentAction();
+			
+		//Check again if we still have any actions and then start the next action
+		if(AnyActionsQueued())
+		{
+			StartNextAction(pState);
+		}
+		else
+		{
+			//We completed an action, and there was nothing else queued.
+			//Normally an action is simply replaced by another action, but since this is the last one,
+			//we need to make sure that all on-going processes related to the action (such as motors spinning) are stopped.
+			currentAction->onActionCompleted(pState); 
+		}
+
+		return true; //We have finished an action
+	}
+
+	//What's happened in this scenario?
+	return false;*/
 }
