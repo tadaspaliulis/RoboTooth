@@ -36,7 +36,7 @@ void messagingService::receiveIncomingData()
 	//dataReceived = 0;
 	char output[6];
 	while ( Serial.available() > 0)
-  	{
+  {
   		//Serial.write("Receive incoming data\n");
   		//If looped around the whole buffer, overwritte data at the beginning
   		if(currentWriteLocation == constants.bufferSize)
@@ -96,104 +96,102 @@ void messagingService::sendMessage(message& msg)
 message* messagingService::processMessage()
 {
 	//Check if we've received enough data for there to be at least one message.
-	if( dataReceived >= constants.minimumMessageLength )
+	if( dataReceived < constants.minimumMessageLength )
 	{
+        return nullptr;
+    }
 
-		//Serial.println("Processing message\n");
-		int dataRead = 0;
+	//Keep track how much data we've read so we could discard it later.
+	int dataRead = 0;
 
-		//Find the start of the frame, returns an index within the data buffer which points to the end of the frame.
-		//Note that the return value here is using the real indexes, and the readPosition then gets added onto that.
+	//Find the start of the frame, returns an index within the data buffer which points to the end of the frame.
+	//Note that the return value here is using the real indexes, and the readPosition then gets added onto that.
 
-		//This should probably return the offset from the currentReadLocation instead, letting the readByte functions then handle addition as well.
-		//The code would probably be more comprehensible.
-		int startOfMessage = findFrameLimitersInBuffer(startOfFrame, currentReadLocation, dataRead);
-		
-		//If a negative value is returned it means no frame was found and there's nothing to do.
-		if( startOfMessage < 0)
-			return nullptr;
-
-		
-		int readPosition  = 1;
-		
-		//tempMessage.dataLength = readByte(startOfMessage + 1);
-		//Attempt reading 
-		if(!readByte(startOfMessage + readPosition, tempMessage.dataLength))
-		{
-			char charBuffer[60];
-  			sprintf(charBuffer, "Failed length read: Idx: %d,Rx:%d", startOfMessage + readPosition, dataReceived);
-			Serial.println(charBuffer);	
-			return nullptr;
-		}
-
-		readPosition += 1;
-
-		//Check if the full message has been received
-		//dataLength = 4, readPosition = 2, startOfMessage = 1,
-		//TODO: this condition needs work, somehow expected ends up being one too low?
-		//What's this + 2??
-		if((tempMessage.dataLength + 2 + dataRead ) >= dataReceived)
-		{
-			char charBuffer[30];
-  			sprintf(charBuffer, "Expected:%d,Rx:%d", tempMessage.dataLength + 2 + dataRead, dataReceived);
-			Serial.println(charBuffer);
-			return nullptr;
-		}
-
-
-		//Check if the received message is longer than expected
-		//Might indicate an error in processing code or a corruption during transmission.
-		if( tempMessage.dataLength > constants.maximumMessageDataLength )
-		{
-			char buffertextmessage[50];
-  			sprintf(buffertextmessage, "Msg too long:%d", tempMessage.dataLength );
-
- 	 		Serial.println(buffertextmessage);
-
- 	 		//TODO: Add this back in
- 	 		//SendStringToApp(buffertextmessage);
-
- 	 		//Disard the data since it's probably corrupted
- 	 		discardData(dataRead);
-
-			return nullptr;
-		}
-
-		//currentReadLocation = startOfMessage + 2;
-		//tempMessage.id = readByte( startOfMessage + 2 );
-		//Attempt to read the message ID (not sure why the readPosition isn't getting incremented here)
-		if(!readByte(startOfMessage + readPosition, tempMessage.id))
-			return nullptr;
-
-		readPosition += 1;
-		
-		//And now read the data that the message was carrying
-		for(int i = 0; i < tempMessage.dataLength ; ++i)
-		{
-			//tempMessage.messageData[i] = readByte(startOfMessage + 3 + i);
-			//If we run out of data to be read at any point (i.e. we haven't received all of it)
-			//Just return null, we can try again later.
-			if(!readByte(startOfMessage + readPosition, tempMessage.messageData[i]))
-				return nullptr;
-
-			readPosition += 1;
-		}
-
-		dataRead += readPosition;
-
-		//Keep track of where we left off reading the buffer.
-		currentReadLocation = (currentReadLocation + dataRead) % constants.bufferSize;
-
-		char charBuffer[40];
-		sprintf(charBuffer, "Msg Parsed. DataRx:%d, dataRead:%d", dataReceived, dataRead);
-		Serial.println(charBuffer);
-
-		discardData(dataRead);
-
-		return &tempMessage;
+	//This should probably return the offset from the currentReadLocation instead, letting the readByte functions then handle addition as well.
+	//The code would probably be more comprehensible.
+	int startOfMessage = findFrameLimitersInBuffer(startOfFrame, currentReadLocation, dataRead);
+	
+	//If a negative value is returned it means no frame was found and there's nothing to do.
+	if( startOfMessage < 0)
+		return nullptr;
+	
+	int readPosition  = 1;
+	
+	//tempMessage.dataLength = readByte(startOfMessage + 1);
+	//Attempt reading 
+	if(!readByte(startOfMessage + readPosition, tempMessage.dataLength))
+	{
+		char charBuffer[60];
+		sprintf(charBuffer, "Failed length read: Idx: %d,Rx:%d", startOfMessage + readPosition, dataReceived);
+		Serial.println(charBuffer);	
+		return nullptr;
 	}
 
-	else return NULL;
+	readPosition += 1;
+
+	//Check if the full message has been received
+	//dataLength = 4, readPosition = 2, startOfMessage = 1,
+	//TODO: this condition needs work, somehow expected ends up being one too low?
+	//What's this + 2??
+	if((tempMessage.dataLength + 2 + dataRead ) >= dataReceived)
+	{
+		char charBuffer[30];
+			sprintf(charBuffer, "Expected:%d,Rx:%d", tempMessage.dataLength + 2 + dataRead, dataReceived);
+		Serial.println(charBuffer);
+		return nullptr;
+	}
+
+
+	//Check if the received message is longer than expected
+	//Might indicate an error in processing code or a corruption during transmission.
+	if( tempMessage.dataLength > constants.maximumMessageDataLength )
+	{
+		char buffertextmessage[50];
+			sprintf(buffertextmessage, "Msg too long:%d", tempMessage.dataLength );
+
+	 		Serial.println(buffertextmessage);
+
+	 		//TODO: Add this back in
+	 		//SendStringToApp(buffertextmessage);
+
+	 		//Disard the data since it's probably corrupted
+	 		discardData(dataRead);
+
+		return nullptr;
+	}
+
+	//currentReadLocation = startOfMessage + 2;
+	//tempMessage.id = readByte( startOfMessage + 2 );
+	//Attempt to read the message ID (not sure why the readPosition isn't getting incremented here)
+	if(!readByte(startOfMessage + readPosition, tempMessage.id))
+		return nullptr;
+
+	readPosition += 1;
+	
+	//And now read the data that the message was carrying
+	for(int i = 0; i < tempMessage.dataLength ; ++i)
+	{
+		//tempMessage.messageData[i] = readByte(startOfMessage + 3 + i);
+		//If we run out of data to be read at any point (i.e. we haven't received all of it)
+		//Just return null, we can try again later.
+		if(!readByte(startOfMessage + readPosition, tempMessage.messageData[i]))
+			return nullptr;
+
+		readPosition += 1;
+	}
+
+	dataRead += readPosition;
+
+	//Keep track of where we left off reading the buffer.
+	currentReadLocation = (currentReadLocation + dataRead) % constants.bufferSize;
+
+	char charBuffer[40];
+	sprintf(charBuffer, "Msg Parsed. DataRx:%d, dataRead:%d", dataReceived, dataRead);
+	Serial.println(charBuffer);
+
+	discardData(dataRead);
+
+	return &tempMessage;
 }
 
 void messagingService::discardData(int byteCount)
