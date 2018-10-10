@@ -32,11 +32,9 @@ void messagingService::initialise()
 
 void messagingService::receiveIncomingData()
 {	
-	//Reset data since last processing
-	//dataReceived = 0;
 	char output[6];
 	while ( Serial.available() > 0)
-  {
+    {
   		//Serial.write("Receive incoming data\n");
   		//If looped around the whole buffer, overwritte data at the beginning
   		if(currentWriteLocation == constants.bufferSize)
@@ -47,22 +45,19 @@ void messagingService::receiveIncomingData()
     	Serial.println(output);
     	++currentWriteLocation;
     	++dataReceived;
-  }
+    }
 
-  totalDataReceived += dataReceived;
+    totalDataReceived += dataReceived;
 }
 
 int messagingService::findFrameLimitersInBuffer(byte token, int readStartPosition, int &dataRead)
 {
-	//Serial.write("Looking for frames\n");
-	
 	//First loop to find the start of the message 
 	for(int i = readStartPosition; dataRead < dataReceived - 1; ++dataRead)
 	{
 		if ( readByte(i) == token && readByte ( i + 1 ) == token )
 		{
-			//Serial.write("Frame found\n");
-			++dataRead; //Another byte read
+			++dataRead; //Another byte read, since we've checked ahead.
 			return (i + 1) % constants.bufferSize; //Frame found! Make sure it's not pointing out of bounds
 		}
 
@@ -117,8 +112,7 @@ message* messagingService::processMessage()
 	
 	int readPosition  = 1;
 	
-	//tempMessage.dataLength = readByte(startOfMessage + 1);
-	//Attempt reading 
+	//Attempt reading the data length of the message.
 	if(!readByte(startOfMessage + readPosition, tempMessage.dataLength))
 	{
 		char charBuffer[60];
@@ -136,26 +130,25 @@ message* messagingService::processMessage()
 	if((tempMessage.dataLength + 2 + dataRead ) >= dataReceived)
 	{
 		char charBuffer[30];
-			sprintf(charBuffer, "Expected:%d,Rx:%d", tempMessage.dataLength + 2 + dataRead, dataReceived);
+		sprintf(charBuffer, "Expected:%d,Rx:%d", tempMessage.dataLength + 2 + dataRead, dataReceived);
 		Serial.println(charBuffer);
 		return nullptr;
 	}
-
 
 	//Check if the received message is longer than expected
 	//Might indicate an error in processing code or a corruption during transmission.
 	if( tempMessage.dataLength > constants.maximumMessageDataLength )
 	{
 		char buffertextmessage[50];
-			sprintf(buffertextmessage, "Msg too long:%d", tempMessage.dataLength );
+		sprintf(buffertextmessage, "Msg too long:%d", tempMessage.dataLength );
 
-	 		Serial.println(buffertextmessage);
+ 		Serial.println(buffertextmessage);
 
-	 		//TODO: Add this back in
-	 		//SendStringToApp(buffertextmessage);
+ 		//TODO: Add this back in
+ 		//SendStringToApp(buffertextmessage);
 
-	 		//Disard the data since it's probably corrupted
-	 		discardData(dataRead);
+ 		//Disard the data since it's probably corrupted
+ 		discardData(dataRead);
 
 		return nullptr;
 	}
@@ -209,7 +202,6 @@ bool messagingService::readByte(int readPosition, byte& outputByte)
 	outputByte = messageBuffer[readPosition % constants.bufferSize];
 	return true;	
 }
-
 
 byte messagingService::readByte(int readPosition)
 {
