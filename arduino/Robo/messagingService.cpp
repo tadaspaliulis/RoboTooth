@@ -114,12 +114,29 @@ message* messagingService::processMessage()
 		return nullptr;
 	}
 
+    //Advance past the data length field.
 	readPosition += 1;
 
-	//Check if the full message has been received
-	//TODO: this condition needs work, somehow expected ends up being one too low?
-	//What's this + 2??
-	if((tempMessage.dataLength + readPosition + 1 /*+ 2 + dataRead*/ ) > dataReceived)
+    //Check if the received message is longer than expected.
+    //Might indicate an error in processing code or a corruption during transmission.
+    if( tempMessage.dataLength > constants.maximumMessageDataLength )
+    {
+        char buffertextmessage[50];
+        sprintf(buffertextmessage, "Msg too long:%d", tempMessage.dataLength );
+
+        Serial.println(buffertextmessage);
+
+        //TODO: Add this back in
+        //SendStringToApp(buffertextmessage);
+
+        //Disard the data since it's probably corrupted.
+        discardData(readPosition + 1);
+
+        return nullptr;
+    }
+
+	//Check if the full message has been received.
+	if((tempMessage.dataLength + readPosition + 1) > dataReceived)
 	{
 		char charBuffer[30];
 		sprintf(charBuffer, "Expected:%d,Rx:%d", tempMessage.dataLength + readPosition + 1, dataReceived);
@@ -127,28 +144,11 @@ message* messagingService::processMessage()
 		return nullptr;
 	}
 
-	//Check if the received message is longer than expected
-	//Might indicate an error in processing code or a corruption during transmission.
-	if( tempMessage.dataLength > constants.maximumMessageDataLength )
-	{
-		char buffertextmessage[50];
-		sprintf(buffertextmessage, "Msg too long:%d", tempMessage.dataLength );
-
- 		Serial.println(buffertextmessage);
-
- 		//TODO: Add this back in
- 		//SendStringToApp(buffertextmessage);
-
- 		//Disard the data since it's probably corrupted.
- 		discardData(readPosition + 1);
-
-		return nullptr;
-	}
-
-    //Attempt to read the message ID (not sure why the readPosition isn't getting incremented here)
+    //Attempt to read the message ID.
 	if(!readByte(readPosition, tempMessage.id))
 		return nullptr;
 
+    //Advance past the ID field.
 	readPosition += 1;
 	
 	//And now read the data that the message was carrying
