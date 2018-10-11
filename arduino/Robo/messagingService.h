@@ -53,7 +53,7 @@ class messagingService
 
     //Helper functions
     //Looks for 2 instances of token in a row, returns -1 if not found
-    int findFrameLimitersInBuffer(byte token, int &dataRead);
+    int findFrameLimitersInBuffer(byte token);
 
     void discardData(int byteCount);
 
