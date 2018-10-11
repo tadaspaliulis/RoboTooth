@@ -50,15 +50,17 @@ void messagingService::receiveIncomingData()
     totalDataReceived += dataReceived;
 }
 
-int messagingService::findFrameLimitersInBuffer(byte token, int readStartPosition, int &dataRead)
+int messagingService::findFrameLimitersInBuffer(byte token, int &dataRead)
 {
 	//First loop to find the start of the message 
-	for(int i = readStartPosition; dataRead < dataReceived - 1; ++dataRead)
+	for(int i = 0; dataRead < dataReceived - 1; ++dataRead)
 	{
 		if ( readByte(i) == token && readByte ( i + 1 ) == token )
 		{
-			++dataRead; //Another byte read, since we've checked ahead.
-			return (i + 1) % constants.bufferSize; //Frame found! Make sure it's not pointing out of bounds
+            //Another byte read, since we've checked ahead.
+			++dataRead;
+            //Frame found! Increment the index so that it would point at the second byte in the frame.
+			return i + 1;;
 		}
 
 		++i;
@@ -99,24 +101,22 @@ message* messagingService::processMessage()
 	//Keep track how much data we've read so we could discard it later.
 	int dataRead = 0;
 
-	//Find the start of the frame, returns an index within the data buffer which points to the end of the frame.
-	//Note that the return value here is using the real indexes, and the readPosition then gets added onto that.
-
-	//This should probably return the offset from the currentReadLocation instead, letting the readByte functions then handle addition as well.
-	//The code would probably be more comprehensible.
-	int startOfMessage = findFrameLimitersInBuffer(startOfFrame, currentReadLocation, dataRead);
+	//Find the start of the frame, returns a 0 based index, where 0 means that that the read would happen at currentReadLocation.
+    //The returned value will point at the 2nd byte in the frame.
+	int readPosition = findFrameLimitersInBuffer(startOfFrame, dataRead);
 	
 	//If a negative value is returned it means no frame was found and there's nothing to do.
-	if( startOfMessage < 0)
+	if( readPosition < 0)
 		return nullptr;
 	
-	int readPosition  = 1;
+    //Advance past the start of frame.
+	readPosition  += 1;
 	
 	//Attempt reading the data length of the message.
-	if(!readByte(startOfMessage + readPosition, tempMessage.dataLength))
+	if(!readByte(readPosition, tempMessage.dataLength))
 	{
 		char charBuffer[60];
-		sprintf(charBuffer, "Failed length read: Idx: %d,Rx:%d", startOfMessage + readPosition, dataReceived);
+		sprintf(charBuffer, "Failed length read: Idx: %d,Rx:%d", readPosition, dataReceived);
 		Serial.println(charBuffer);	
 		return nullptr;
 	}
@@ -124,7 +124,6 @@ message* messagingService::processMessage()
 	readPosition += 1;
 
 	//Check if the full message has been received
-	//dataLength = 4, readPosition = 2, startOfMessage = 1,
 	//TODO: this condition needs work, somehow expected ends up being one too low?
 	//What's this + 2??
 	if((tempMessage.dataLength + 2 + dataRead ) >= dataReceived)
@@ -147,16 +146,14 @@ message* messagingService::processMessage()
  		//TODO: Add this back in
  		//SendStringToApp(buffertextmessage);
 
- 		//Disard the data since it's probably corrupted
+ 		//Disard the data since it's probably corrupted.
  		discardData(dataRead);
 
 		return nullptr;
 	}
 
-	//currentReadLocation = startOfMessage + 2;
-	//tempMessage.id = readByte( startOfMessage + 2 );
-	//Attempt to read the message ID (not sure why the readPosition isn't getting incremented here)
-	if(!readByte(startOfMessage + readPosition, tempMessage.id))
+    //Attempt to read the message ID (not sure why the readPosition isn't getting incremented here)
+	if(!readByte(readPosition, tempMessage.id))
 		return nullptr;
 
 	readPosition += 1;
@@ -164,10 +161,9 @@ message* messagingService::processMessage()
 	//And now read the data that the message was carrying
 	for(int i = 0; i < tempMessage.dataLength ; ++i)
 	{
-		//tempMessage.messageData[i] = readByte(startOfMessage + 3 + i);
 		//If we run out of data to be read at any point (i.e. we haven't received all of it)
 		//Just return null, we can try again later.
-		if(!readByte(startOfMessage + readPosition, tempMessage.messageData[i]))
+		if(!readByte(readPosition, tempMessage.messageData[i]))
 			return nullptr;
 
 		readPosition += 1;
@@ -175,35 +171,36 @@ message* messagingService::processMessage()
 
 	dataRead += readPosition;
 
-	//Keep track of where we left off reading the buffer.
-	currentReadLocation = (currentReadLocation + dataRead) % constants.bufferSize;
-
 	char charBuffer[40];
 	sprintf(charBuffer, "Msg Parsed. DataRx:%d, dataRead:%d", dataReceived, dataRead);
 	Serial.println(charBuffer);
 
+    //Advance internal tracking past the data we've already processed.
 	discardData(dataRead);
 
 	return &tempMessage;
 }
 
-void messagingService::discardData(int byteCount)
+void messagingService::discardData(int dataRead)
 {
-	dataReceived -= byteCount;
+    dataReceived -= dataRead;
+
+    //Keep track of where we left off reading the buffer.
+    currentReadLocation = (currentReadLocation + dataRead) % constants.bufferSize;
 }
 
 bool messagingService::readByte(int readPosition, byte& outputByte)
 {
 	//Check whether we've received enough data to do this read.
-	//Read position is essentially currentReadLocation + offset from the starting point.
-	if(readPosition - currentReadLocation >= dataReceived)
+	if(readPosition >= dataReceived)
 		return false;
 
-	outputByte = messageBuffer[readPosition % constants.bufferSize];
+    //Now call the unsafe readByte overload.
+	outputByte = readByte(readPosition);
 	return true;	
 }
 
 byte messagingService::readByte(int readPosition)
 {
-	return messageBuffer[readPosition % constants.bufferSize];
+	return messageBuffer[(currentReadLocation + readPosition) % constants.bufferSize];
 }

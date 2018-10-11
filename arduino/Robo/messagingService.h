@@ -51,18 +51,14 @@ class messagingService
     //Data Received since session start 
     long totalDataReceived; //(Bytes)
 
-    //Number of received messages what were not finished or didn't match the defined data length
-    int mangledMessages;
-
     //Helper functions
     //Looks for 2 instances of token in a row, returns -1 if not found
-    int findFrameLimitersInBuffer(byte token, int readStartPosition, int &dataRead);
+    int findFrameLimitersInBuffer(byte token, int &dataRead);
 
     void discardData(int byteCount);
 
     //Reads the specific byte in the buffer, applies mod to make sure index is never out of bounds
     byte readByte(int readPosition);
-
 
     bool readByte(int readPosition, byte& outputByte);
 };
