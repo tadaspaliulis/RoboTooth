@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Firmware">
+      <UniqueIdentifier>{8176e782-06bc-49b8-885b-d50888dc995f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Firmware\Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Firmware\Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Testbed">
+      <UniqueIdentifier>{d45c781d-ca4e-4070-98ea-643a4030a540}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Testbed\Mocks">
+      <UniqueIdentifier>{623788d5-8f9b-4910-95f8-68b6ace5a8df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Testbed\EmptyArduinoImplementations">
+      <UniqueIdentifier>{1104ba50-f60a-46fe-bebb-4cd811d8d474}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Firmware\Header Files\DeviceSpecificIncludes">
+      <UniqueIdentifier>{810dadef-5766-48c9-9bd9-b2e9943ee949}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="actionQueue.h">
+      <Filter>Firmware\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="constants.h">
+      <Filter>Firmware\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="controller.h">
+      <Filter>Firmware\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>Firmware\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="messagingService.h">
+      <Filter>Firmware\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="motorAction.h">
+      <Filter>Firmware\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="state.h">
+      <Filter>Firmware\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="timeMeasurement.h">
+      <Filter>Firmware\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SerialEmpty.h">
+      <Filter>Testbed\EmptyArduinoImplementations</Filter>
+    </ClInclude>
+    <ClInclude Include="ArduinoEmptyFunctions.h">
+      <Filter>Testbed\EmptyArduinoImplementations</Filter>
+    </ClInclude>
+    <ClInclude Include="ArduinoFunctionallity.h">
+      <Filter>Firmware\Header Files\DeviceSpecificIncludes</Filter>
+    </ClInclude>
+    <ClInclude Include="WireFunctionallity.h">
+      <Filter>Firmware\Header Files\DeviceSpecificIncludes</Filter>
+    </ClInclude>
+    <ClInclude Include="WireEmpty.h">
+      <Filter>Testbed\EmptyArduinoImplementations</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Testbed</Filter>
+    </ClCompile>
+    <ClCompile Include="controller.cpp">
+      <Filter>Firmware\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="messagingService.cpp">
+      <Filter>Firmware\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="motorAction.cpp">
+      <Filter>Firmware\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="state.cpp">
+      <Filter>Firmware\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="timeMeasurement.cpp">
+      <Filter>Firmware\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ArduinoEmptyFunctions.cpp">
+      <Filter>Testbed\EmptyArduinoImplementations</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
