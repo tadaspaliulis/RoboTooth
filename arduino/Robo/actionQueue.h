@@ -136,6 +136,10 @@ void actionQueue<T>::addNewAction(const T& action)
 	//BUT WHY does it start working at ID 5 and not ID 3??
 
 	//IF the current action is indefinite, we want to override it with the new one.
+
+  //11/10/2018 - If the last action in the queue is indefinite,
+  //but the currently processed action is timed, any new indefinite actions won't actually replace the 
+  //last action in the queue but just add it onto the list. NOT CORRECT.
 	if(AnyActionsQueued() && GetCurrentAction()->isIndefinite())
 	{
 		nextInsertSlotIndex = currentActionIndex;
@@ -168,7 +172,7 @@ T* actionQueue<T>::GetCurrentAction()
 template<class T>
 void actionQueue<T>::CompleteCurrentAction()
 {
-	lastFinishedActionId = GetCurrentAction()->getActionId();//currentActionIndex; //Is this correct? Action and Id?
+	lastFinishedActionId = GetCurrentAction()->getActionId();
 	char charBuffer[24];
 	sprintf(charBuffer, "Completed id:%d", lastFinishedActionId);
 	Serial.println(charBuffer);
@@ -199,7 +203,7 @@ bool actionQueue<T>::StartNextAction(state* pState)
 	//If execTime is 0 the action will be performed indefinitely or till a timed action supercedes it
 	if(!currAction->isIndefinite())
 	{
-		Serial.println("Act is indef");
+		//Serial.println("Act is indef");
 		timer.resetTimer(currAction->getExecutionTimeMs());
 	}
 
@@ -220,7 +224,7 @@ bool actionQueue<T>::UpdateQueue(unsigned int elapsedTime, state* pState)
 		return false; 
 	}
 
-	Serial.println("Actions queued");
+	//Serial.println("Actions queued");
 
 	//Attempt to start a new action.
 	if(StartNextAction(pState))
@@ -248,31 +252,10 @@ bool actionQueue<T>::UpdateQueue(unsigned int elapsedTime, state* pState)
 		//We completed an action, and there was nothing else queued.
 		//Normally an action is simply replaced by another action, but since this is the last one,
 		//we need to make sure that all on-going processes related to the action (such as motors spinning) are stopped.
-		currentAction->onActionCompleted(pState); 
+    currentAction->onActionCompleted(pState); 
 	}
 
-	return true; //We have finished an action
-
-	/*if(!currentAction->isIndefinite() && timer.updateTimer(elapsedTime))
-	{
-		CompleteCurrentAction();
-			
-		//Check again if we still have any actions and then start the next action
-		if(AnyActionsQueued())
-		{
-			StartNextAction(pState);
-		}
-		else
-		{
-			//We completed an action, and there was nothing else queued.
-			//Normally an action is simply replaced by another action, but since this is the last one,
-			//we need to make sure that all on-going processes related to the action (such as motors spinning) are stopped.
-			currentAction->onActionCompleted(pState); 
-		}
-
-		return true; //We have finished an action
-	}
-
-	//What's happened in this scenario?
-	return false;*/
+  //We have finished an action.
+  return true;
 }
+  
