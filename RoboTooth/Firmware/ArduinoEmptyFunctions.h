@@ -6,8 +6,12 @@
 //Arduino defines a byte type which is in fact just one byte.
 typedef char byte;
 
+//Need the ifdef to make sure that arduino IDE won't try to import the includes,
+//Even though it shouldn't attempt to compile this file at all!
+#ifdef VS_TESTBED
 #include <memory>
 #include "SerialEmpty.h"
+#endif
 
 void delay(int x);
 void delayMicroseconds(int x);
