@@ -65,6 +65,9 @@
     <ClInclude Include="WireEmpty.h">
       <Filter>Testbed\EmptyArduinoImplementations</Filter>
     </ClInclude>
+    <ClInclude Include="queue.h">
+      <Filter>Firmware\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">

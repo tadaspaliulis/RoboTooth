@@ -125,6 +125,7 @@
     <ClInclude Include="Debug.h" />
     <ClInclude Include="messagingService.h" />
     <ClInclude Include="motorAction.h" />
+    <ClInclude Include="queue.h" />
     <ClInclude Include="SerialEmpty.h" />
     <ClInclude Include="state.h" />
     <ClInclude Include="timeMeasurement.h" />
