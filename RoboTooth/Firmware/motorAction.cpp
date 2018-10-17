@@ -1,31 +1,24 @@
 #include "motorAction.h"
 
-void motorAction::start(state* pState) 
+void motorAction::start() 
 {
 	started = true;
-	(pState->*movementAction)(speed); 
+	(motorState->*movementAction)(speed); 
 }
 
-motorAction::motorAction() : started(false), actionId(0), executionTimeMs(0),
+motorAction::motorAction() : started(false), actionId(0), executionTimeMs(0), motorState(nullptr),
 							movementAction(nullptr), speed(0)
 {
 }
 
-motorAction::motorAction(movementActionFunction Action, byte ActionId, unsigned int ExecutionTimeMs, byte Speed)
-	: started(false), actionId(ActionId), executionTimeMs(ExecutionTimeMs), movementAction(Action), speed(Speed)
+motorAction::motorAction(state* MotorState, movementActionFunction Action, byte ActionId, unsigned int ExecutionTimeMs, byte Speed)
+	: started(false), actionId(ActionId), executionTimeMs(ExecutionTimeMs), motorState(MotorState), movementAction(Action), speed(Speed)
 {
 }
 
 //Should rename this to onLastQueueAction
-void motorAction::onActionCompleted(state* pState)
+void motorAction::onActionCompleted()
 {
 	//Called only if there's no further actions queued
-	pState->stop(0);
+	motorState->stop(0);
 }
-
-/*void motorAction::initialise(movementActionFunction Action, byte ActionId, unsigned int ExecutionTimeMs)
-	started = false;
-	movementAction = Action;
-	actionId = ActionId;
-	executionTimeMs = ExecutionTimeMs;
-}*/

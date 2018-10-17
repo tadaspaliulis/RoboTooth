@@ -34,7 +34,7 @@ void controller::act()
 	//timestamp will always take up a constant period of time. 
 	//Thefore it's probably best to have a seperate timer just for this
 	unsigned int elapsedTime = actionQueueTimer.timeStamp();
-	if(motorActionQueue.UpdateQueue(elapsedTime, getState())) 
+	if(motorActionQueue.UpdateQueue(elapsedTime))
 	{
 		//If update queue returns true, it means that an action was completed.
 		//Inform the control application.
@@ -118,7 +118,8 @@ bool controller::handleMoveMessage( message* msg )
 			return false; //Invalid command
 	}
 	
-	motorAction tempMotorAction(action, actionId, executionTimeMs, movementSpeed);
+	//Store the action in a queue.
+	motorAction tempMotorAction(getState(), action, actionId, executionTimeMs, movementSpeed);
 	motorActionQueue.addNewAction(tempMotorAction);
 	return true;
 }

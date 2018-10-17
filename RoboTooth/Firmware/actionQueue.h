@@ -31,7 +31,7 @@ public:
 	T* GetCurrentAction();
 
 	//Returns TRUE if an action was finished
-	bool UpdateQueue(unsigned int elapsedTime, state* pState);
+	bool UpdateQueue(unsigned int elapsedTime);
 
 	byte GetLastFinishedActionId() { return lastFinishedActionId; }
 
@@ -44,7 +44,7 @@ private:
 	void CompleteCurrentAction();
 
 	//Returns true if it started an action
-	bool StartNextAction(state* pState);
+	bool StartNextAction();
 
 	//Treats the action queue as a virtual array, which starts at the 'CurrentAction'
 	T* getAction(int index);
@@ -181,7 +181,7 @@ void actionQueue<T>::CompleteCurrentAction()
 }
 
 template<class T>
-bool actionQueue<T>::StartNextAction(state* pState)
+bool actionQueue<T>::StartNextAction()
 {
 	auto currAction = GetCurrentAction();
 
@@ -198,7 +198,7 @@ bool actionQueue<T>::StartNextAction(state* pState)
 	sprintf(charBuffer, "Action start, time:%d", currAction->getExecutionTimeMs());
 	Serial.println(charBuffer);
 	//SendStringToApp(charBuffer);
-	currAction->start(pState);
+	currAction->start();
 
 	//If execTime is 0 the action will be performed indefinitely or till a timed action supercedes it
 	if(!currAction->isIndefinite())
@@ -211,7 +211,7 @@ bool actionQueue<T>::StartNextAction(state* pState)
 }
 
 template<class T>
-bool actionQueue<T>::UpdateQueue(unsigned int elapsedTime, state* pState)
+bool actionQueue<T>::UpdateQueue(unsigned int elapsedTime)
 {
 	//1. Check if there are any actions queued up, maybe no need to do anything here!
 	//2. If there's an action queued, check if it has been started yet
@@ -227,7 +227,7 @@ bool actionQueue<T>::UpdateQueue(unsigned int elapsedTime, state* pState)
 	//Serial.println("Actions queued");
 
 	//Attempt to start a new action.
-	if(StartNextAction(pState))
+	if(StartNextAction())
 	{
 		//We just started a new action, so no need to do anything else.
 		return false; 
@@ -245,14 +245,14 @@ bool actionQueue<T>::UpdateQueue(unsigned int elapsedTime, state* pState)
 	//Check again if we still have any actions and then start the next action
 	if(AnyActionsQueued())
 	{
-		StartNextAction(pState);
+		StartNextAction();
 	}
 	else
 	{
 		//We completed an action, and there was nothing else queued.
 		//Normally an action is simply replaced by another action, but since this is the last one,
 		//we need to make sure that all on-going processes related to the action (such as motors spinning) are stopped.
-    currentAction->onActionCompleted(pState); 
+		currentAction->onActionCompleted(); 
 	}
 
   //We have finished an action.
