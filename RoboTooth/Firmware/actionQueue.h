@@ -1,9 +1,9 @@
 #pragma once
 
-#include "state.h"
 #include "timeMeasurement.h"
 #include "Debug.h"
 #include <stdio.h>
+#include "queue.h"
 
 enum movevementStateEnum
 {
@@ -46,21 +46,10 @@ private:
 	//Returns true if it started an action
 	bool StartNextAction();
 
-	//Treats the action queue as a virtual array, which starts at the 'CurrentAction'
-	T* getAction(int index);
-
-	//Number of currently actions
-	int getQueuedActionsCount();
+	//A FIFO container for storing actions.
+	queue<T> internalQueue;
 
 	countdownTimer timer;
-
-	//Index for the action that the robot is currently carrying out
-	int currentActionIndex;
-	//Index for the next action insertion slot. This wraps around the array
-	int nextInsertSlotIndex;
-	T queue[queueLength];
-
-	byte nextActionId;
 
 	//Updated every time an action is finished
 	byte lastFinishedActionId;
@@ -72,38 +61,7 @@ private:
 //const int actionQueue<T>::queueLength = 10;
 
 template<class T>
-actionQueue<T>::actionQueue(byte ActionQueueId): currentActionIndex(0), nextInsertSlotIndex(0), nextActionId(0),
- actionQueueId(ActionQueueId)
-{
-
-}
-
-template<class T>
-T* actionQueue<T>::getAction(int index)
-{
-	auto normalizedIndex = (currentActionIndex + index) % queueLength; //Avoid trying to access elements out of bounds
-	//[2] [3n] [4] [c0] [1]
-	return &queue[normalizedIndex];
-}
-
-template<class T>
-int actionQueue<T>::getQueuedActionsCount()
-{
-	//This is effectively a circular buffer, hence this function not being straightforward
-	if(currentActionIndex == nextInsertSlotIndex) //[nc] [] [] [] []
-		return 0;
-
-	if(currentActionIndex > nextInsertSlotIndex)
-	{
-		//[] [n] [] [c] []
-		return queueLength - (currentActionIndex + 1) + nextInsertSlotIndex;
-	}
-	else
-	{
-		//[] [c] [] [n] []
-		return nextInsertSlotIndex - currentActionIndex;
-	}
-}
+actionQueue<T>::actionQueue(byte ActionQueueId) : actionQueueId(ActionQueueId), internalQueue(queueLength) {}
 
 template<class T>
 void actionQueue<T>::addNewAction(const T& action)
@@ -140,33 +98,36 @@ void actionQueue<T>::addNewAction(const T& action)
   //11/10/2018 - If the last action in the queue is indefinite,
   //but the currently processed action is timed, any new indefinite actions won't actually replace the 
   //last action in the queue but just add it onto the list. NOT CORRECT.
-	if(AnyActionsQueued() && GetCurrentAction()->isIndefinite())
+
+	//If the last action in the queue is indefinite, replace it with the new action that
+	//is getting added.
+	if(AnyActionsQueued() && internalQueue.last()->isIndefinite())
 	{
-		nextInsertSlotIndex = currentActionIndex;
+		auto lastItemIndex = internalQueue.getSize() - 1;
+		internalQueue.replace(lastItemIndex, action);
+	}
+	else
+	{
+		//Should check the result here.
+		internalQueue.tryAdd(action);
 	}
 
-	queue[nextInsertSlotIndex] = action;
+	//char charBuffer[30];
+	//sprintf(charBuffer, "Added at:%d,tm:%d", nextInsertSlotIndex, action.getExecutionTimeMs());
+	//Serial.println(charBuffer);
 
-	char charBuffer[30];
-	sprintf(charBuffer, "Added at:%d,tm:%d", nextInsertSlotIndex, action.getExecutionTimeMs());
-	Serial.println(charBuffer);
-
-	//Increment the index controlling where the next action will be insterted
-	//and make sure its not outside the queue.
-	++nextInsertSlotIndex;
-	nextInsertSlotIndex = nextInsertSlotIndex % queueLength;
 }
 
 template<class T>
 bool actionQueue<T>::AnyActionsQueued()
 {
-	return currentActionIndex != nextInsertSlotIndex;
+	return internalQueue.getSize() != 0;
 }
 
 template<class T>
 T* actionQueue<T>::GetCurrentAction()
 {
-	return &queue[currentActionIndex];
+	return internalQueue.first();
 }
 
 template<class T>
@@ -176,8 +137,7 @@ void actionQueue<T>::CompleteCurrentAction()
 	char charBuffer[24];
 	sprintf(charBuffer, "Completed id:%d", lastFinishedActionId);
 	Serial.println(charBuffer);
-	++currentActionIndex;
-	currentActionIndex = currentActionIndex % queueLength;
+	internalQueue.popFront();
 }
 
 template<class T>
@@ -186,7 +146,7 @@ bool actionQueue<T>::StartNextAction()
 	auto currAction = GetCurrentAction();
 
 	char charBuffer2[40]; //Is this it????
-	sprintf(charBuffer2, "Attempt start, id:%d idx:%d", currAction->getActionId(), currentActionIndex);
+	sprintf(charBuffer2, "Attempt start, id:%d", currAction->getActionId());
 	Serial.println(charBuffer2);
 
 	//An action has already been started, do nothing.
