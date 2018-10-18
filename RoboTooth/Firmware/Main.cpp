@@ -150,6 +150,49 @@ void testQueueLast()
 	assert(*q.last() == 42);
 }
 
+void testQueuePopXItems()
+{
+	queue<int> q(4);
+	q.tryAdd(1);
+	q.tryAdd(2);
+	q.tryAdd(3);
+	q.tryAdd(4);
+	q.popFront(3);
+	assert(*q.get(0) == 4);
+	assert(q.getSize() == 1);
+}
+
+void testQueuePopXItemsWithWraparound()
+{
+	queue<int> q(4);
+	q.tryAdd(1);
+	q.tryAdd(2);
+	q.tryAdd(3);
+	q.tryAdd(4);
+	q.popFront(3);
+
+	q.tryAdd(5);
+	q.tryAdd(6);
+	q.tryAdd(7);
+	q.popFront(3);
+	assert(*q.get(0) == 7);
+	assert(q.getSize() == 1);
+}
+
+void testQueuePopXItemsPopAllItems()
+{
+	queue<int> q(4);
+	q.tryAdd(1);
+	q.tryAdd(2);
+	q.tryAdd(3);
+	q.tryAdd(4);
+
+	q.popFront(4);
+
+	assert(q.get(0) == nullptr);
+	assert(q.getSize() == 0);
+}
+
 void queueTests()
 {
 	testQueueAddLimit();
@@ -161,6 +204,9 @@ void queueTests()
 	testQueueEmptyLast();
 	testQueueFirst();
 	testQueueLast();
+	testQueuePopXItems();
+	testQueuePopXItemsWithWraparound();
+	testQueuePopXItemsPopAllItems();
 }
 
 int main()

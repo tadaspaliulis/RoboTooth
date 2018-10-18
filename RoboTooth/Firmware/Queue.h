@@ -35,6 +35,11 @@ public:
 	//Does nothing if the queue is empty.
 	void popFront();
 
+	//Removes several items at the front of the queue.
+	//If the parameter exceeds or equals the size of the queue, the queue will become empty.
+	//Does nothing if the queue is already empty.
+	void popFront(int numberOfItemsToPop);
+
 	//Returns the number of items currently in the queue.
 	int getSize();
 
@@ -128,13 +133,25 @@ void queue<T>::replace(int index, T item)
 template<class T>
 void queue<T>::popFront()
 {
+	popFront(1);
+}
+
+template<class T>
+void queue<T>::popFront(int numberOfItemsToPop)
+{
 	//Make sure there's something to pop.
-	if(getSize() == 0)
+	if (getSize() == 0)
 		return;
 
-	//Remove the first item by moving the start queue forward.
-	startOfQueueIndex = (startOfQueueIndex + 1) % getMaximumCapacity();
-	--itemCount;
+	//Check if we're poping all of the items in the queue.
+	if (numberOfItemsToPop >= getSize())
+	{
+		itemCount = 0;
+		return;
+	}
+	//Remove first x items from the queue by moving the index forward and reducing the size;
+	startOfQueueIndex = (startOfQueueIndex + numberOfItemsToPop) % getMaximumCapacity();
+	itemCount -= numberOfItemsToPop;
 }
 
 template<class T>
