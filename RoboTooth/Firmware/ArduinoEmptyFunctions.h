@@ -4,7 +4,7 @@
 	Won't get used on the arduino itself. */
 
 //Arduino defines a byte type which is in fact just one byte.
-typedef char byte;
+typedef unsigned char byte;
 
 //Need the ifdef to make sure that arduino IDE won't try to import the includes,
 //Even though it shouldn't attempt to compile this file at all!
