@@ -16,7 +16,7 @@ static void SendStringToApp(const char* debugString)
 	msg.id = constants.messageIdTx.debugStringMsg;
 	msg.dataLength = stringLength;
 	memcpy(msg.messageData, debugString, stringLength);
-	messagingService::getMessenger()->sendMessage(msg);
+	//messagingService::getMessenger()->sendMessage(msg);
 }
 
 #endif

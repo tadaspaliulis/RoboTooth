@@ -2,6 +2,7 @@
 
 #include "constants.h"
 #include "messagingService.h"
+#include "ArduinoSerialInteface.h"
 
 enum motorStateEnum
 {
@@ -110,7 +111,7 @@ class state
     void updateDistanceMeasurement();
     void updateMagnetometerMeasurement();
 
-    messagingService* getMessenger() { return messagingService::getMessenger(); }
+    messagingService<arduinoSerialInterface>* getMessenger() { return messagingService<arduinoSerialInterface>::getMessenger(); }
 
   private:
     motorState* getMotor( motor motorNode );

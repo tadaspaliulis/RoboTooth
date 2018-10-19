@@ -68,15 +68,15 @@
     <ClInclude Include="queue.h">
       <Filter>Firmware\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="arduinoSerialInteface.h">
+      <Filter>Firmware\Header Files\DeviceSpecificIncludes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>Testbed</Filter>
     </ClCompile>
     <ClCompile Include="controller.cpp">
-      <Filter>Firmware\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="messagingService.cpp">
       <Filter>Firmware\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="motorAction.cpp">

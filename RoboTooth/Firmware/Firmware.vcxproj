@@ -120,6 +120,7 @@
     <ClInclude Include="actionQueue.h" />
     <ClInclude Include="ArduinoFunctionallity.h" />
     <ClInclude Include="ArduinoEmptyFunctions.h" />
+    <ClInclude Include="arduinoSerialInteface.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="controller.h" />
     <ClInclude Include="Debug.h" />
@@ -136,7 +137,6 @@
     <ClCompile Include="ArduinoEmptyFunctions.cpp" />
     <ClCompile Include="controller.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="messagingService.cpp" />
     <ClCompile Include="motorAction.cpp" />
     <ClCompile Include="state.cpp" />
     <ClCompile Include="timeMeasurement.cpp" />
