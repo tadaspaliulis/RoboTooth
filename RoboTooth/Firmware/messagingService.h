@@ -1,5 +1,6 @@
 #pragma once
 #include "constants.h"
+#include "queue.h"
 
 /**** Message format ***/
 /* preamble/start of frame (2 bytes) + data length (1 byte) + messageId ( 1 byte ) + data( x bytes )
@@ -38,18 +39,12 @@ class messagingService
     const static int bufferSize;
 
     //Buffer for received data
-    byte messageBuffer[constants.bufferSize];
+    
     byte sendBuffer[constants.sendBufferSize];
-    int dataReceived;
-    int currentReadLocation;
-    int currentWriteLocation;
+    
+	queue<byte> inboundDataQueue;
 
     message tempMessage;
-
-    //State tracking
-
-    //Data Received since session start 
-    long totalDataReceived; //(Bytes)
 
     //Helper functions
     //Looks for 2 instances of token in a row, returns -1 if not found

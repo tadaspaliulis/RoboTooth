@@ -16,7 +16,7 @@ messagingService* messagingService::getMessenger()
 	return messengerSingleton;
 }
 
-messagingService::messagingService() : dataReceived ( 0 ), currentReadLocation ( 0 ), currentWriteLocation ( 0 ), totalDataReceived ( 0 ) 
+messagingService::messagingService() : inboundDataQueue(constants.bufferSize)
 {
 	
 }
@@ -36,24 +36,16 @@ void messagingService::receiveIncomingData()
 	while ( Serial.available() > 0)
     {
   		//Serial.write("Receive incoming data\n");
-  		//If looped around the whole buffer, overwritte data at the beginning
-  		if(currentWriteLocation == constants.bufferSize)
-  			currentWriteLocation = 0;
-  		
-    	messageBuffer[currentWriteLocation] = Serial.read();
-    	sprintf(output, "%x", messageBuffer[currentWriteLocation]);
+		inboundDataQueue.tryAdd(Serial.read());
+		sprintf(output, "%x", *inboundDataQueue.last());
     	Serial.println(output);
-    	++currentWriteLocation;
-    	++dataReceived;
     }
-
-    totalDataReceived += dataReceived;
 }
 
 int messagingService::findFrameLimitersInBuffer(byte token)
 {
 	//First loop to find the start of the message 
-	for(int readPosition = 0; readPosition < dataReceived - 1; ++readPosition)
+	for(int readPosition = 0; readPosition < inboundDataQueue.getSize() - 1; ++readPosition)
 	{
 		if ( readByte(readPosition) == token && readByte ( readPosition + 1 ) == token )
 		{
@@ -89,7 +81,7 @@ void messagingService::sendMessage(message& msg)
 message* messagingService::processMessage()
 {
 	//Check if we've received enough data for there to be at least one message.
-	if( dataReceived < constants.minimumMessageLength )
+	if( inboundDataQueue.getSize() < constants.minimumMessageLength )
 	{
         return nullptr;
     }
@@ -109,7 +101,7 @@ message* messagingService::processMessage()
 	if(!readByte(readPosition, tempMessage.dataLength))
 	{
 		char charBuffer[60];
-		sprintf(charBuffer, "Failed length read: Idx: %d,Rx:%d", readPosition, dataReceived);
+		sprintf(charBuffer, "Failed length read: Idx: %d,Rx:%d", readPosition, inboundDataQueue.getSize());
 		Serial.println(charBuffer);	
 		return nullptr;
 	}
@@ -136,10 +128,10 @@ message* messagingService::processMessage()
     }
 
 	//Check if the full message has been received.
-	if((tempMessage.dataLength + readPosition + 1) > dataReceived)
+	if((tempMessage.dataLength + readPosition + 1) > inboundDataQueue.getSize())
 	{
 		char charBuffer[30];
-		sprintf(charBuffer, "Expected:%d,Rx:%d", tempMessage.dataLength + readPosition + 1, dataReceived);
+		sprintf(charBuffer, "Expected:%d,Rx:%d", tempMessage.dataLength + readPosition + 1, inboundDataQueue.getSize());
 		Serial.println(charBuffer);
 		return nullptr;
 	}
@@ -165,7 +157,7 @@ message* messagingService::processMessage()
 	}
 
 	char charBuffer[40];
-	sprintf(charBuffer, "Msg Parsed. DataRx:%d, dataRead:%d", dataReceived, readPosition);
+	sprintf(charBuffer, "Msg Parsed. DataRx:%d, dataRead:%d", inboundDataQueue.getSize(), readPosition);
 	Serial.println(charBuffer);
 
     //Advance internal tracking past the data we've already processed.
@@ -177,24 +169,21 @@ message* messagingService::processMessage()
 
 void messagingService::discardData(int dataRead)
 {
-    dataReceived -= dataRead;
-
-    //Keep track of where we left off reading the buffer.
-    currentReadLocation = (currentReadLocation + dataRead) % constants.bufferSize;
+	inboundDataQueue.popFront(dataRead);
 }
 
 bool messagingService::readByte(int readPosition, byte& outputByte)
 {
-	//Check whether we've received enough data to do this read.
-	if(readPosition >= dataReceived)
+	auto incomingByte = inboundDataQueue.get(readPosition);
+	if(incomingByte == nullptr)
 		return false;
 
-    //Now call the unsafe readByte overload.
-	outputByte = readByte(readPosition);
+	outputByte = *incomingByte;
 	return true;	
 }
 
 byte messagingService::readByte(int readPosition)
 {
-	return messageBuffer[(currentReadLocation + readPosition) % constants.bufferSize];
+	//No protections here for nullptr referencing. Beware!
+	return *inboundDataQueue.get(readPosition);
 }
