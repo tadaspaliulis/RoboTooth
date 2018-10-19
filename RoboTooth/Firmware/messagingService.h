@@ -38,9 +38,11 @@ class messagingService
 
   	const static byte startOfFrame;
 
-    const static int bufferSize;
-
-    byte sendBuffer[constants.sendBufferSize];
+	//This is a very awkward workound, but for some reason
+	//arduino compiler started to refuse to compile with sendBufferSize
+	//used directly after messagingService became a template class.
+    const static int bufferSize = constants.sendBufferSize;
+    byte sendBuffer[bufferSize];
     
 	//Buffer for received data.
 	queue<byte> inboundDataQueue;
