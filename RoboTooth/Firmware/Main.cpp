@@ -4,7 +4,8 @@
 //Need the ifdef to make sure that arduino IDE won't try to latch onto
 //the main and ignore the real one.
 #ifdef VS_TESTBED
-
+#include "serialInterfaceMock.h"
+#include "messagingService.h"
 #include <cassert>
 
 class actionMock
@@ -209,10 +210,39 @@ void queueTests()
 	testQueuePopXItemsPopAllItems();
 }
 
+void assertMessagesEqual(const message& a, const message& b)
+{
+	assert(a.dataLength == b.dataLength);
+	assert(a.id == b.id);
+	for (int i = 0; i < a.dataLength && i < constants.maximumMessageDataLength; ++i)
+	{
+		assert(a.messageData[i] == b.messageData[i]);
+	}
+}
+
+void messagingServiceTests()
+{
+	serialInterfaceMock serialMock;
+	
+	message sentMessage;
+	sentMessage.dataLength = 0;
+	sentMessage.id = 12;
+	serialMock.addMessageBytesForReading(sentMessage);
+
+	messagingService<serialInterfaceMock> messaging(&serialMock);
+
+	messaging.receiveIncomingData();
+	message* receivedMessage = messaging.processMessage();
+	assert(receivedMessage != nullptr);
+
+	assertMessagesEqual(sentMessage, *receivedMessage);
+}
+
 int main()
 {
 	//testActionQueueIndefiniteActionReplacement();
 	queueTests();
+	messagingServiceTests();
 	return 0;
 }
 

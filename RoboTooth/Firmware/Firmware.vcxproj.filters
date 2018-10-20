@@ -71,6 +71,9 @@
     <ClInclude Include="arduinoSerialInteface.h">
       <Filter>Firmware\Header Files\DeviceSpecificIncludes</Filter>
     </ClInclude>
+    <ClInclude Include="serialInterfaceMock.h">
+      <Filter>Testbed\Mocks</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -90,6 +93,9 @@
     </ClCompile>
     <ClCompile Include="ArduinoEmptyFunctions.cpp">
       <Filter>Testbed\EmptyArduinoImplementations</Filter>
+    </ClCompile>
+    <ClCompile Include="serialInterfaceMock.cpp">
+      <Filter>Testbed\Mocks</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
