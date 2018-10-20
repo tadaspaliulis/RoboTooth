@@ -1,5 +1,6 @@
 #pragma once
 #include "ArduinoFunctionallity.h"
+#include "message.h"
 
 struct pinMappingStruct
 {
@@ -26,10 +27,11 @@ struct pinMappingStruct
 
  struct constantsStruct
  {
-    const static int sendBufferSize = 28;//24 + 2 + 1 + 1;
     const static int bufferSize = 256;
-    const static int minimumMessageLength = 6;
-    const static int maximumMessageDataLength = 24;
+	const static int preambleSize = sizeof(byte) * 2;
+    const static int maximumMessageDataLength = message::maximumDataLength;
+	const static int minimumMessageLength = preambleSize + sizeof(message) - maximumMessageDataLength;
+	const static int sendBufferSize = preambleSize + sizeof(message);
 
     struct timersConstants
     {

@@ -124,6 +124,7 @@
     <ClInclude Include="constants.h" />
     <ClInclude Include="controller.h" />
     <ClInclude Include="Debug.h" />
+    <ClInclude Include="message.h" />
     <ClInclude Include="messagingService.h" />
     <ClInclude Include="motorAction.h" />
     <ClInclude Include="queue.h" />

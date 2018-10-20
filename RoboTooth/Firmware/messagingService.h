@@ -1,16 +1,7 @@
 #pragma once
 #include "constants.h"
 #include "queue.h"
-/**** Message format ***/
-/* preamble/start of frame (2 bytes) + data length (1 byte) + messageId ( 1 byte ) + data( x bytes )
-*/
-struct message
-{
-	byte dataLength;
-	byte id;
-	byte messageData[constants.maximumMessageDataLength];
-};
-
+#include "message.h"
 
 //Singleton for communicating with the application
 template<class SerialInterface>

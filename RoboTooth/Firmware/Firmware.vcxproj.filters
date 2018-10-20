@@ -74,6 +74,9 @@
     <ClInclude Include="serialInterfaceMock.h">
       <Filter>Testbed\Mocks</Filter>
     </ClInclude>
+    <ClInclude Include="message.h">
+      <Filter>Firmware\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
