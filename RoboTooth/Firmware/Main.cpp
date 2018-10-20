@@ -220,10 +220,10 @@ void assertMessagesEqual(const message& a, const message& b)
 	}
 }
 
-void messagingServiceTests()
+void messagingServiceZeroDataLengthMessage()
 {
 	serialInterfaceMock serialMock;
-	
+
 	message sentMessage;
 	sentMessage.dataLength = 0;
 	sentMessage.id = 12;
@@ -236,6 +236,218 @@ void messagingServiceTests()
 	assert(receivedMessage != nullptr);
 
 	assertMessagesEqual(sentMessage, *receivedMessage);
+}
+
+void messagingServiceMessageParse()
+{
+	serialInterfaceMock serialMock;
+
+	message sentMessage;
+	sentMessage.dataLength = 5;
+	sentMessage.id = 12;
+	sentMessage.messageData[0] = 0;
+	sentMessage.messageData[1] = 1;
+	sentMessage.messageData[2] = 2;
+	sentMessage.messageData[3] = 3;
+	sentMessage.messageData[4] = 4;
+
+	serialMock.addMessageBytesForReading(sentMessage);
+
+	messagingService<serialInterfaceMock> messaging(&serialMock);
+
+	messaging.receiveIncomingData();
+	message* receivedMessage = messaging.processMessage();
+	assert(receivedMessage != nullptr);
+
+	assertMessagesEqual(sentMessage, *receivedMessage);
+}
+
+void messagingServiceParseMessageReceivedInSingleBytes()
+{
+	serialInterfaceMock serialMock;
+
+	//Create a message that we'll try to compare against.
+	message sentMessage;
+	sentMessage.dataLength = 1;
+	sentMessage.id = 12;
+	sentMessage.messageData[0] = 42;
+
+	const auto arraySize = constants.minimumMessageLength + 1;
+	byte messageAsByteArray[arraySize];
+	messageAsByteArray[0] = messageAsByteArray[1] = 0xbb;
+	memcpy(messageAsByteArray + 2, &sentMessage, sizeof(sentMessage.dataLength) + sentMessage.id + sizeof(byte));
+
+	messagingService<serialInterfaceMock> messaging(&serialMock);
+
+	//Receive the bytes one by one and try looking for a message each time.
+	for (int i = 0; i < arraySize - 1; ++i)
+	{
+		serialMock.addByte(messageAsByteArray[i]);
+
+		messaging.receiveIncomingData();
+		assert(messaging.processMessage() == nullptr);
+	}
+
+	//Add the final byte and try processing again.
+	//This time it should be successful.
+	serialMock.addByte(messageAsByteArray[arraySize - 1]);
+
+	messaging.receiveIncomingData();
+	message* receivedMessage = messaging.processMessage();
+	assert(receivedMessage != nullptr);
+	assertMessagesEqual(sentMessage, *receivedMessage);
+}
+
+void messagingServiceMessageParseNotAllDataInitially()
+{
+	serialInterfaceMock serialMock;
+
+	message sentMessage;
+	sentMessage.dataLength = 5;
+	sentMessage.id = 12;
+	sentMessage.messageData[0] = 0;
+	sentMessage.messageData[1] = 1;
+	sentMessage.messageData[2] = 2;
+	sentMessage.messageData[3] = 3;
+	sentMessage.messageData[4] = 4;
+
+	serialMock.addMessageBytesForReading(sentMessage, 2);
+
+	messagingService<serialInterfaceMock> messaging(&serialMock);
+
+	//Not all data received, shouldn't get a received message.
+	messaging.receiveIncomingData();
+	message* receivedMessage = messaging.processMessage();
+	assert(receivedMessage == nullptr);
+
+	serialMock.addByte(2);
+	serialMock.addByte(3);
+	serialMock.addByte(4);
+
+	//Receive the rest of the data and make sure the message is there too.
+	messaging.receiveIncomingData();
+	receivedMessage = messaging.processMessage();
+	assert(receivedMessage != nullptr);
+
+	assertMessagesEqual(sentMessage, *receivedMessage);
+}
+
+void messagingServiceMessageParseGarbageAtTheStart()
+{
+	serialInterfaceMock serialMock;
+
+	//Add some 'gargabage' data to the data stream.
+	for (int i = 0; i < 6; ++i)
+	{
+		serialMock.addByte(42);
+	}
+	
+	//And only then send the actual message.
+	message sentMessage;
+	sentMessage.dataLength = 5;
+	sentMessage.id = 12;
+	sentMessage.messageData[0] = 0;
+	sentMessage.messageData[1] = 1;
+	sentMessage.messageData[2] = 2;
+	sentMessage.messageData[3] = 3;
+	sentMessage.messageData[4] = 4;
+
+	serialMock.addMessageBytesForReading(sentMessage);
+
+	messagingService<serialInterfaceMock> messaging(&serialMock);
+
+	messaging.receiveIncomingData();
+	message* receivedMessage = messaging.processMessage();
+	assert(receivedMessage != nullptr);
+
+	assertMessagesEqual(sentMessage, *receivedMessage);
+}
+
+void messagingServiceGarbageDataOnly()
+{
+	serialInterfaceMock serialMock;
+
+	//Add some 'gargabage' data to the data stream.
+	for (int i = 0; i < 20; ++i)
+	{
+		serialMock.addByte(42 + i);
+	}
+
+	messagingService<serialInterfaceMock> messaging(&serialMock);
+
+	messaging.receiveIncomingData();
+	message* receivedMessage = messaging.processMessage();
+	assert(receivedMessage == nullptr);
+}
+
+void messagingServiceMessageParseTwoInARow()
+{
+	serialInterfaceMock serialMock;
+
+	//Queue up two messages in a row.
+	message sentMessage1;
+	sentMessage1.dataLength = 5;
+	sentMessage1.id = 12;
+	sentMessage1.messageData[0] = 0;
+	sentMessage1.messageData[1] = 1;
+	sentMessage1.messageData[2] = 2;
+	sentMessage1.messageData[3] = 3;
+	sentMessage1.messageData[4] = 4;
+
+	serialMock.addMessageBytesForReading(sentMessage1);
+
+	message sentMessage2;
+	sentMessage2.dataLength = 4;
+	sentMessage2.id = 42;
+	sentMessage2.messageData[0] = 4;
+	sentMessage2.messageData[1] = 5;
+	sentMessage2.messageData[2] = 6;
+	sentMessage2.messageData[3] = 7;
+
+	serialMock.addMessageBytesForReading(sentMessage2);
+
+	messagingService<serialInterfaceMock> messaging(&serialMock);
+
+	messaging.receiveIncomingData();
+
+	//Make sure we've received the the two messages
+	message* receivedMessage1 = messaging.processMessage();
+	assert(receivedMessage1 != nullptr);
+	assertMessagesEqual(sentMessage1, *receivedMessage1);
+
+	message* receivedMessage2 = messaging.processMessage();
+	assert(receivedMessage2 != nullptr);
+	assertMessagesEqual(sentMessage2, *receivedMessage2);
+}
+
+void messagingServiceDataLengthTooGreat()
+{
+	serialInterfaceMock serialMock;
+
+	message sentMessage;
+	//Set the data length to be invalid.
+	sentMessage.dataLength = constants.maximumMessageDataLength + 1;
+	sentMessage.id = 12;
+
+	serialMock.addMessageBytesForReading(sentMessage, 2);
+
+	messagingService<serialInterfaceMock> messaging(&serialMock);
+
+	messaging.receiveIncomingData();
+	message* receivedMessage = messaging.processMessage();
+	assert(receivedMessage == nullptr);
+}
+
+void messagingServiceTests()
+{
+	messagingServiceZeroDataLengthMessage();
+	messagingServiceMessageParse();
+	messagingServiceParseMessageReceivedInSingleBytes();
+	messagingServiceMessageParseNotAllDataInitially();
+	messagingServiceMessageParseGarbageAtTheStart();
+	messagingServiceGarbageDataOnly();
+	messagingServiceMessageParseTwoInARow();
+	messagingServiceDataLengthTooGreat();
 }
 
 int main()

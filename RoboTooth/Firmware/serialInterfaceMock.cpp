@@ -12,11 +12,16 @@ byte serialInterfaceMock::read()
 
 void serialInterfaceMock::addMessageBytesForReading(const message& msg)
 {
+	addMessageBytesForReading(msg, msg.dataLength);
+}
+
+void serialInterfaceMock::addMessageBytesForReading(const message& msg, byte dataLengWhenCopying)
+{
 	addMessagePreamble();
 
 	addByte(msg.dataLength);
 	addByte(msg.id);
-	for (int i = 0; i < constants.maximumMessageDataLength && i < msg.dataLength; ++i)
+	for (int i = 0; i < constants.maximumMessageDataLength && i < dataLengWhenCopying; ++i)
 	{
 		addByte(msg.messageData[i]);
 	}
