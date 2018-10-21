@@ -126,7 +126,7 @@ void messagingService<SerialInterface>::sendMessage(byte* messageData, byte mess
 	//Finally it's the actual data
 	memcpy(sendBuffer + 4, messageData, messageDataSize);
 	//And then SEND!!
-	Serial.write(sendBuffer, 2 + 1 + 1 + messageDataSize);
+	serialInterface->write(sendBuffer, 2 + 1 + 1 + messageDataSize);
 }
 
 template<class SerialInterface>
