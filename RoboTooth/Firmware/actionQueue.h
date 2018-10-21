@@ -2,7 +2,6 @@
 
 #include "timeMeasurement.h"
 #include "Debug.h"
-#include <stdio.h>
 #include "queue.h"
 
 enum movevementStateEnum
@@ -66,39 +65,6 @@ actionQueue<T>::actionQueue(byte ActionQueueId) : actionQueueId(ActionQueueId), 
 template<class T>
 void actionQueue<T>::addNewAction(const T& action)
 {
-	Serial.println("Adding action!");
-	//There's no protective mechanism from queue 'overflowing', it's possible for th/e currently executed action to be overwritten
-	//if too many actions get queued in a row. Leave it up to roboApp to manage this..? Maybe
-	/*auto lastQueueAction = getQueuedActionsCount() - 1; //Is this correct??
-
-	//If the currently queued action is permanent, and a new action is added, this action needs to be removed from
-	//the queue and the newly added action needs to be started immediately
-
-	//RoboApp should track assign the action ID, otherwise the whole sync problem is gonna be a huge pain
-
-	//Check if the last action in the queue is permanent, and replace it if it is
-	//If it's the current action, the new action will start on the next update
-	if(lastQueueAction >= 0 && getAction(lastQueueAction)->isIndefinite()) 
-	{
-		Serial.println("Ovrwrite indef act");
-		//Decrement while making sure we don't get negative numbers here
-		nextInsertSlotIndex = lastQueueAction;
-	}*/
-
-	//Assuming getQueuedActionsCount works ok
-	//getAction is normalized, so it effectively gets the current action when passed 0
-	// So when there was 1 timed action and and 1 indef action, the count should return 1, and with -1 the idx ends up being 0
-	//So when it's check for indef, it checks current (which is in fact indefinite)
-	//But then the overwrite would happen at actual 0, which was infact timed action
-	//And since the insert index was 0, nexInsertSLot and currentIndex end up being the same, which means it does not even attempt to start any action
-	//BUT WHY does it start working at ID 5 and not ID 3??
-
-	//IF the current action is indefinite, we want to override it with the new one.
-
-  //11/10/2018 - If the last action in the queue is indefinite,
-  //but the currently processed action is timed, any new indefinite actions won't actually replace the 
-  //last action in the queue but just add it onto the list. NOT CORRECT.
-
 	//If the last action in the queue is indefinite, replace it with the new action that
 	//is getting added.
 	if(AnyActionsQueued() && internalQueue.last()->isIndefinite())
@@ -111,11 +77,6 @@ void actionQueue<T>::addNewAction(const T& action)
 		//Should check the result here.
 		internalQueue.tryAdd(action);
 	}
-
-	//char charBuffer[30];
-	//sprintf(charBuffer, "Added at:%d,tm:%d", nextInsertSlotIndex, action.getExecutionTimeMs());
-	//Serial.println(charBuffer);
-
 }
 
 template<class T>
@@ -134,9 +95,6 @@ template<class T>
 void actionQueue<T>::CompleteCurrentAction()
 {
 	lastFinishedActionId = GetCurrentAction()->getActionId();
-	char charBuffer[24];
-	sprintf(charBuffer, "Completed id:%d", lastFinishedActionId);
-	Serial.println(charBuffer);
 	internalQueue.popFront();
 }
 
@@ -145,25 +103,16 @@ bool actionQueue<T>::StartNextAction()
 {
 	auto currAction = GetCurrentAction();
 
-	char charBuffer2[40]; //Is this it????
-	sprintf(charBuffer2, "Attempt start, id:%d", currAction->getActionId());
-	Serial.println(charBuffer2);
-
 	//An action has already been started, do nothing.
 	if(currAction->isStarted())
 		return false;
 
 	//There's an action that can be started.
-	char charBuffer[30]; //Is this it????
-	sprintf(charBuffer, "Action start, time:%d", currAction->getExecutionTimeMs());
-	Serial.println(charBuffer);
-	//SendStringToApp(charBuffer);
 	currAction->start();
 
 	//If execTime is 0 the action will be performed indefinitely or till a timed action supercedes it
 	if(!currAction->isIndefinite())
 	{
-		//Serial.println("Act is indef");
 		timer.resetTimer(currAction->getExecutionTimeMs());
 	}
 
@@ -183,8 +132,6 @@ bool actionQueue<T>::UpdateQueue(unsigned int elapsedTime)
 		//No actions completed.
 		return false; 
 	}
-
-	//Serial.println("Actions queued");
 
 	//Attempt to start a new action.
 	if(StartNextAction())

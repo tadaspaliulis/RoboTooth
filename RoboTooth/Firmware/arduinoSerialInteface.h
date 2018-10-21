@@ -10,6 +10,6 @@ public:
 
 	byte read() { return Serial.read(); }
 
-	void println(const char* string) { Serial.write(string); }
+	void println(const char* string) { Serial.println(string); }
 	void write( const char* string) { Serial.write(string); }
 };

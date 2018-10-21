@@ -77,7 +77,6 @@ namespace RoboTooth.Model.MessagingService
         /// </summary>
         private void LookForMessages()
         {
-            return;
             var availableData = _receivedDataBuffer.getAvailableDataSize();
             if (availableData < RawMessage.MessageHeaderLength)
             {

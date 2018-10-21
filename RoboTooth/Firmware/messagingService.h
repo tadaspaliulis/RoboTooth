@@ -91,10 +91,8 @@ void messagingService<SerialInterface>::receiveIncomingData()
 	char output[6];
 	while ( serialInterface->available() > 0)
     {
-  		//Serial.write("Receive incoming data\n");
+  		//Store receied data in a buffer.
 		inboundDataQueue.tryAdd(serialInterface->read());
-		sprintf(output, "%x", *inboundDataQueue.last());
-    	serialInterface->println(output);
     }
 }
 
@@ -128,7 +126,7 @@ void messagingService<SerialInterface>::sendMessage(byte* messageData, byte mess
 	//Finally it's the actual data
 	memcpy(sendBuffer + 4, messageData, messageDataSize);
 	//And then SEND!!
-	//Serial.write(sendBuffer, 2 + 1 + 1 + messageDataSize);
+	Serial.write(sendBuffer, 2 + 1 + 1 + messageDataSize);
 }
 
 template<class SerialInterface>
@@ -159,10 +157,7 @@ message* messagingService<SerialInterface>::processMessage()
 	
 	//Attempt reading the data length of the message.
 	if(!readByte(readPosition, tempMessage.dataLength))
-	{
-		char charBuffer[60];
-		sprintf(charBuffer, "Failed length read: Idx: %d,Rx:%d", readPosition, inboundDataQueue.getSize());
-		serialInterface->println(charBuffer);	
+	{	
 		return nullptr;
 	}
 
@@ -173,11 +168,6 @@ message* messagingService<SerialInterface>::processMessage()
     //Might indicate an error in processing code or a corruption during transmission.
     if( tempMessage.dataLength > constants.maximumMessageDataLength )
     {
-        char buffertextmessage[50];
-        sprintf(buffertextmessage, "Msg too long:%d", tempMessage.dataLength );
-
-        serialInterface->println(buffertextmessage);
-
         //TODO: Add this back in
         //SendStringToApp(buffertextmessage);
 
@@ -190,9 +180,6 @@ message* messagingService<SerialInterface>::processMessage()
 	//Check if the full message has been received.
 	if((tempMessage.dataLength + readPosition + 1) > inboundDataQueue.getSize())
 	{
-		char charBuffer[30];
-		sprintf(charBuffer, "Expected:%d,Rx:%d", tempMessage.dataLength + readPosition + 1, inboundDataQueue.getSize());
-		serialInterface->println(charBuffer);
 		return nullptr;
 	}
 
@@ -215,10 +202,6 @@ message* messagingService<SerialInterface>::processMessage()
         //on the last cycle of the loop.
 		readPosition += 1;
 	}
-
-	char charBuffer[40];
-	sprintf(charBuffer, "Msg Parsed. DataRx:%d, dataRead:%d", inboundDataQueue.getSize(), readPosition);
-	serialInterface->println(charBuffer);
 
     //Advance internal tracking past the data we've already processed.
     //readPosition is equivalent to the amount of data read.

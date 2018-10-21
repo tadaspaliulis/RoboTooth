@@ -47,7 +47,7 @@ void controller::updateSensorData()
 	//Time elapsed since last sensor update
 	unsigned int elapsedTime = sensorTimer.timeStamp();
 	getState()->getMessenger()->receiveIncomingData();
-	return;
+	
 	if( echoSensorCountdown.updateTimer( elapsedTime ) ) //If true, countdown time over, do the operation and reset
 	{
 		getState()->updateDistanceMeasurement();
