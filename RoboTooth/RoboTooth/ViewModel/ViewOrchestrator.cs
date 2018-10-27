@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using RoboTooth.Model.MessagingService.Messages;
 using System.Collections.ObjectModel;
 using RoboTooth.ViewModel.DataDisplayVM;
+using RoboTooth.ViewModel.WorldMap;
 
 namespace RoboTooth.ViewModel
 {
@@ -58,8 +59,26 @@ namespace RoboTooth.ViewModel
             MoveLeftButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => _mainController.GetRoboController().TurnLeftIndefinite()), null);
             MoveRightButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => _mainController.GetRoboController().TurnRightIndefinite()), null);
             MoveForwardButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => _mainController.GetRoboController().MoveForwardIndefinite()), null);
-            MoveBackwardsButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => _mainController.GetRoboController().MoveBackwardsIndefinite()), null);
-            MoveStopButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => _mainController.GetRoboController().StopMovement()), null);
+            //The two actions below need fixing!
+            MoveBackwardsButton = new ObservableButton(new Command((a) => { return true; }, (a) => MovementMap.Points.Add(new LineVM
+            {
+                OriginX = 200,
+                OriginY = 14,
+                DestinationX = 100,
+                DestinationY = 50,
+            })), null);
+            MoveStopButton = new ObservableButton(new Command((a) => { return true; }, (a) => MovementMap.Points[0].DestinationX += 20), null);
+
+            MovementMap.Points = new ObservableCollection<LineVM>
+            {
+                new LineVM()
+                {
+                    OriginX = 0,
+                    OriginY = 0,
+                    DestinationX = 100,
+                    DestinationY = 50,
+                }
+            };
         }
             
         private void InitialiseControllers()
@@ -101,6 +120,20 @@ namespace RoboTooth.ViewModel
             set
             {
                 _connectionManagement = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private MovementMapVM _movementMap = new MovementMapVM();
+        public MovementMapVM MovementMap
+        {
+            get
+            {
+                return _movementMap;
+            }
+            set
+            {
+                _movementMap = value;
                 NotifyPropertyChanged();
             }
         }

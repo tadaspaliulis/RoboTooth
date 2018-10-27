@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RoboTooth.Model.MessagingService;
-using RoboTooth.Model.MessagingService.Messages;
 using RoboTooth.Model.MessagingService.Messages.RxMessages;
 using RoboTooth.Model.MessagingService.Messages.TxMessages;
+using RoboTooth.Model.State;
 
 namespace RoboTooth.Model.Control
 {
@@ -128,6 +128,7 @@ namespace RoboTooth.Model.Control
         private MessageSorter _messageSorter;
 
         private RobotActionQueue _motorActionQueue = new RobotActionQueue(0);
-    
+
+        private MotionHistory _motionHistory;
     }
 }

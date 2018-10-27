@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:RoboTooth"
         mc:Ignorable="d"
         Title="RoboController" Height="460" Width="600"
-        xmlns:ViewModel="clr-namespace:RoboTooth.ViewModel">
+        xmlns:ViewModel="clr-namespace:RoboTooth.ViewModel"
+        xmlns:View="clr-namespace:RoboTooth.View">
 
     <Window.Resources>
         <Style TargetType="Border" x:Key="HeaderBorderStyle">
@@ -70,6 +71,7 @@
                 <Button Content ="Backwards" DockPanel.Dock="Bottom" IsEnabled="{Binding MoveBackwardsButton.Enabled, UpdateSourceTrigger=PropertyChanged}" Command="{Binding MoveBackwardsButton.Command}"/>
                 <Button Content="Stop" IsEnabled="{Binding MoveStopButton.Enabled, UpdateSourceTrigger=PropertyChanged}" Command="{Binding MoveStopButton.Command}"/>
             </DockPanel>
+            <View:WorldCanvas MovementMap="{Binding MovementMap}"/>
         </StackPanel>
     </Grid>
 </Window>
