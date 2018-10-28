@@ -68,6 +68,7 @@
     <Compile Include="Model\Control\RobotAction.cs" />
     <Compile Include="Model\Control\RobotActionQueue.cs" />
     <Compile Include="Model\ICommunicationInterface.cs" />
+    <Compile Include="Model\Kinematics\KinematicsModel.cs" />
     <Compile Include="Model\MessagingService\CircularBuffer.cs" />
     <Compile Include="Model\MessagingService\MessageSorter.cs" />
     <Compile Include="Model\MessagingService\Messages\RxMessages\ActionCompletedMessage.cs" />
@@ -80,7 +81,7 @@
     <Compile Include="Model\MessagingService\MessagingService.cs" />
     <Compile Include="Model\BluetoothCommunicationInterface.cs" />
     <Compile Include="Model\State\MotionHistory.cs" />
-    <Compile Include="Model\State\PositionSnapshot.cs" />
+    <Compile Include="Model\State\MovementRecord.cs" />
     <Compile Include="ViewModel\AsyncCommand.cs" />
     <Compile Include="ViewModel\Command.cs" />
     <Compile Include="ViewModel\ConnectionManagementView.cs" />

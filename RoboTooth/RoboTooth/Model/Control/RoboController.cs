@@ -15,15 +15,18 @@ namespace RoboTooth.Model.Control
     /// </summary>
     public class RoboController
     {
-        public RoboController(MessagingService.MessagingService messagingService, MessageSorter messageSorter)
+        public RoboController(MessagingService.MessagingService messagingService, MessageSorter messageSorter, MotionHistory motionHistory)
         {
             _messagingService = messagingService;
 
+            //Subscribe to various message events from the message sorter.
             _messageSorter = messageSorter;
             _messageSorter.EchoDistanceMessages.MessageReceived += handleEchoDistanceMessage;
             _messageSorter.MagnetometerOrientationMessages.MessageReceived += handleMagnetometerOrientationMessage;
             _messageSorter.ActionCompletedMessages.MessageReceived += handleActionCompletedMessage;
             _messageSorter.DebugStringMessages.MessageReceived += handleDebugStringMessage;
+
+            _motionHistory = motionHistory;
         }
         #region Robot Message handlers
         private void handleEchoDistanceMessage(object sender, EchoDistanceMessage message) { }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RoboTooth.Model.MessagingService;
+using RoboTooth.Model.State;
 
 namespace RoboTooth.Model.Control
 {
@@ -18,7 +19,10 @@ namespace RoboTooth.Model.Control
             _messagingService = new MessagingService.MessagingService(_communicationInterface);
             _messageSorter = new MessageSorter();
             _messagingService.MessageReceivedEvent += _messageSorter.HandleRawMessage;
-            _roboController = new RoboController(_messagingService, _messageSorter);
+
+            _motionHistory = new MotionHistory();
+
+            _roboController = new RoboController(_messagingService, _messageSorter, _motionHistory);
         }
 
         internal ICommunicationInterface GetCommunicationInterface()
@@ -41,9 +45,17 @@ namespace RoboTooth.Model.Control
             return _roboController;
         }
 
+        internal MotionHistory GetMotionHistory()
+        {
+            return _motionHistory;
+        }
+
         private MessagingService.MessagingService _messagingService;
         private ICommunicationInterface _communicationInterface;
         private MessageSorter _messageSorter;
+
+        private MotionHistory _motionHistory;
+
         private RoboController _roboController;
     }
 }

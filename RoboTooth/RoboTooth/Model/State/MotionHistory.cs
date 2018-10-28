@@ -12,28 +12,43 @@ namespace RoboTooth.Model.State
     /// </summary>
     public class MotionHistory
     {
+        public event Action<MovementRecord> NewMotionRecordAdded;
+
         public MotionHistory()
         {
-            ResetToStartingPoint();
+            Reset();
+        }
+
+        public void AddNewPoint(ushort relativeTime, float x, float y, float orientationX, float orientationY)
+        {
+            _history.Add(new MovementRecord(relativeTime, x, y, orientationX, orientationY));
+        }
+
+        public Vector2 GetCurrentPosition()
+        {
+            return _currentPosition;
+        }
+
+        public Vector2 GetCurrentOrientation()
+        {
+            return _currentOrientation;
         }
 
         /// <summary>
         /// Sets the history to its starting point.
         /// A.K.A. a zero vector.
         /// </summary>
-        private void ResetToStartingPoint()
+        private void Reset()
         {
             _history.Clear();
 
-            //Create our starting point.
-            AddNewPoint(0, 0, 0, 1, 0);
+            _currentPosition = Vector2.Zero;
+            _currentOrientation = Vector2.UnitY;
         }
 
-        public void AddNewPoint(ushort relativeTime, float x, float y, float orientationX, float orientationY)
-        {
-            _history.Add(new PositionSnapshot(relativeTime, x, y, orientationX, orientationY));
-        }
+        private Vector2 _currentPosition;
+        private Vector2 _currentOrientation;
 
-        private List<PositionSnapshot> _history = new List<PositionSnapshot>();
+        private List<MovementRecord> _history = new List<MovementRecord>();
     }
 }
