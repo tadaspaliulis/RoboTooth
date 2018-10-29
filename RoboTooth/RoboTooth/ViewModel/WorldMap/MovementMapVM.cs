@@ -4,6 +4,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls.Primitives;
+using RoboTooth.Model.State;
 
 namespace RoboTooth.ViewModel.WorldMap
 {
@@ -57,21 +60,52 @@ namespace RoboTooth.ViewModel.WorldMap
         }
     }
 
+    public class ViewPortSettings : ObservableObject
+    {
+        private float _mapScaling;
+        public float MapScaling
+        {
+            get { return _mapScaling; }
+            set
+            {
+                _mapScaling = value;
+                NotifyPropertyChanged();
+            }
+        }        
+    }
+
     /// <summary>
-    /// Represents a map of movements that the robot has done so far.
+    /// Represents a map of movements that the robot has made so far.
     /// </summary>
     public class MovementMapVM : ObservableObject
     {
-        private ObservableCollection<LineVM> _points;
-        public ObservableCollection<LineVM> Points
+        public void HandleNewMovementRecordAdded(MovementRecord movementRecord)
+        {
+            if (Application.Current.Dispatcher != null)
+            {
+                Application.Current.Dispatcher.Invoke(delegate
+                {
+                    Lines.Add(new LineVM
+                    {
+                        OriginX = movementRecord.StartPosition.X + 150,
+                        OriginY = movementRecord.StartPosition.Y + 150 ,
+                        DestinationX = movementRecord.DestinationPoint.X + 150,
+                        DestinationY = movementRecord.DestinationPoint.Y + 150,
+                    });
+                });
+            }
+        }
+
+        private ObservableCollection<LineVM> _lines;
+        public ObservableCollection<LineVM> Lines
         {
             get
             {
-                return _points;
+                return _lines;
             }
             set
             {
-                _points = value;
+                _lines = value;
                 NotifyPropertyChanged();
             }
         }

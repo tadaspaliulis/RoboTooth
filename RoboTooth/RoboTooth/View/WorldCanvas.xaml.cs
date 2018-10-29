@@ -52,7 +52,7 @@ namespace RoboTooth.View
             {
                 var oldValue = args.OldValue as MovementMapVM;
                 // Unsubscribe from CollectionChanged on the old collection
-                oldValue.Points.CollectionChanged -= world.OnPointsCollectionChanged;
+                oldValue.Lines.CollectionChanged -= world.OnPointsCollectionChanged;
             }
 
             if (args.NewValue != null)
@@ -61,10 +61,10 @@ namespace RoboTooth.View
                 world.MovementMap = newMovementMap;
 
                 // Subscribe to CollectionChanged on the new collection
-                newMovementMap.Points.CollectionChanged += world.OnPointsCollectionChanged;
+                newMovementMap.Lines.CollectionChanged += world.OnPointsCollectionChanged;
 
                 //Do the initial draw for this newly assigned collection
-                world.DrawMap(newMovementMap.Points);
+                world.DrawMap(newMovementMap.Lines);
             }
 
 

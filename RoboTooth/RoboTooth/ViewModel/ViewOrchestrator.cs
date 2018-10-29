@@ -60,16 +60,16 @@ namespace RoboTooth.ViewModel
             MoveRightButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => _mainController.GetRoboController().TurnRightIndefinite()), null);
             MoveForwardButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => _mainController.GetRoboController().MoveForwardIndefinite()), null);
             //The two actions below need fixing!
-            MoveBackwardsButton = new ObservableButton(new Command((a) => { return true; }, (a) => MovementMap.Points.Add(new LineVM
+            MoveBackwardsButton = new ObservableButton(new Command((a) => { return true; }, (a) => MovementMap.Lines.Add(new LineVM
             {
                 OriginX = 200,
                 OriginY = 14,
                 DestinationX = 100,
                 DestinationY = 50,
             })), null);
-            MoveStopButton = new ObservableButton(new Command((a) => { return true; }, (a) => MovementMap.Points[0].DestinationX += 20), null);
+            MoveStopButton = new ObservableButton(new Command((a) => { return true; }, (a) => MovementMap.Lines[0].DestinationX += 20), null);
 
-            MovementMap.Points = new ObservableCollection<LineVM>
+            MovementMap.Lines = new ObservableCollection<LineVM>
             {
                 new LineVM()
                 {
@@ -79,6 +79,8 @@ namespace RoboTooth.ViewModel
                     DestinationY = 50,
                 }
             };
+
+            _mainController.GetMotionHistory().NewMovementRecordAdded += MovementMap.HandleNewMovementRecordAdded;
         }
             
         private void InitialiseControllers()
@@ -105,7 +107,6 @@ namespace RoboTooth.ViewModel
             {
                 _rawMessageList.Add(new MessageListItem(message));
             });
-            
         }
 
         private MainController _mainController;

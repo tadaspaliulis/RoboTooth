@@ -9,15 +9,15 @@
     <Grid>
         <!-- Define a border around the grid-->
         <Border
-                        BorderThickness="1"
-                        BorderBrush="Black"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top">
+            BorderThickness="1"
+            BorderBrush="Black"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top">
             
-            <ItemsControl ItemsSource="{Binding MovementMap.Points}">
+            <ItemsControl ItemsSource="{Binding MovementMap.Lines}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <Canvas Width="300" Height="300" Name="CanvasArea">
+                        <Canvas Width="300" Height="300" ClipToBounds="True">
                             <!-- Define a tiled background -->
                             <Canvas.Background>
                                 <DrawingBrush TileMode="Tile" Viewport="-10,-10,40,40" 
@@ -43,7 +43,7 @@
                           Y1="{Binding OriginY}"
                           X2="{Binding DestinationX}"
                           Y2="{Binding DestinationX}"
-                          Stroke="Black" StrokeThickness="2"/>
+                          Stroke="Black" Opacity="0.7" StrokeThickness="2"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

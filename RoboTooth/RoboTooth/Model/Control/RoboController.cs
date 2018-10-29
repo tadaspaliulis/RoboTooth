@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using RoboTooth.Model.Kinematics;
 using RoboTooth.Model.MessagingService;
 using RoboTooth.Model.MessagingService.Messages.RxMessages;
 using RoboTooth.Model.MessagingService.Messages.TxMessages;
@@ -23,11 +25,16 @@ namespace RoboTooth.Model.Control
             _messageSorter = messageSorter;
             _messageSorter.EchoDistanceMessages.MessageReceived += handleEchoDistanceMessage;
             _messageSorter.MagnetometerOrientationMessages.MessageReceived += handleMagnetometerOrientationMessage;
-            _messageSorter.ActionCompletedMessages.MessageReceived += handleActionCompletedMessage;
             _messageSorter.DebugStringMessages.MessageReceived += handleDebugStringMessage;
 
+            _motorsController = new MotorsController(_messagingService);
+            _messageSorter.ActionCompletedMessages.MessageReceived += _motorsController.HandleActionCompletedMessage;
+
             _motionHistory = motionHistory;
+            _kinematicsModel = new KinematicsModel(10, 10);
+            _navigationPlanner = new NavigationPlanner(_kinematicsModel, _motorsController, _motionHistory);
         }
+
         #region Robot Message handlers
         private void handleEchoDistanceMessage(object sender, EchoDistanceMessage message) { }
         private void handleMagnetometerOrientationMessage(object sender, MagnetometerOrientationMessage message)
@@ -38,15 +45,6 @@ namespace RoboTooth.Model.Control
 
             val = val * 180 / Math.PI;
             //System.Diagnostics.Debug.WriteLine(val);
-        }
-        private void handleActionCompletedMessage(object sender, ActionCompletedMessage message)
-        {
-            //Figure which queue this action belonged to and then pop it
-            if(message.GetQueueId() == _motorActionQueue.GetQueueId())
-            {
-                _motorActionQueue.PopCompletedAction(message.GetActionId());
-                //Could be an opportunity for the controller to react to this action being completed here
-            }
         }
 
         private void handleDebugStringMessage(object sender, DebugStringMessage message)
@@ -60,17 +58,13 @@ namespace RoboTooth.Model.Control
 
         private void performRobotMovementAction(TimedMoveMessage action)
         {
-            _motorActionQueue.AddActionToQueue(action);
-            _messagingService.SendMessage(action);
+            //_motorActionQueue.AddActionToQueue(action);
+            //_messagingService.SendMessage(action);
         }
 
         public void TurnLeftIndefinite()
         {
-            for (int i = 0; i != 10; ++i)
-            {
-                performRobotMovementAction(new IndefiniteMoveMessage(MoveDirection.ETurnLeft, 255));
-                Task.Delay(20);
-            }
+            performRobotMovementAction(new IndefiniteMoveMessage(MoveDirection.ETurnLeft, 255));
         }
 
         public void TurnRightIndefinite()
@@ -81,6 +75,8 @@ namespace RoboTooth.Model.Control
         public void MoveForwardIndefinite()
         {
             performRobotMovementAction(new IndefiniteMoveMessage(MoveDirection.EForward, 255));
+            var startPosition = _kinematicsModel.GetCurrentPosition();
+            _motionHistory.AddNewMovement(new MovementRecord(0, startPosition, _kinematicsModel.GetCurrentOrientation(), new Vector2(12, 5)));
         }
 
         public void MoveBackwardsIndefinite()
@@ -130,8 +126,12 @@ namespace RoboTooth.Model.Control
         private MessagingService.MessagingService _messagingService;
         private MessageSorter _messageSorter;
 
-        private RobotActionQueue _motorActionQueue = new RobotActionQueue(0);
+        private MotorsController _motorsController;
 
         private MotionHistory _motionHistory;
+
+        private KinematicsModel _kinematicsModel;
+
+        private NavigationPlanner _navigationPlanner;
     }
 }

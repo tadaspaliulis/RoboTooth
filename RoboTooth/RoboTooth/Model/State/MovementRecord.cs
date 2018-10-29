@@ -9,24 +9,22 @@ namespace RoboTooth.Model.State
 {
     public class MovementRecord
     {
-        public readonly ushort RelativeTime; 
-        public readonly Vector2 Position;
+        public readonly ushort RelativeTime;
+        public readonly Vector2 StartPosition;
+        public readonly Vector2 Movement;
         public readonly Vector2 Orientation;
 
-        public MovementRecord(ushort relativeTime, float x, float y, float orientationX, float orientationY)
+        public Vector2 DestinationPoint
         {
-            RelativeTime = relativeTime;
-            Position = new Vector2(x, y);
-
-            //Make sure the vector is normalized.
-            Orientation = Vector2.Normalize(new Vector2(orientationX, orientationY));
+            get { return StartPosition + Movement; }
         }
 
-        public MovementRecord(ushort relativeTime, Vector2 position, Vector2 orientation)
+        public MovementRecord(ushort relativeTime, Vector2 startPosition, Vector2 orientation, Vector2 movement)
         {
-            this.RelativeTime = relativeTime;
-            Position = position;
-            orientation = position;
+            RelativeTime = relativeTime;
+            StartPosition = startPosition;
+            Orientation = orientation;
+            Movement = movement;
         }
     }
 }

@@ -62,8 +62,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\Control\MotorsController.cs" />
     <Compile Include="Model\Control\IActionInitiationMessage.cs" />
     <Compile Include="Model\Control\MainController.cs" />
+    <Compile Include="Model\Control\NavigationPlanner.cs" />
     <Compile Include="Model\Control\RoboController.cs" />
     <Compile Include="Model\Control\RobotAction.cs" />
     <Compile Include="Model\Control\RobotActionQueue.cs" />
