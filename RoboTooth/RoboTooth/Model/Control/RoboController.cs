@@ -75,8 +75,7 @@ namespace RoboTooth.Model.Control
         public void MoveForwardIndefinite()
         {
             performRobotMovementAction(new IndefiniteMoveMessage(MoveDirection.EForward, 255));
-            var startPosition = _kinematicsModel.GetCurrentPosition();
-            _motionHistory.AddNewMovement(new MovementRecord(0, startPosition, _kinematicsModel.GetCurrentOrientation(), new Vector2(12, 5)));
+           _navigationPlanner.Test();
         }
 
         public void MoveBackwardsIndefinite()

@@ -37,12 +37,13 @@
                         </Canvas>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
+                <!-- What's the drawing order here? -->
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Line X1="{Binding OriginX}"
                           Y1="{Binding OriginY}"
                           X2="{Binding DestinationX}"
-                          Y2="{Binding DestinationX}"
+                          Y2="{Binding DestinationY}"
                           Stroke="Black" Opacity="0.7" StrokeThickness="2"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

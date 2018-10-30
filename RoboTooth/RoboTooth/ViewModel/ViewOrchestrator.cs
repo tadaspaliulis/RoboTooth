@@ -69,16 +69,7 @@ namespace RoboTooth.ViewModel
             })), null);
             MoveStopButton = new ObservableButton(new Command((a) => { return true; }, (a) => MovementMap.Lines[0].DestinationX += 20), null);
 
-            MovementMap.Lines = new ObservableCollection<LineVM>
-            {
-                new LineVM()
-                {
-                    OriginX = 0,
-                    OriginY = 0,
-                    DestinationX = 100,
-                    DestinationY = 50,
-                }
-            };
+            MovementMap.Lines = new ObservableCollection<LineVM>();
 
             _mainController.GetMotionHistory().NewMovementRecordAdded += MovementMap.HandleNewMovementRecordAdded;
         }

@@ -14,8 +14,8 @@ namespace RoboTooth.Model.Kinematics
     /// </summary>
     public class KinematicsModel
     {
-        private float _maximumMovementSpeed;
-        private float _maximumRotationSpeed;
+        private readonly float _maximumMovementSpeed;
+        private readonly float _maximumRotationSpeed;
 
         private Vector2 _currentPosition;
         private Vector2 _currentOrientation;
@@ -51,6 +51,15 @@ namespace RoboTooth.Model.Kinematics
             var totalDistance = deltaDistance.Length();
 
             return totalDistance / (_maximumMovementSpeed * motorSpeedPercentage);
+        }
+
+        public float CalculateRotationDurationForNewOrientation(Vector2 newOrientation, float motoSpeedPercentage, out bool rotateClockwise)
+        {
+            var angleBetweenVectors = Vector2.Dot(_currentOrientation, newOrientation);
+            //Figure out direction somehow.
+            rotateClockwise = true;
+
+            return angleBetweenVectors / (motoSpeedPercentage * _maximumRotationSpeed);
         }
 
         public void UpdateCurrentPosition(Vector2 newPosition)
