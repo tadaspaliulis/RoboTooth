@@ -12,4 +12,5 @@ public:
 
 	void println(const char* string) { Serial.println(string); }
 	void write( const char* string) { Serial.write(string); }
+	void write(byte* string, int count ) { Serial.write(string, count); }
 };

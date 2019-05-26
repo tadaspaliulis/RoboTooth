@@ -20,6 +20,7 @@ public:
 
 	//Does nothing for now.
 	void write( const char* string) {}
+	void write( byte* rawBytes, int count ) {}
 
 	void addByte(byte b);
 

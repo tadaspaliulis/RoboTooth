@@ -13,6 +13,7 @@ public:
 	void begin(int x) { } 
 	int available() { return 0; }
 	void write(const char * a) { }
+	void write(byte * a, int count) { }
 };
 
 static SerialEmpty Serial;
