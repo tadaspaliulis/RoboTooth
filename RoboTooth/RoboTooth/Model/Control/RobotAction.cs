@@ -16,6 +16,7 @@ namespace RoboTooth.Model.Control
         {
             _queueId = queueId;
             ActionId = actionId;
+            ActionMessage = moveMessage;
         }
 
         private byte _queueId;

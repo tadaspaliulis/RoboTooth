@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RoboTooth"
         mc:Ignorable="d"
-        Title="RoboController" Height="460" Width="600"
+        Title="RoboController" Height="700" Width="600"
         xmlns:ViewModel="clr-namespace:RoboTooth.ViewModel"
         xmlns:View="clr-namespace:RoboTooth.View">
 
@@ -54,6 +54,10 @@
             <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
                 <Label Content="Distance:"/>
                 <TextBox IsReadOnly="True" MinWidth="40" VerticalContentAlignment="Center" Text="{Binding IntDataDisplay.EchoDistanceValue}"/>
+                <Label Content="Position X:"/>
+                <TextBox IsReadOnly="True" MinWidth="40" VerticalContentAlignment="Center" Text="{Binding IntDataDisplay.PositionX}"/>
+                <Label Content="Position Y:"/>
+                <TextBox IsReadOnly="True" MinWidth="40" VerticalContentAlignment="Center" Text="{Binding IntDataDisplay.PositionY}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
                 <Label Content="X:"/>
@@ -65,7 +69,7 @@
                 
             </StackPanel>
             <DockPanel Margin="5" HorizontalAlignment="Left" VerticalAlignment="Bottom" LastChildFill="True">
-                <Button Content="Left" DockPanel.Dock="Left" IsEnabled="{Binding MoveLeftButton.Enabled, UpdateSourceTrigger=PropertyChanged}" Command="{Binding MoveLeftButton.Command}"/>
+                <Button Content="Test" DockPanel.Dock="Left" IsEnabled="{Binding MoveLeftButton.Enabled, UpdateSourceTrigger=PropertyChanged}" Command="{Binding MoveLeftButton.Command}"/>
                 <Button Content="Right" DockPanel.Dock="Right" IsEnabled="{Binding MoveRightButton.Enabled, UpdateSourceTrigger=PropertyChanged}" Command="{Binding MoveRightButton.Command}"/>
                 <Button Content ="Forward" DockPanel.Dock="Top" IsEnabled="{Binding MoveForwardButton.Enabled, UpdateSourceTrigger=PropertyChanged}" Command="{Binding MoveForwardButton.Command}"/>
                 <Button Content ="Backwards" DockPanel.Dock="Bottom" IsEnabled="{Binding MoveBackwardsButton.Enabled, UpdateSourceTrigger=PropertyChanged}" Command="{Binding MoveBackwardsButton.Command}"/>

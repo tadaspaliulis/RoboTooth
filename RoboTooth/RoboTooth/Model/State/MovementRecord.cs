@@ -11,20 +11,26 @@ namespace RoboTooth.Model.State
     {
         public readonly ushort RelativeTime;
         public readonly Vector2 StartPosition;
-        public readonly Vector2 Movement;
-        public readonly Vector2 Orientation;
+        
+        private bool _isPlannedOnly;
 
-        public Vector2 DestinationPoint
-        {
-            get { return StartPosition + Movement; }
-        }
+        /// <summary>
+        /// Indicates whether the action has been executed 
+        /// or is only planned to be executed in the future.
+        /// </summary>
+        public bool IsPlannedOnly { get => _isPlannedOnly; set => _isPlannedOnly = value; }
 
-        public MovementRecord(ushort relativeTime, Vector2 startPosition, Vector2 orientation, Vector2 movement)
+        /// <summary>
+        /// End point of the movement.
+        /// </summary>
+        public Vector2 Destination;
+
+        public MovementRecord(ushort relativeTime, Vector2 startPosition, Vector2 destination)
         {
             RelativeTime = relativeTime;
             StartPosition = startPosition;
-            Orientation = orientation;
-            Movement = movement;
+            Destination = destination;
+            _isPlannedOnly = true;
         }
     }
 }

@@ -39,7 +39,9 @@ namespace RoboTooth.Model.MessagingService.Messages.TxMessages
             return new byte[] { (byte)moveDirection, speed, timeBytes[0], timeBytes[1], actionId }; //The last 2 bytes are duration in microseconds
         }
 
-        //Used to set/access the action Id directly after the message was already created
+        /// <summary>
+        /// Used to set/access the action Id directly after the message was already created 
+        /// </summary>
         private const int _actionIdByteOffset = sizeof(MoveDirection) + sizeof(byte) + sizeof(ushort);
         public byte ActionId
         {
@@ -50,6 +52,30 @@ namespace RoboTooth.Model.MessagingService.Messages.TxMessages
             set
             {
                 rawData[_actionIdByteOffset] = value;
+            }
+        }
+        /// <summary>
+        /// Used to access the speed byte after the message was created.
+        /// </summary>
+        private const int _SpeedByteOffset = sizeof(MoveDirection);
+        public byte Speed
+        {
+            get
+            {
+                return rawData[_SpeedByteOffset];
+            }
+        }
+        
+        /// <summary>
+        /// Used to access the direction byte after the message was created.
+        /// </summary>
+        private const int _moveDirectionByteOffset = 0;
+
+        public MoveDirection Direction
+        {
+            get
+            {
+                return (MoveDirection)rawData[0];
             }
         }
     }

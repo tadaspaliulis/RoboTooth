@@ -73,7 +73,7 @@ namespace RoboTooth.View
 
         private void DrawMap(ObservableCollection<LineVM> Points)
         {
-            foreach (var point in Points)
+            /*foreach (var point in Points)
             {
                 var line = new Line
                 {
@@ -85,7 +85,7 @@ namespace RoboTooth.View
                     StrokeThickness = 3,
                 };
                 //canvasArea.Children.Add(line);
-            }
+            }*/
 
         }
     }

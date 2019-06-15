@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using RoboTooth.Model.MessagingService.Messages.RxMessages;
@@ -15,6 +16,42 @@ namespace RoboTooth.ViewModel.DataDisplayVM
             _MagnetometerOrientationYValue = "N/A";
             _MagnetometerOrientationZValue = "N/A";
         }
+
+        #region Position
+
+        private string _positionX;
+        public string PositionX
+        {
+            get { return _positionX; }
+            set
+            {
+                _positionX = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private string _positionY;
+        public string PositionY
+        {
+            get { return _positionY; }
+            set
+            {
+                _positionY = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public void HandlePositionUpdated(Vector2 position)
+        {
+            //Switch to UI thread
+            App.Current?.Dispatcher?.Invoke(delegate
+            {
+                PositionX = position.X.ToString();
+                PositionY = position.Y.ToString();
+            });
+        }
+
+        #endregion
 
         private string _echoDistanceValue;
         public String EchoDistanceValue
@@ -33,12 +70,11 @@ namespace RoboTooth.ViewModel.DataDisplayVM
         public void HandleEchoDistanceMessage(object sender, EchoDistanceMessage message)
         {
             //Switch to UI thread
-            App.Current.Dispatcher.Invoke(delegate
+            App.Current?.Dispatcher?.Invoke(delegate
             {
                 EchoDistanceValue = message.GetDistance().ToString();
             });
         }
-
 
         private string _MagnetometerOrientationXValue;
         public String MagnetometerOrientationXValue
@@ -85,7 +121,7 @@ namespace RoboTooth.ViewModel.DataDisplayVM
         public void HandleMagnetometerOrientationMessage(object sender, MagnetometerOrientationMessage message)
         {
             //Switch to UI thread
-            App.Current.Dispatcher.Invoke(delegate
+            App.Current?.Dispatcher?.Invoke(delegate
             {
                 MagnetometerOrientationXValue = message.GetX().ToString();
                 MagnetometerOrientationYValue = message.GetY().ToString();

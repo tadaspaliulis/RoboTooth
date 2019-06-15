@@ -58,6 +58,19 @@ namespace RoboTooth.ViewModel.WorldMap
                 NotifyPropertyChanged();
             }
         }
+
+
+        private bool _isPlannedOnly;
+        public bool IsPlannedOnly
+        {
+            get { return _isPlannedOnly; }
+            set
+            {
+                _isPlannedOnly = value;
+                NotifyPropertyChanged();
+            }
+        }
+
     }
 
     public class ViewPortSettings : ObservableObject
@@ -88,10 +101,30 @@ namespace RoboTooth.ViewModel.WorldMap
                     Lines.Add(new LineVM
                     {
                         OriginX = movementRecord.StartPosition.X + 150,
-                        OriginY = movementRecord.StartPosition.Y + 150 ,
-                        DestinationX = movementRecord.DestinationPoint.X + 150,
-                        DestinationY = movementRecord.DestinationPoint.Y + 150,
+                        OriginY = movementRecord.StartPosition.Y + 150,
+                        DestinationX = movementRecord.Destination.X + 150,
+                        DestinationY = movementRecord.Destination.Y + 150,
+                        IsPlannedOnly = movementRecord.IsPlannedOnly,
                     });
+                });
+            }
+        }
+
+        public void HandleLastMovementRecordUpdated(MovementRecord movementRecord)
+        {
+            if (Application.Current?.Dispatcher != null)
+            {
+                Application.Current?.Dispatcher.Invoke(delegate
+                {
+                    if(Lines.Count == 0)
+                    {
+                        //TODO: Is this exception going to be lost since it's in a different thread.
+                        throw new InvalidOperationException("Attempted to update a line when the list of lines was empty.");
+                    }
+                    var lastLine = Lines.Last();
+
+                    lastLine.DestinationX = movementRecord.Destination.X + 150;
+                    lastLine.DestinationY = movementRecord.Destination.Y + 150;
                 });
             }
         }

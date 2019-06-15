@@ -22,6 +22,8 @@ namespace RoboTooth.Model
 
     public interface ICommunicationInterface
     {
+        bool IsConnected { get; }
+
         Stream GetConnectionStream();
         void EstablishConnection();
 

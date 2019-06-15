@@ -10,66 +10,66 @@ using System.Threading.Tasks;
 namespace RoboTooth.Model.Control
 {
     /// <summary>
-    /// 
+    /// TODO: Write a description.
     /// </summary>
     public class NavigationPlanner
     {
-        public NavigationPlanner(KinematicsModel kinematicsModel, MotorsController motorsController, MotionHistory motionHistory)
+        public NavigationPlanner(IPositionState kinematicsModel, LocomotionPlanner locomotionPlanner, MotionHistory motionHistory)
         {
             _kinematicsModel = kinematicsModel;
-            _motorsController = motorsController;
+            _locomotionPlanner = locomotionPlanner;
             _motionHistory = motionHistory;
+
+            locomotionPlanner.MovementCommandComplete += HandleMovementCommandComplete;
         }
 
         public void Test()
         {
             MoveToPosition(new Vector2(0, 50), 1.0f);
             MoveToPosition(new Vector2(15, 15), 1.0f);
-            MoveToPosition(new Vector2(-100, -100), 1.0f);
-            MoveToPosition(new Vector2(-100, 0), 1.0f);
+            MoveToPosition(new Vector2(-10, -10), 1.0f);
+            MoveToPosition(new Vector2(-15, 0), 1.0f);
+            MoveToPosition(new Vector2(68, 90), 1.0f);
+            MoveToPosition(new Vector2(-12, -90), 1.0f);
+            MoveToPosition(new Vector2(0, 0), 1.0f);
         }
 
         public void MoveToPosition(Vector2 newPosition, float speedPercentage)
         {
-            //Maybe this should be a set target position and set target orientation instead?
+            _movementCommandQueue.Enqueue(new MovementCommand(newPosition, speedPercentage));
 
-
-            //Figure out if rotation is needed before we can move.
-            //Make sure the vector substraction operand order is the right way around.
-            var deltaVector = newPosition - _kinematicsModel.GetCurrentPosition();
-            var requiredOrientationForMovement = Vector2.Normalize(deltaVector);
-
-            bool rotateClockwise;
-            var rotationDuration =_kinematicsModel.CalculateRotationDurationForNewOrientation(requiredOrientationForMovement, speedPercentage, out rotateClockwise);
-            
-            //This should be something more lenient than just epsilon, maybe a milisecond? Probably even that is too much
-            //Don't think the motors will spin up in just a milisecond.
-            //Should figure out what units we're actually dealing with here!
-            if (Math.Abs(rotationDuration) > float.Epsilon)
-            {
-                if (rotateClockwise)
-                {
-                    //_motorsController.TurnClockwise((ushort)rotationDuration);
-                }
-                else
-                {
-                    //_motorsController.TurnCounterClockwise((ushort)rotationDuration);
-                }
-
-                _motionHistory.AddNewMovement(new MovementRecord(0, _kinematicsModel.GetCurrentPosition(), requiredOrientationForMovement, Vector2.Zero));
-                
-                _kinematicsModel.UpdateCurrentOrientation(requiredOrientationForMovement);
-            }
-
-            //Then move to the new position
-            var movementDuration = _kinematicsModel.CalculateMovementDurationForDeltaDistance(deltaVector, speedPercentage);
-            //_motorsController.MoveForwardTimed((ushort)movementDuration);
-            _motionHistory.AddNewMovement(new MovementRecord(0, _kinematicsModel.GetCurrentPosition(), _kinematicsModel.GetCurrentOrientation(), deltaVector));
-            _kinematicsModel.UpdateCurrentPosition(newPosition);
+            ExecuteActions();
         }
 
-        private readonly KinematicsModel _kinematicsModel;
-        private readonly MotorsController _motorsController;
+        private void ExecuteActions()
+        {
+            //Make sure there's something to execute.
+            if (_movementCommandQueue.Count == 0 || _currentlyExecutedAction != null)
+                return;
+
+            _currentlyExecutedAction = _movementCommandQueue.Dequeue();
+            _locomotionPlanner.ChangePosition(_currentlyExecutedAction);
+        }
+
+        private void HandleMovementCommandComplete(object sender, EventArgs eventArgs)
+        {
+            //TODO: Does this need a confirmation that we've actually executed the right command?
+            _currentlyExecutedAction = null;
+
+            //TODO: This should be a good opportunity to trigger some pathfinding/whatever logic in the future.
+
+            ExecuteActions();
+        }
+
+        #region Private variables
+
+        private Queue<MovementCommand> _movementCommandQueue = new Queue<MovementCommand>();
+        private MovementCommand _currentlyExecutedAction = null;
+
+        private readonly IPositionState _kinematicsModel;
+        private readonly LocomotionPlanner _locomotionPlanner;
         private readonly MotionHistory _motionHistory;
+
+        #endregion
     }
 }

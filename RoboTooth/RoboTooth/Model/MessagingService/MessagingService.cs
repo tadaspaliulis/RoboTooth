@@ -48,7 +48,10 @@ namespace RoboTooth.Model.MessagingService
             {
                 Stream dataStream = communicationInterface.GetConnectionStream();
                 byte[] bytes = new byte[/*dataStream.Length +*/ 100];
-                while (EnableReceiving)
+
+
+                //TODO: Fix this too! (somehow)
+                while (EnableReceiving && communicationInterface.IsConnected)
                 {
                     // Read may return anything from 0 to 10.
                     int numBytesRead = dataStream.Read(bytes, 0, 15);
@@ -141,6 +144,13 @@ namespace RoboTooth.Model.MessagingService
         {
             lock (_sendMessageLock)
             {
+                //TODO: FIX THIS PROPERLY.
+                if(!communicationInterface.IsConnected)
+                {
+                    //Don't actually send anything if we're not connected.
+                    return;
+                }
+
                 Stream dataStream = communicationInterface.GetConnectionStream();
                 var rawMessageData = message.ToByteArray();
                 dataStream.Write(rawMessageData, 0, rawMessageData.Length);

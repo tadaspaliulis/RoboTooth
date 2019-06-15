@@ -52,26 +52,22 @@ namespace RoboTooth.ViewModel
             _intDataDisplay = new InternalDataDisplay();
             _mainController.GetMessageSorter().EchoDistanceMessages.MessageReceived += IntDataDisplay.HandleEchoDistanceMessage;
             _mainController.GetMessageSorter().MagnetometerOrientationMessages.MessageReceived += IntDataDisplay.HandleMagnetometerOrientationMessage;
+            _mainController.GetRoboController().GetPositionState().CurrentPositionUpdated += IntDataDisplay.HandlePositionUpdated;
 
             _rawMessageList = new ObservableCollection<MessageListItem>();
             _mainController.GetMessageSorter().UnfilteredMessages += HandleReceivedMessages;
 
-            MoveLeftButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => _mainController.GetRoboController().TurnLeftIndefinite()), null);
-            MoveRightButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => _mainController.GetRoboController().TurnRightIndefinite()), null);
-            MoveForwardButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => _mainController.GetRoboController().MoveForwardIndefinite()), null);
+            MoveLeftButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => { _mainController.GetRoboController().Test(); }), null);
+            MoveRightButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => { }), null);
+            MoveForwardButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => { }), null);
             //The two actions below need fixing!
-            MoveBackwardsButton = new ObservableButton(new Command((a) => { return true; }, (a) => MovementMap.Lines.Add(new LineVM
-            {
-                OriginX = 200,
-                OriginY = 14,
-                DestinationX = 100,
-                DestinationY = 50,
-            })), null);
-            MoveStopButton = new ObservableButton(new Command((a) => { return true; }, (a) => MovementMap.Lines[0].DestinationX += 20), null);
+            MoveBackwardsButton = new ObservableButton(new Command((a) => { return true; }, (a) => { }), null);
+            MoveStopButton = new ObservableButton(new Command((a) => { return true; }, (a) => { }), null);
 
             MovementMap.Lines = new ObservableCollection<LineVM>();
 
             _mainController.GetMotionHistory().NewMovementRecordAdded += MovementMap.HandleNewMovementRecordAdded;
+            _mainController.GetMotionHistory().LastMovementRecordUpdated += MovementMap.HandleLastMovementRecordUpdated;
         }
             
         private void InitialiseControllers()

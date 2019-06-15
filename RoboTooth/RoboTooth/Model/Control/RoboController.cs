@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using RoboTooth.Model.Kinematics;
 using RoboTooth.Model.MessagingService;
@@ -31,8 +33,23 @@ namespace RoboTooth.Model.Control
             _messageSorter.ActionCompletedMessages.MessageReceived += _motorsController.HandleActionCompletedMessage;
 
             _motionHistory = motionHistory;
-            _kinematicsModel = new KinematicsModel(10, 10);
-            _navigationPlanner = new NavigationPlanner(_kinematicsModel, _motorsController, _motionHistory);
+            _solver = new SolverNaive(10, 40);
+ 
+            _kinematicsModel = new KinematicsModel(_motorsController, _solver);
+            _locomotionPlanner = new LocomotionPlanner(_solver, _kinematicsModel, _motorsController, 5.0f, Angle.CreateFromDegrees(5.0));
+            _navigationPlanner = new NavigationPlanner(_kinematicsModel, _locomotionPlanner, _motionHistory);
+
+            //Subscribe motion history to kinematics events.
+            //TODO: Unify event handler names. Currently it's a mix of On... and Handle.. styles.
+            _kinematicsModel.CurrentOrientationUpdated += motionHistory.OnOrientationChangedEvent;
+            _kinematicsModel.CurrentPositionUpdated += motionHistory.OnPositionChangedEvent;
+
+            StartExploration();
+        }
+
+        public void Test()
+        {
+            _navigationPlanner.Test();
         }
 
         #region Robot Message handlers
@@ -110,8 +127,56 @@ namespace RoboTooth.Model.Control
 
         #endregion
 
+        private bool _isExplorationRunning = false;
+
+        public void StartExploration()
+        {
+            //Make sure the simulation is not already running.
+            if (true == _isExplorationRunning)
+                throw new InvalidOperationException("Exploration is already running.");
+
+            _isExplorationRunning = true;
+
+            Task simulation = Task.Factory.StartNew(RunSimulationLoop);
+
+            //_kinematicsModel.Simulate
+        }
+
+        public IPositionState GetPositionState()
+        {
+            return _kinematicsModel;
+        }
+
+        //private CancellationTokenSource _cancelationTokenSource;
+
+        private void RunSimulationLoop(/*CancellationToken token*/)
+        {
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+            while(true)
+            {
+                //if (token.IsCancellationRequested)
+                //   break;
+
+                //Don't want to call the simulation too frequently,
+                //because it might blow up due to floating point inaccuracy accumulation
+                //and hog the processing time.
+                var deltaTime = Duration.CreateFromMiliSeconds(stopWatch.ElapsedMilliseconds);
+                if(deltaTime.Miliseconds < 5)
+                {
+                    Thread.Sleep(1);
+                    continue;
+                }
+
+
+                stopWatch.Restart();
+                //Console.WriteLine($"Calling simulate with dT={deltaTime.Seconds} seconds");
+                _kinematicsModel.Simulate(deltaTime);
+            }
+        }
+
         /// <summary>
-        /// Calculate how time robot would need to rotate by specified amount
+        /// Calculate how much time robot would need to rotate by specified amount
         /// </summary>
         /// <param name="degrees">An angle for turning</param>
         /// <returns>Number of microseconds needed to turn by specified angle</returns>
@@ -119,6 +184,8 @@ namespace RoboTooth.Model.Control
         {
             return (ushort)(((float)degrees / 360) * _timeToDo360MicroSeconds);
         }
+
+        #region Private variables
 
         const float _timeToDo360MicroSeconds = 3600; //Todo, need to figure out what this value actually is
 
@@ -129,8 +196,14 @@ namespace RoboTooth.Model.Control
 
         private MotionHistory _motionHistory;
 
+        private ISolver _solver;
+
         private KinematicsModel _kinematicsModel;
 
+        private LocomotionPlanner _locomotionPlanner;
+
         private NavigationPlanner _navigationPlanner;
+
+        #endregion
     }
 }

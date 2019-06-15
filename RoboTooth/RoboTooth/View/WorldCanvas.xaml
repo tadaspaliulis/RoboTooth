@@ -6,6 +6,29 @@
              xmlns:local="clr-namespace:RoboTooth.View"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+
+    <UserControl.Resources>
+        <Style x:Key="LineStyle"
+               TargetType="Line">
+            <Setter Property="StrokeThickness"
+                    Value="2" />
+            <Setter Property="Opacity"
+                    Value="0.7" />
+            <Style.Triggers>
+                <!-- If the move has already been carried, make it easily visible -->
+                <DataTrigger Binding="{Binding IsPlannedOnly}" Value="false">
+                    <Setter Property="Stroke"
+                            Value="Black" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsPlannedOnly}" Value="true">
+                    <Setter Property="Stroke"
+                            Value="Red" />
+                    <Setter Property="StrokeDashArray"
+                            Value="2,2"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <!-- Define a border around the grid-->
         <Border
@@ -41,10 +64,13 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Line X1="{Binding OriginX}"
-                          Y1="{Binding OriginY}"
-                          X2="{Binding DestinationX}"
-                          Y2="{Binding DestinationY}"
-                          Stroke="Black" Opacity="0.7" StrokeThickness="2"/>
+                              Y1="{Binding OriginY}"
+                              X2="{Binding DestinationX}"
+                              Y2="{Binding DestinationY}" 
+                              Style="{StaticResource ResourceKey=LineStyle}">
+                            <!-- <DataTrigger
+                            Stroke="Black" Opacity="0.7" StrokeThickness="2" -->
+                        </Line>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

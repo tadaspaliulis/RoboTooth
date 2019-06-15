@@ -37,6 +37,14 @@ namespace RoboTooth.Model.Control
                                                         + action.ActionId + " Removed action id: " + ActionId);
         }
 
+        public IActionInitiationMessage GetCurrentAction()
+        {
+            if (_actionQueue.Count == 0)
+                return null;
+
+            return _actionQueue.Peek().ActionMessage;
+        }
+
         public byte GetQueueId() { return _queueId; }
 
         private Queue<RobotAction> _actionQueue = new Queue<RobotAction>();

@@ -22,6 +22,8 @@ namespace RoboTooth.Model
             discoveredDevices = new List<BluetoothDeviceInfo>();
         }
 
+        #region Public methods
+
         public void EstablishConnection()
         {
             OnConnectionEvent(new ConnectionEvent
@@ -43,6 +45,19 @@ namespace RoboTooth.Model
         {
             return _bluetoothClient.GetStream();
         }
+
+        public bool IsConnected
+        {
+            get
+            {
+                //TODO: Needs to be fixed!
+                return true;
+            }
+        }
+
+        #endregion
+
+        #region Private methods
 
         private void ScanForConnections()
         {
@@ -122,9 +137,15 @@ namespace RoboTooth.Model
             }
         }
 
+        #endregion
+
+        #region Private variables
+
         private BluetoothClient _bluetoothClient;
         private BluetoothComponent _localComponent;
 
         private List<BluetoothDeviceInfo> discoveredDevices;
+
+        #endregion
     }
 }
