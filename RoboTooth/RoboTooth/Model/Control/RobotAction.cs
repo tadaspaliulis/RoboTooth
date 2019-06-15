@@ -8,7 +8,7 @@ namespace RoboTooth.Model.Control
 {
     /// <summary>
     /// An action that will be executed by the robot.
-    /// Will be removed once the robot sends back a message informing that the app that the action was complete.
+    /// Will be removed once the robot sends back a message informing the app that the action was complete.
     /// </summary>
     public class RobotAction
     {
