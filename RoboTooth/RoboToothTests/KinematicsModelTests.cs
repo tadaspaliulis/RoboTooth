@@ -28,31 +28,5 @@ namespace RoboToothTests
             Assert.AreEqual(model.GetCurrentPosition(), Vector2.Zero);
             Assert.AreEqual(model.GetCurrentOrientation(), Vector2.UnitY);
         }
-
-        /// <summary>
-        /// TODO: This is too integration like and not unit test like.
-        /// </summary>
-        [Test]
-        public void Simulate_MotorsRotateClockwise()
-        {
-            //Not mocking this for, but perhaps should?
-            var solver = new SolverNaive(1.0f, 1.0f);
-            var motorStateMock = Mock.Of<IMotorState>(p => p.GetCurrentSpeedPercentage() == 1.0 && 
-                                                           p.GetCurrentDirection() == MotorState.RotateClockwise);
-
-            var model = new KinematicsModel(motorStateMock, solver);
-
-            var totalDuration = solver.CalculateRotationDurationForNewOrientation(Vector2.UnitY, -Vector2.UnitY, 1.0f, out bool clockwise);
-            var deltaTime = Duration.CreateFromSeconds(totalDuration.Seconds / 1000);
-
-            for(int i= 0; i < 1000; ++i)
-            {
-                model.Simulate(deltaTime);
-            }
-
-            Assert.AreEqual(Vector2.Zero, model.GetCurrentPosition());
-            Assert.AreEqual(Vector2.UnitY, model.GetCurrentOrientation());
-        }
-
     }
 }
