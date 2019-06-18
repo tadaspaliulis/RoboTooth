@@ -96,6 +96,10 @@
     <Compile Include="Model\MessagingService\Messages\TxMessages\IndefiniteMoveMessage.cs" />
     <Compile Include="Model\MessagingService\MessagingService.cs" />
     <Compile Include="Model\BluetoothCommunicationInterface.cs" />
+    <Compile Include="Model\Simulation\ISimulation.cs" />
+    <Compile Include="Model\Simulation\IVelocityEstimate.cs" />
+    <Compile Include="Model\Simulation\MotorSimulator.cs" />
+    <Compile Include="Model\Simulation\VelocityEstimator.cs" />
     <Compile Include="Model\State\MotionHistory.cs" />
     <Compile Include="Model\State\MovementRecord.cs" />
     <Compile Include="ViewModel\AsyncCommand.cs" />

@@ -1,5 +1,6 @@
 ﻿using RoboTooth.Model.MessagingService.Messages.RxMessages;
 using RoboTooth.Model.MessagingService.Messages.TxMessages;
+using RoboTooth.Model.Simulation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,9 +27,10 @@ namespace RoboTooth.Model.Control
 
     public class MotorsController : IMotorState, IMovementController
     {
-        public MotorsController(MessagingService.MessagingService messagingService)
+        public MotorsController(MessagingService.MessagingService messagingService, MotorSimulator motorSimulator)
         {
             _messagingService = messagingService;
+            _motorSimulator = motorSimulator;
         }
 
         #region Movement commands
@@ -178,6 +180,7 @@ namespace RoboTooth.Model.Control
         private float _currentMotorSpeedPercentage = 0.0f;
 
         private MessagingService.MessagingService _messagingService;
+        private MotorSimulator _motorSimulator;
         private RobotActionQueue _motorActionQueue = new RobotActionQueue(0);
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
 using RoboTooth.Model.Control;
+using RoboTooth.Model.Simulation;
 
 namespace RoboTooth.Model.Kinematics
 {
@@ -13,7 +14,7 @@ namespace RoboTooth.Model.Kinematics
     /// 
     /// Initial implementation will have to assume 'perfect' estimation.
     /// </summary>
-    public class KinematicsModel : IPositionState
+    public class KinematicsModel : IPositionState, ISimulation
     {
         #region Private variables
 
