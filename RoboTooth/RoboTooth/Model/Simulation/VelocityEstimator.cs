@@ -1,19 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RoboTooth.Model.Control;
 
 namespace RoboTooth.Model.Simulation
 {
+    /// <summary>
+    /// Estimates robot velocity based on the state of the robot
+    /// </summary>
     public class VelocityEstimator : IVelocityEstimate
     {
-        public VelocityEstimator() { }
-
-        public Vector2 GetVelocity()
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="motorState">Motor state interface</param>
+        /// <param name="speedCalibrationMovement">Calibration multiplier for movement speed</param>
+        /// <param name="speedCalibrationRotation">Calibration multiplier for rotation speed</param>
+        public VelocityEstimator(IMotorState motorState, 
+                                 float speedCalibrationMovement,
+                                 float speedCalibrationRotation)
         {
-            throw new NotImplementedException();
+            _motorState = motorState;
+            _speedCalibrationMovement = speedCalibrationMovement;
+            _speedCalibrationRotation = speedCalibrationRotation;
         }
+
+        /// <summary>
+        /// Gets the current movement velocity estimate
+        /// </summary>
+        /// <returns>Velocity</returns>
+        public float GetMovementVelocity()
+        {
+            return _motorState.GetCurrentSpeedPercentage() * _speedCalibrationMovement;
+        }
+
+        /// <summary>
+        /// Gets the current rotation velocity estimate.
+        /// </summary>
+        /// <returns>Angular velocity</returns>
+        public float GetRotationVelocity()
+        {
+            return _motorState.GetCurrentSpeedPercentage() * _speedCalibrationRotation;
+        }
+
+        private IMotorState _motorState;
+        private float _speedCalibrationMovement;
+        private float _speedCalibrationRotation;
     }
 }
