@@ -68,6 +68,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\Control\IMotorState.cs" />
     <Compile Include="Model\Control\IMovementController.cs" />
     <Compile Include="Model\Control\LocomotionPlanner.cs" />
     <Compile Include="Model\Control\MotorsController.cs" />

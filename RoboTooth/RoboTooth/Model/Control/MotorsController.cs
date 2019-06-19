@@ -9,22 +9,6 @@ using System.Threading.Tasks;
 
 namespace RoboTooth.Model.Control
 {
-    public enum MotorState
-    {
-        Idle,
-        MoveForward,
-        MoveBackwards,
-        RotateClockwise,
-        RotateCounterClockwise,
-    }
-
-    public interface IMotorState
-    {
-        float GetCurrentSpeedPercentage();
-
-        MotorState GetCurrentDirection();
-    }
-
     public class MotorsController : IMotorState, IMovementController
     {
         public MotorsController(MessagingService.MessagingService messagingService, MotorSimulator motorSimulator)
@@ -106,8 +90,16 @@ namespace RoboTooth.Model.Control
 
         private byte performRobotMovementAction(TimedMoveMessage action)
         {
+            // AddActionToQueue needs to be called before MotorSimulator::AddCommand
+            // so that the ActionId field would get set.
             _motorActionQueue.AddActionToQueue(action);
             _messagingService.SendMessage(action);
+
+            // Add the movement/rotation action to the simulation.
+            _motorSimulator.AddCommand(Duration.CreateFromMiliSeconds((long)action.DurationInMiliSeconds),
+                                      ConvertMoveDirectionToMotorState(action.Direction),
+                                      ConvertSpeedFromHwToPercentage(action.Speed),
+                                      action.ActionId);
 
             UpdateInternalMotorState();
 
@@ -115,16 +107,20 @@ namespace RoboTooth.Model.Control
         }
 
         /// <summary>
-        /// 
+        /// TODO
         /// </summary>
         /// <param name="speed"></param>
         /// <returns></returns>
         private static byte ConvertSpeedFromPercentageToHw(float speed)
         {
-            //TODO: Fix this.
             return (byte)(255.0f * speed);
         }
 
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name="speed"></param>
+        /// <returns></returns>
         private static float ConvertSpeedFromHwToPercentage(byte speed)
         {
             return (float)speed / 255.0f;

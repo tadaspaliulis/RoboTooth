@@ -3,6 +3,8 @@ namespace RoboTooth.Model.Simulation
 {
     /// <summary>
     /// Exposes velocity estimates.
+    /// 
+    /// TODO: How does this get integrated with the ISolver? Is ISolver the consumer here?
     /// </summary>
     public interface IVelocityEstimate
     {

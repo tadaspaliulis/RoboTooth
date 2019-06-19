@@ -44,27 +44,37 @@ namespace RoboTooth.Model.Simulation
                 var currentAction  = _actionQueue.Peek();
                 deltaTimeInner = currentAction.AdvanceTime(deltaTimeInner);
                 if (currentAction.IsComplete())
+                {
                     _actionQueue.Dequeue();
+                    MovementActionCompleted(this, currentAction.ID);
+                }
 
                 if (deltaTimeInner.Miliseconds == 0)
                     break;
             }
         }
 
-        void AddCommand(Duration commandDuration, MotorState state, float motorSpeedPercentage)
+        public void AddCommand(Duration commandDuration, MotorState state, float motorSpeedPercentage, byte commandId)
         {
             _actionQueue.Enqueue(new MotorAction
             {
                 StartsIn = Duration.CreateFromMiliSeconds(100), //TODO: Might want to make this dynamic
                 DurationLeft = commandDuration,
                 State = state,
-                RequestedSpeedPercentage = motorSpeedPercentage
+                RequestedSpeedPercentage = motorSpeedPercentage,
+                ID = commandId
             });
         }
 
+        /// <summary>
+        /// Invoked whenever a command is completed, the byte parameter indicates
+        /// the ID of completed action.
+        /// </summary>
+        public event EventHandler<byte> MovementActionCompleted;
+
         private Queue<MotorAction> _actionQueue = new Queue<MotorAction>();
 
-        public class MotorAction
+        private class MotorAction
         {
             /// <summary>
             /// 
@@ -82,19 +92,19 @@ namespace RoboTooth.Model.Simulation
                 else
                 {
                     // We're still waiting for the action to start.
-                    StartsIn.Substract(deltaTime);
+                    StartsIn = StartsIn.Substract(deltaTime);
                     return Duration.CreateFromMiliSeconds(0);
                 }
 
                 if (leftOver.Miliseconds >= DurationLeft.Miliseconds)
                 {
-                    StartsIn = Duration.CreateFromMiliSeconds(0);
                     leftOver = leftOver.Substract(DurationLeft);
+                    DurationLeft = Duration.CreateFromMiliSeconds(0);
                 }
                 else
                 {
                     // We're executing the action.
-                    DurationLeft.Substract(leftOver);
+                    DurationLeft = DurationLeft.Substract(leftOver);
                     return Duration.CreateFromMiliSeconds(0);
                 }
 
@@ -110,6 +120,8 @@ namespace RoboTooth.Model.Simulation
             {
                 return StartsIn.Miliseconds == 0 && DurationLeft.Miliseconds != 0;
             }
+
+            public byte ID;
 
             public Duration DurationLeft;
             public Duration StartsIn;

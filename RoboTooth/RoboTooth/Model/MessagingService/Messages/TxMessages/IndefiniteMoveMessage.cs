@@ -65,7 +65,20 @@ namespace RoboTooth.Model.MessagingService.Messages.TxMessages
                 return rawData[_SpeedByteOffset];
             }
         }
-        
+
+        /// <summary>
+        /// Used to access the duration after the message was created.
+        /// </summary>
+        private const int _DurationOffset = sizeof(MoveDirection) + sizeof(byte);
+
+        public ushort DurationInMiliSeconds
+        {
+            get
+            {
+                return BitConverter.ToUInt16(rawData, _DurationOffset);
+            }
+        }
+
         /// <summary>
         /// Used to access the direction byte after the message was created.
         /// </summary>
@@ -75,7 +88,7 @@ namespace RoboTooth.Model.MessagingService.Messages.TxMessages
         {
             get
             {
-                return (MoveDirection)rawData[0];
+                return (MoveDirection)rawData[_moveDirectionByteOffset];
             }
         }
     }

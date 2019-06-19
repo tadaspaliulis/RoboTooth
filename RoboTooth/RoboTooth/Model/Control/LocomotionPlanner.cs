@@ -36,11 +36,12 @@ namespace RoboTooth.Model.Control
     /// </summary>
     public class LocomotionPlanner
     {
-        public LocomotionPlanner(ISolver solver, IPositionState positionState, IMovementController motorsController, float allowedDistanceError, Angle allowedOrientationError)
+        public LocomotionPlanner(ISolver solver, IPositionState positionState, IMotorState motorState, IMovementController motorsController, float allowedDistanceError, Angle allowedOrientationError)
         {
             _solver = solver;
             _positionState = positionState;
             _movementController = motorsController;
+            _motorState = motorState;
 
             _allowedDistanceError = allowedDistanceError;
             _allowedOrientationError = allowedOrientationError;
@@ -53,7 +54,7 @@ namespace RoboTooth.Model.Control
             //_positionState.CurrentOrientationUpdated += OnOrientationChangedEvent;
             //_positionState.CurrentPositionUpdated += OnPositionChangedEvent;
 
-            motorsController.MovementActionCompleted += OnMovementActionCompleted;
+            _motorState.MovementActionCompleted += OnMovementActionCompleted;
         }
 
         #region Public methods
@@ -225,6 +226,7 @@ namespace RoboTooth.Model.Control
 
         private IPositionState _positionState;
         private IMovementController _movementController;
+        private IMotorState _motorState;
         private ISolver _solver;
 
         /// <summary>

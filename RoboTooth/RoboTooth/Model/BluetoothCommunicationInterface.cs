@@ -51,7 +51,7 @@ namespace RoboTooth.Model
             get
             {
                 //TODO: Needs to be fixed!
-                return true;
+                return false;
             }
         }
 

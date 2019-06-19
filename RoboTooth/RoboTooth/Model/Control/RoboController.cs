@@ -11,6 +11,7 @@ using RoboTooth.Model.MessagingService;
 using RoboTooth.Model.MessagingService.Messages.RxMessages;
 using RoboTooth.Model.MessagingService.Messages.TxMessages;
 using RoboTooth.Model.State;
+using RoboTooth.Model.Simulation;
 
 namespace RoboTooth.Model.Control
 {
@@ -29,14 +30,15 @@ namespace RoboTooth.Model.Control
             _messageSorter.MagnetometerOrientationMessages.MessageReceived += handleMagnetometerOrientationMessage;
             _messageSorter.DebugStringMessages.MessageReceived += handleDebugStringMessage;
 
-            _motorsController = new MotorsController(_messagingService);
+            _motorsSimulator = new MotorSimulator();
+            _motorsController = new MotorsController(_messagingService, _motorsSimulator);
             _messageSorter.ActionCompletedMessages.MessageReceived += _motorsController.HandleActionCompletedMessage;
 
             _motionHistory = motionHistory;
             _solver = new SolverNaive(10, 40);
  
-            _kinematicsModel = new KinematicsModel(_motorsController, _solver);
-            _locomotionPlanner = new LocomotionPlanner(_solver, _kinematicsModel, _motorsController, 5.0f, Angle.CreateFromDegrees(5.0));
+            _kinematicsModel = new KinematicsModel(_motorsSimulator, _solver);
+            _locomotionPlanner = new LocomotionPlanner(_solver, _kinematicsModel, _motorsSimulator, _motorsController, 5.0f, Angle.CreateFromDegrees(5.0));
             _navigationPlanner = new NavigationPlanner(_kinematicsModel, _locomotionPlanner, _motionHistory);
 
             //Subscribe motion history to kinematics events.
@@ -168,9 +170,9 @@ namespace RoboTooth.Model.Control
                     continue;
                 }
 
-
                 stopWatch.Restart();
                 //Console.WriteLine($"Calling simulate with dT={deltaTime.Seconds} seconds");
+                _motorsSimulator.Simulate(deltaTime);
                 _kinematicsModel.Simulate(deltaTime);
             }
         }
@@ -192,6 +194,7 @@ namespace RoboTooth.Model.Control
         private MessagingService.MessagingService _messagingService;
         private MessageSorter _messageSorter;
 
+        private MotorSimulator _motorsSimulator;
         private MotorsController _motorsController;
 
         private MotionHistory _motionHistory;

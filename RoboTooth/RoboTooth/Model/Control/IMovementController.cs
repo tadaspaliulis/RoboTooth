@@ -50,11 +50,5 @@ namespace RoboTooth.Model.Control
         /// <returns>ID returned by the firmware that identifies this command
         /// </returns>
         byte TurnCounterClockwise(Duration rotationDuration, float speedPercentage);
-
-        /// <summary>
-        /// Invoked whenever a command is completed, the byte parameter indicates
-        /// the ID of completed action.
-        /// </summary>
-        event EventHandler<byte> MovementActionCompleted;
     }
 }
