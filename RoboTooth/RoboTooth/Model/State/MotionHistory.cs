@@ -26,6 +26,7 @@ namespace RoboTooth.Model.State
 
         public void AddNewMovement(MovementRecord movementRecord)
         {
+            _orientationChanged = false;
             _history.Add(movementRecord);
 
             NewMovementRecordAdded?.Invoke(movementRecord);
@@ -34,7 +35,7 @@ namespace RoboTooth.Model.State
         public void OnOrientationChangedEvent(Vector2 orientation)
         {
             //Means that the next we get a position update we'll start a new 'line'.
-            orientationChanged = true;
+            _orientationChanged = true;
         }
 
         public void OnPositionChangedEvent(Vector2 position)
@@ -63,7 +64,7 @@ namespace RoboTooth.Model.State
         /// <returns>True if new record is needed.</returns>
         private bool IsNewRecordNeeded()
         {
-            return orientationChanged || _history.Count == 0;
+            return _orientationChanged || _history.Count == 0;
         }
 
         /// <summary>
@@ -90,8 +91,7 @@ namespace RoboTooth.Model.State
             _history.Clear();
         }
 
-
-        private bool orientationChanged = false;
+        private bool _orientationChanged = false;
 
         /// <summary>
         /// Keeps track of the movements actually made (or movements that we believe were made).
