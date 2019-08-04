@@ -68,6 +68,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\Control\Filters\IFilter.cs" />
+    <Compile Include="Model\Control\Filters\RunningAverageFilter.cs" />
     <Compile Include="Model\Control\IMotorState.cs" />
     <Compile Include="Model\Control\IMovementController.cs" />
     <Compile Include="Model\Control\LocomotionPlanner.cs" />
@@ -78,6 +80,7 @@
     <Compile Include="Model\Control\RoboController.cs" />
     <Compile Include="Model\Control\RobotAction.cs" />
     <Compile Include="Model\Control\RobotActionQueue.cs" />
+    <Compile Include="Model\Control\Sensors\EchoDistanceSensor.cs" />
     <Compile Include="Model\Duration.cs" />
     <Compile Include="Model\ICommunicationInterface.cs" />
     <Compile Include="Model\Kinematics\Angle.cs" />

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RoboTooth.Model.MessagingService.Messages.RxMessages
 {
@@ -24,9 +20,6 @@ namespace RoboTooth.Model.MessagingService.Messages.RxMessages
         /// <returns>Echo Distance sensor distance value</returns>
         public float GetDistance()
         {
-            //var dataCopy = new byte[rawData.Length];
-            //rawData.CopyTo(dataCopy, 0);
-            //Array.Reverse(dataCopy);
             return BitConverter.ToSingle(rawData, 0);
         }
 

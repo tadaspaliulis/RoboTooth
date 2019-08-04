@@ -12,6 +12,8 @@ using RoboTooth.Model.MessagingService.Messages.RxMessages;
 using RoboTooth.Model.MessagingService.Messages.TxMessages;
 using RoboTooth.Model.State;
 using RoboTooth.Model.Simulation;
+using RoboTooth.Model.Control.Sensors;
+using RoboTooth.Model.Control.Filters;
 
 namespace RoboTooth.Model.Control
 {
@@ -26,7 +28,7 @@ namespace RoboTooth.Model.Control
 
             //Subscribe to various message events from the message sorter.
             _messageSorter = messageSorter;
-            _messageSorter.EchoDistanceMessages.MessageReceived += handleEchoDistanceMessage;
+            
             _messageSorter.MagnetometerOrientationMessages.MessageReceived += handleMagnetometerOrientationMessage;
             _messageSorter.DebugStringMessages.MessageReceived += handleDebugStringMessage;
 
@@ -46,6 +48,10 @@ namespace RoboTooth.Model.Control
             _kinematicsModel.CurrentOrientationUpdated += motionHistory.OnOrientationChangedEvent;
             _kinematicsModel.CurrentPositionUpdated += motionHistory.OnPositionChangedEvent;
 
+            // Set up the sensors
+            _echoDistanceSensor = new EchoDistanceSensor(_kinematicsModel, new RunningAverageFilter(3), Vector2.Zero);
+            _messageSorter.EchoDistanceMessages.MessageReceived += _echoDistanceSensor.HandleRawSensorDataReceived;
+
             StartExploration();
         }
 
@@ -55,7 +61,7 @@ namespace RoboTooth.Model.Control
         }
 
         #region Robot Message handlers
-        private void handleEchoDistanceMessage(object sender, EchoDistanceMessage message) { }
+
         private void handleMagnetometerOrientationMessage(object sender, MagnetometerOrientationMessage message)
         {
             var val = Math.Atan2(message.GetY() -1800, message.GetZ() + 600);
@@ -206,6 +212,8 @@ namespace RoboTooth.Model.Control
         private LocomotionPlanner _locomotionPlanner;
 
         private NavigationPlanner _navigationPlanner;
+
+        private EchoDistanceSensor _echoDistanceSensor;
 
         #endregion
     }
