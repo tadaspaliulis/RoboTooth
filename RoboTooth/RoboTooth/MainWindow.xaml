@@ -75,7 +75,7 @@
                 <Button Content ="Backwards" DockPanel.Dock="Bottom" IsEnabled="{Binding MoveBackwardsButton.Enabled, UpdateSourceTrigger=PropertyChanged}" Command="{Binding MoveBackwardsButton.Command}"/>
                 <Button Content="Stop" IsEnabled="{Binding MoveStopButton.Enabled, UpdateSourceTrigger=PropertyChanged}" Command="{Binding MoveStopButton.Command}"/>
             </DockPanel>
-            <View:WorldCanvas MovementMap="{Binding MovementMap}"/>
+            <View:WorldCanvas Canvas="{Binding Canvas}"/>
         </StackPanel>
     </Grid>
 </Window>

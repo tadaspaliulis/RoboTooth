@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using RoboTooth.ViewModel.WorldMap;
-
+using RoboTooth.ViewModel.Drawing;
 namespace RoboTooth.View
 {
     /// <summary>
@@ -28,50 +28,48 @@ namespace RoboTooth.View
             InitializeComponent();
         }
 
-        public static readonly DependencyProperty MovementMapProperty =
+        public static readonly DependencyProperty CanvasProperty =
         DependencyProperty.Register(
-            "MovementMap", typeof(MovementMapVM), typeof(WorldCanvas)/*,  new PropertyMetadata(OnMovementMapPropertyChanged)*/);
+            "Canvas", typeof(CanvasVM), typeof(WorldCanvas)/*,  new PropertyMetadata(OnMovementMapPropertyChanged)*/);
 
-        public MovementMapVM MovementMap
+        public CanvasVM Canvas
         {
-            get { return (MovementMapVM)GetValue(MovementMapProperty); }
-            set { SetValue(MovementMapProperty, value); }
+            get { return (CanvasVM)GetValue(CanvasProperty); }
+            set { SetValue(CanvasProperty, value); }
         }
 
         private void OnPointsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            DrawMap((ObservableCollection<LineVM>)sender);
+            DrawMap((ObservableCollection<ViewModel.Line>)sender);
         }
 
         private static void OnMovementMapPropertyChanged(DependencyObject property, DependencyPropertyChangedEventArgs args)
         {
             var world = property as WorldCanvas;
             
-            
             if (args.OldValue != null)
             {
-                var oldValue = args.OldValue as MovementMapVM;
+                var oldValue = args.OldValue as CanvasVM;
                 // Unsubscribe from CollectionChanged on the old collection
-                oldValue.Lines.CollectionChanged -= world.OnPointsCollectionChanged;
+                oldValue.Drawables.CollectionChanged -= world.OnPointsCollectionChanged;
             }
 
             if (args.NewValue != null)
             {
-                var newMovementMap = args.NewValue as MovementMapVM;
-                world.MovementMap = newMovementMap;
+                var newCanvas = args.NewValue as CanvasVM;
+                world.Canvas = newCanvas;
 
                 // Subscribe to CollectionChanged on the new collection
-                newMovementMap.Lines.CollectionChanged += world.OnPointsCollectionChanged;
+                newCanvas.Drawables.CollectionChanged += world.OnPointsCollectionChanged;
 
                 //Do the initial draw for this newly assigned collection
-                world.DrawMap(newMovementMap.Lines);
+                //world.DrawMap(newCanvas.Drawables);
             }
-
 
             Console.WriteLine("Success!");
         }
 
-        private void DrawMap(ObservableCollection<LineVM> Points)
+        private void DrawMap(ObservableCollection<ViewModel.Line> Points)
         {
             /*foreach (var point in Points)
             {

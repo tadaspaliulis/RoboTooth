@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:RoboTooth.View"
+             xmlns:local="clr-namespace:RoboTooth.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 
@@ -12,8 +12,8 @@
                TargetType="Line">
             <Setter Property="StrokeThickness"
                     Value="2" />
-            <Setter Property="Opacity"
-                    Value="0.7" />
+            <!-- <Setter Property="Opacity"
+                    Value="0.7" /> -->
             <Style.Triggers>
                 <!-- If the move has already been carried, make it easily visible -->
                 <DataTrigger Binding="{Binding IsPlannedOnly}" Value="false">
@@ -28,7 +28,48 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+        <!--Attribute: Style="{StaticResource ResourceKey=LineStyle}"-->
+        <DataTemplate DataType="{x:Type local:Line}">
+            <Line X1="{Binding StartPointX}"
+                  Y1="{Binding StartPointY}"
+                  X2="{Binding EndPointX}"
+                  Y2="{Binding EndPointY}" 
+                  Opacity="{Binding Opacity}"
+                  StrokeThickness="2"
+                  Stroke="Aquamarine">
+            </Line>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local:WorldMap.WallVM}">
+            <Grid>
+                <Line X1="{Binding MainLine.StartPointX}"
+                                  Y1="{Binding MainLine.StartPointY}"
+                                  X2="{Binding MainLine.EndPointX}"
+                                  Y2="{Binding MainLine.EndPointY}" 
+                                  Opacity="1.0"
+                                  StrokeThickness="3"
+                                  Stroke="Black">
+                </Line>
+                <Line X1="{Binding ShadowLineInner.StartPointX}"
+                                  Y1="{Binding ShadowLineInner.StartPointY}"
+                                  X2="{Binding ShadowLineInner.EndPointX}"
+                                  Y2="{Binding ShadowLineInner.EndPointY}" 
+                                  Opacity="0.8"
+                                  StrokeThickness="1"
+                                  Stroke="Red">
+                </Line>
+                <Line X1="{Binding ShadowLineOuter.StartPointX}"
+                                  Y1="{Binding ShadowLineOuter.StartPointY}"
+                                  X2="{Binding ShadowLineOuter.EndPointX}"
+                                  Y2="{Binding ShadowLineOuter.EndPointY}" 
+                                  Opacity="0.64"
+                                  StrokeThickness="3"
+                                  Stroke="Green">
+                </Line>
+            </Grid>
+        </DataTemplate>
+
     </UserControl.Resources>
+    
     <Grid>
         <!-- Define a border around the grid-->
         <Border
@@ -37,7 +78,8 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Top">
             
-            <ItemsControl ItemsSource="{Binding MovementMap.Lines}">
+            <!-- Movement lines -->
+            <ItemsControl ItemsSource="{Binding Canvas.Drawables}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <Canvas Width="300" Height="300" ClipToBounds="True">
@@ -61,18 +103,9 @@
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <!-- What's the drawing order here? -->
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Line X1="{Binding OriginX}"
-                              Y1="{Binding OriginY}"
-                              X2="{Binding DestinationX}"
-                              Y2="{Binding DestinationY}" 
-                              Style="{StaticResource ResourceKey=LineStyle}">
-                            <!-- <DataTrigger
-                            Stroke="Black" Opacity="0.7" StrokeThickness="2" -->
-                        </Line>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
+                <!--<ItemsControl.ItemTemplate>
+                </ItemsControl.ItemTemplate>-->
+
             </ItemsControl>
         </Border>
     </Grid>

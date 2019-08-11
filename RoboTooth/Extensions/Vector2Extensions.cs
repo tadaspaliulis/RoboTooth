@@ -24,5 +24,15 @@ namespace Extensions
         {
             return Math.Abs(v1.X - v2.X) < delta && Math.Abs(v1.Y - v2.Y) < delta;
         }
+
+        /// <summary>
+        /// Creates a perpendicular vector, rotated counter clockwise to the original.
+        /// </summary>
+        /// <param name="v1">Vector</param>
+        /// <returns>Perpendicular vector</returns>
+        public static Vector2 PerpendicularCounterClockWise(this Vector2 v1)
+        {
+            return new Vector2(-v1.Y, v1.X);
+        }
     }
 }
