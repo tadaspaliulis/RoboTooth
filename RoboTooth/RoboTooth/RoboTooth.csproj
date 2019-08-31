@@ -110,8 +110,12 @@
     <Compile Include="Model\State\MotionHistory.cs" />
     <Compile Include="Model\State\MovementRecord.cs" />
     <Compile Include="Model\State\SensorHistory.cs" />
-    <Compile Include="ViewModel\AsyncCommand.cs" />
-    <Compile Include="ViewModel\Command.cs" />
+    <Compile Include="ViewModel\Commands\AsyncCommand.cs" />
+    <Compile Include="ViewModel\Commands\CanExecuteEvalTriggers\CanExecuteEvaluationTrigger.cs" />
+    <Compile Include="ViewModel\Commands\CanExecuteEvalTriggers\EventOccurredCanExecuteTrigger.cs" />
+    <Compile Include="ViewModel\Commands\CanExecuteEvalTriggers\PropertyChangedCanExecuteTrigger.cs" />
+    <Compile Include="ViewModel\Commands\Command.cs" />
+    <Compile Include="ViewModel\Commands\ICanExecuteChangedInvoker.cs" />
     <Compile Include="ViewModel\ConnectionManagementView.cs" />
     <Compile Include="ViewModel\DataDisplayVM\InternalDataDisplay.cs" />
     <Compile Include="ViewModel\Drawing\DrawableObservable.cs" />
@@ -187,6 +191,7 @@
       <Name>Extensions</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

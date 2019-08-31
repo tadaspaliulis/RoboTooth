@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RoboTooth.Model;
+using RoboTooth.ViewModel.Commands;
+using RoboTooth.ViewModel.Commands.CanExecuteEvalTriggers;
 
 namespace RoboTooth.ViewModel
 {
@@ -19,10 +21,12 @@ namespace RoboTooth.ViewModel
             comms.ConnectionEvent += ConnectionEventHandler;
 
             //Initialise connection button
-            var connectionCommand = new AsyncCommand(new Func<object, bool>(CanExecuteConnectButton), (object a) => _comms.EstablishConnection());
+            var connectionCommand = new AsyncCommand(CanExecuteConnectButton, (object a) => _comms.EstablishConnection());
+            var canExecuteTrigger = new EventOccurredCanExecuteTrigger();
+            connectionCommand.AddCanExecuteChangedTrigger(canExecuteTrigger);
 
-            //External event monitor for potential can execute chhanges
-            ConnectionEventOccured += connectionCommand.StateChangeHandler; 
+            //External event monitor for potential can execute changes
+            ConnectionEventOccured += canExecuteTrigger.HandleEventReceived; 
 
             ConnectionButton = new ObservableButton(connectionCommand, null);
             ConnectionButton.Content = "Connect";

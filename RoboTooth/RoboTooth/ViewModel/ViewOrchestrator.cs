@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using RoboTooth.ViewModel.DataDisplayVM;
 using RoboTooth.ViewModel.WorldMap;
 using RoboTooth.ViewModel.Drawing;
+using RoboTooth.ViewModel.Commands;
 
 namespace RoboTooth.ViewModel
 {

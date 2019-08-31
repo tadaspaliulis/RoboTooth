@@ -1,4 +1,6 @@
-﻿using System;
+﻿using RoboTooth.ViewModel.Commands;
+using RoboTooth.ViewModel.Commands.CanExecuteEvalTriggers;
+using System;
 
 namespace RoboTooth.ViewModel.Drawing
 {
@@ -9,15 +11,15 @@ namespace RoboTooth.ViewModel.Drawing
     {
         public ViewPortSettings()
         {
-            var zoomInButtonCommand = new AsyncCommand((a) => IsZoomInEnabled(), (a) => ZoomIn());
+            var zoomInButtonCommand = new Command((a) => IsZoomInEnabled(), (a) => ZoomIn());
             zoomInButtonCommand.AddCanExecuteChangedTrigger(new PropertyChangedCanExecuteTrigger(nameof(MapScaling), this));
             _zoomInButton = new ObservableButton(zoomInButtonCommand, null);
 
-            var zoomOutButtonCommand = new AsyncCommand((a) => IsZoomOutEnabled(), (a) => ZoomOut());
+            var zoomOutButtonCommand = new Command((a) => IsZoomOutEnabled(), (a) => ZoomOut());
             zoomOutButtonCommand.AddCanExecuteChangedTrigger(new PropertyChangedCanExecuteTrigger(nameof(MapScaling), this));
             _zoomOutButton = new ObservableButton(zoomOutButtonCommand, null);
 
-            var resetButtonCommand = new AsyncCommand((a) => IsZoomResetEnabled(), (a) => ResetZoom());
+            var resetButtonCommand = new Command((a) => IsZoomResetEnabled(), (a) => ResetZoom());
             resetButtonCommand.AddCanExecuteChangedTrigger(new PropertyChangedCanExecuteTrigger(nameof(MapScaling), this));
             _zoomResetButton = new ObservableButton(resetButtonCommand, null);
         }

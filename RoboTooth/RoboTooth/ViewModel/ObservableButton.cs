@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace RoboTooth.ViewModel
 {
@@ -16,8 +11,6 @@ namespace RoboTooth.ViewModel
         public ObservableButton(ICommand command, object stateObject)
         {
             _buttonCommand = command;
-            command.CanExecuteChanged += OnCanExecuteStateChanged;
-            Enabled = command.CanExecute(stateObject);
             _stateObject = stateObject;
         }
 
@@ -38,23 +31,6 @@ namespace RoboTooth.ViewModel
             }
         }
 
-        private bool _enabled;
-        /// <summary>
-        /// Enables or disables the control
-        /// </summary>
-        public bool Enabled
-        {
-            get
-            {
-                return _enabled;
-            }
-            private set
-            {
-                _enabled = value;
-                NotifyPropertyChanged();
-            }
-        }
-
         /// <summary>
         /// Command invoked when the button is clicked
         /// </summary>
@@ -64,11 +40,6 @@ namespace RoboTooth.ViewModel
             {
                 return _buttonCommand;
             }
-        }
-
-        private void OnCanExecuteStateChanged(object sender, EventArgs e)
-        {
-            Enabled = _buttonCommand.CanExecute(_stateObject);
         }
 
         private ICommand _buttonCommand;

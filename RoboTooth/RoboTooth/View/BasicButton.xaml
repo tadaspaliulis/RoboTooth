@@ -11,8 +11,7 @@
         <converters:RankedPreferenceConverter x:Key="RankedPreferenceConverter"/>
     </UserControl.Resources>
 
-    <Button Command="{Binding Button.Command, RelativeSource={RelativeSource AncestorType=UserControl}}" 
-            IsEnabled="{Binding Button.Enabled, RelativeSource={RelativeSource AncestorType=UserControl}}">
+    <Button Command="{Binding Button.Command, RelativeSource={RelativeSource AncestorType=UserControl}}">
         <Button.Content>
             <MultiBinding Converter="{StaticResource RankedPreferenceConverter}">
                 <Binding Path="Text" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
