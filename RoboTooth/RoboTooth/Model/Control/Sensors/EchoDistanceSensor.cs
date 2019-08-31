@@ -86,11 +86,16 @@ namespace RoboTooth.Model.Control.Sensors
 
         private void HandleFilterResultGenerated(object sender, float result)
         {
-            var measurementOrientation = Trigonometry.RotateVectorByAngle(_robotPosition.GetCurrentOrientation(), _angleFromFront);
+            var measurementOrientation = _robotPosition.GetCurrentOrientation();
+            if(_angleFromFront != null)
+            {
+                measurementOrientation = Trigonometry.RotateVectorByAngle(_robotPosition.GetCurrentOrientation(), _angleFromFront);
+            }
+             
             var measuredDistance = measurementOrientation * result;
             var measurementPosition = _robotPosition.GetCurrentPosition() + _offsetFromCenter;
 
-            NewDistanceDataAvailable(this, new EchoDistanceMeasurement(measurementPosition, measuredDistance));
+            NewDistanceDataAvailable?.Invoke(this, new EchoDistanceMeasurement(measurementPosition, measuredDistance));
         }
 
         #endregion

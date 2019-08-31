@@ -77,7 +77,7 @@ namespace RoboTooth.Model.Simulation
         private class MotorAction
         {
             /// <summary>
-            /// 
+            /// TODO
             /// </summary>
             /// <param name="deltaTime"></param>
             /// <returns>Left over duration after advancing the action, note, might be 0.</returns>

@@ -39,7 +39,7 @@
                   Y2="{Binding EndPointY}" 
                   Opacity="{Binding Opacity}"
                   StrokeThickness="2"
-                  Stroke="Aquamarine">
+                  Stroke="Red">
             </Line>
         </DataTemplate>
         <DataTemplate DataType="{x:Type worldMap:WallVM}">
