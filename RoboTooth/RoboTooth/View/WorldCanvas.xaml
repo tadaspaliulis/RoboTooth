@@ -4,6 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:RoboTooth.ViewModel"
+             xmlns:view="clr-namespace:RoboTooth.View"
+             xmlns:drawing="clr-namespace:RoboTooth.ViewModel.Drawing"
+             xmlns:worldMap="clr-namespace:RoboTooth.ViewModel.WorldMap"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 
@@ -29,7 +32,7 @@
             </Style.Triggers>
         </Style>
         <!--Attribute: Style="{StaticResource ResourceKey=LineStyle}"-->
-        <DataTemplate DataType="{x:Type local:Line}">
+        <DataTemplate DataType="{x:Type drawing:Line}">
             <Line X1="{Binding StartPointX}"
                   Y1="{Binding StartPointY}"
                   X2="{Binding EndPointX}"
@@ -39,74 +42,85 @@
                   Stroke="Aquamarine">
             </Line>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type local:WorldMap.WallVM}">
+        <DataTemplate DataType="{x:Type worldMap:WallVM}">
             <Grid>
                 <Line X1="{Binding MainLine.StartPointX}"
-                                  Y1="{Binding MainLine.StartPointY}"
-                                  X2="{Binding MainLine.EndPointX}"
-                                  Y2="{Binding MainLine.EndPointY}" 
-                                  Opacity="1.0"
-                                  StrokeThickness="3"
-                                  Stroke="Black">
+                      Y1="{Binding MainLine.StartPointY}"
+                      X2="{Binding MainLine.EndPointX}"
+                      Y2="{Binding MainLine.EndPointY}" 
+                      Opacity="1.0"
+                      StrokeThickness="3"
+                      Stroke="Black">
                 </Line>
                 <Line X1="{Binding ShadowLineInner.StartPointX}"
-                                  Y1="{Binding ShadowLineInner.StartPointY}"
-                                  X2="{Binding ShadowLineInner.EndPointX}"
-                                  Y2="{Binding ShadowLineInner.EndPointY}" 
-                                  Opacity="0.8"
-                                  StrokeThickness="1"
-                                  Stroke="Red">
+                      Y1="{Binding ShadowLineInner.StartPointY}"
+                      X2="{Binding ShadowLineInner.EndPointX}"
+                      Y2="{Binding ShadowLineInner.EndPointY}" 
+                      Opacity="0.8"
+                      StrokeThickness="1"
+                      Stroke="Red">
                 </Line>
                 <Line X1="{Binding ShadowLineOuter.StartPointX}"
-                                  Y1="{Binding ShadowLineOuter.StartPointY}"
-                                  X2="{Binding ShadowLineOuter.EndPointX}"
-                                  Y2="{Binding ShadowLineOuter.EndPointY}" 
-                                  Opacity="0.64"
-                                  StrokeThickness="3"
-                                  Stroke="Green">
+                      Y1="{Binding ShadowLineOuter.StartPointY}"
+                      X2="{Binding ShadowLineOuter.EndPointX}"
+                      Y2="{Binding ShadowLineOuter.EndPointY}" 
+                      Opacity="0.64"
+                      StrokeThickness="3"
+                      Stroke="Green">
                 </Line>
             </Grid>
         </DataTemplate>
 
     </UserControl.Resources>
-    
-    <Grid>
-        <!-- Define a border around the grid-->
-        <Border
-            BorderThickness="1"
-            BorderBrush="Black"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top">
-            
-            <!-- Movement lines -->
-            <ItemsControl ItemsSource="{Binding Canvas.Drawables}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas Width="300" Height="300" ClipToBounds="True">
-                            <!-- Define a tiled background -->
-                            <Canvas.Background>
-                                <DrawingBrush TileMode="Tile" Viewport="-10,-10,40,40" 
-                                    ViewportUnits="Absolute">
-                                    <DrawingBrush.Drawing>
-                                        <GeometryDrawing>
-                                            <GeometryDrawing.Geometry>
-                                                <RectangleGeometry Rect="0,0,50,50"/>
-                                            </GeometryDrawing.Geometry>
-                                            <GeometryDrawing.Pen>
-                                                <Pen Brush="Gray" Thickness="0.5"/>
-                                            </GeometryDrawing.Pen>
-                                        </GeometryDrawing>
-                                    </DrawingBrush.Drawing>
-                                </DrawingBrush>
-                            </Canvas.Background>
-                        </Canvas>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <!-- What's the drawing order here? -->
-                <!--<ItemsControl.ItemTemplate>
-                </ItemsControl.ItemTemplate>-->
 
-            </ItemsControl>
-        </Border>
-    </Grid>
+    <StackPanel Orientation="Vertical">
+        <!-- The map of the 'world'-->
+        <Grid>
+            <!-- Define a border around the grid-->
+            <Border
+                BorderThickness="1"
+                BorderBrush="Black"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top">
+
+                <!-- A collection of items that can be drawn by the canvas -->
+                <ItemsControl ItemsSource="{Binding Canvas.Drawables}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas Width="300" Height="300" ClipToBounds="True">
+                                <!-- Define a tiled background -->
+                                <Canvas.Background>
+                                    <DrawingBrush TileMode="Tile" Viewport="-10,-10,40,40" 
+                                        ViewportUnits="Absolute">
+                                        <DrawingBrush.Drawing>
+                                            <GeometryDrawing>
+                                                <GeometryDrawing.Geometry>
+                                                    <RectangleGeometry Rect="0,0,50,50"/>
+                                                </GeometryDrawing.Geometry>
+                                                <GeometryDrawing.Pen>
+                                                    <Pen Brush="Gray" Thickness="0.5"/>
+                                                </GeometryDrawing.Pen>
+                                            </GeometryDrawing>
+                                        </DrawingBrush.Drawing>
+                                    </DrawingBrush>
+                                </Canvas.Background>
+                            </Canvas>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <!-- What's the drawing order here? -->
+                    <!--<ItemsControl.ItemTemplate>
+                    </ItemsControl.ItemTemplate>-->
+
+                </ItemsControl>
+            </Border>
+        </Grid>
+        
+        <!-- View Port controls  -->
+        <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Margin="2">
+            <view:BasicButton Button="{Binding Canvas.ViewSettings.ZoomInButton}" Text="Zoom In"/>
+            <view:BasicButton Button="{Binding Canvas.ViewSettings.ZoomOutButton}" Text="Zoom Out"/>
+            <view:BasicButton Button="{Binding Canvas.ViewSettings.ZoomResetButton}" Text="Reset"/>
+        </StackPanel>
+    </StackPanel>
+    
 </UserControl>

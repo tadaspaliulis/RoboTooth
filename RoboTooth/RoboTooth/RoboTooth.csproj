@@ -118,13 +118,17 @@
     <Compile Include="ViewModel\Drawing\IViewPortSettingsReadonly.cs" />
     <Compile Include="ViewModel\Drawing\ViewPortSettings.cs" />
     <Compile Include="ViewModel\IdColourValueConverter.cs" />
-    <Compile Include="ViewModel\Line.cs" />
+    <Compile Include="ViewModel\Drawing\Line.cs" />
     <Compile Include="ViewModel\ObservableButton.cs" />
     <Compile Include="ViewModel\ObservableObject.cs" />
     <Compile Include="ViewModel\ViewOrchestrator.cs" />
     <Compile Include="ViewModel\Drawing\CanvasVM.cs" />
     <Compile Include="ViewModel\WorldMap\MovementMapVM.cs" />
     <Compile Include="ViewModel\WorldMap\WallVM.cs" />
+    <Compile Include="View\BasicButton.xaml.cs">
+      <DependentUpon>BasicButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Converters\RankedPreferenceConverter.cs" />
     <Compile Include="View\WorldCanvas.xaml.cs">
       <DependentUpon>WorldCanvas.xaml</DependentUpon>
     </Compile>
@@ -140,6 +144,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\BasicButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\WorldCanvas.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

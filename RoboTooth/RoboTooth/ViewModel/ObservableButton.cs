@@ -8,7 +8,8 @@ using System.Windows.Input;
 namespace RoboTooth.ViewModel
 {
     /// <summary>
-    /// A button class that provides functionality for controlling content, enabled/disabled state and the command executed on click
+    /// A button class that provides functionality for controlling content,
+    /// enabled/disabled state and the command executed on click.
     /// </summary>
     public class ObservableButton : ObservableObject
     {
@@ -21,6 +22,9 @@ namespace RoboTooth.ViewModel
         }
 
         private string _content;
+        /// <summary>
+        /// The button text
+        /// </summary>
         public string Content
         {
             get
@@ -62,12 +66,7 @@ namespace RoboTooth.ViewModel
             }
         }
 
-        private void OnCanExecuteStateChanged(object sender, System.EventArgs e)
-        {
-            Enabled = _buttonCommand.CanExecute(_stateObject);
-        }
-
-        private void OnExecutionStatusChangeChanged(object sender, CommandExecutionStatus status)
+        private void OnCanExecuteStateChanged(object sender, EventArgs e)
         {
             Enabled = _buttonCommand.CanExecute(_stateObject);
         }

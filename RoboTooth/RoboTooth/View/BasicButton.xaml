@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="RoboTooth.View.BasicButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RoboTooth.View"
+             xmlns:converters="clr-namespace:RoboTooth.View.Converters"
+             mc:Ignorable="d">
+    
+    <UserControl.Resources>
+        <converters:RankedPreferenceConverter x:Key="RankedPreferenceConverter"/>
+    </UserControl.Resources>
+
+    <Button Command="{Binding Button.Command, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+            IsEnabled="{Binding Button.Enabled, RelativeSource={RelativeSource AncestorType=UserControl}}">
+        <Button.Content>
+            <MultiBinding Converter="{StaticResource RankedPreferenceConverter}">
+                <Binding Path="Text" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                <Binding Path="Button.Content" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+            </MultiBinding>
+        </Button.Content>
+    </Button>
+</UserControl>

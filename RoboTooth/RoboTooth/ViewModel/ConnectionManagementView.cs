@@ -12,7 +12,7 @@ namespace RoboTooth.ViewModel
         public ConnectionManagementView(ICommunicationInterface comms)
         {
             _comms = comms;
-            TextStatus = "Not connection yet.";
+            TextStatus = "No connection yet.";
             _isConnected = false;
             _currentConnectionStatus = ConnecStatusEnum.ENotConnected;
             //Hook up connection events to the Comms
@@ -21,7 +21,8 @@ namespace RoboTooth.ViewModel
             //Initialise connection button
             var connectionCommand = new AsyncCommand(new Func<object, bool>(CanExecuteConnectButton), (object a) => _comms.EstablishConnection());
 
-            ConnectionEventOccured += connectionCommand.StateChangeHandler; //External event monitor for potential can execute chhanges
+            //External event monitor for potential can execute chhanges
+            ConnectionEventOccured += connectionCommand.StateChangeHandler; 
 
             ConnectionButton = new ObservableButton(connectionCommand, null);
             ConnectionButton.Content = "Connect";

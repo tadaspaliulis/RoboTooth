@@ -1,8 +1,7 @@
-﻿using RoboTooth.ViewModel.Drawing;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Numerics;
 
-namespace RoboTooth.ViewModel
+namespace RoboTooth.ViewModel.Drawing
 {
     /// <summary>
     /// View Model of a line
