@@ -17,6 +17,19 @@ using RoboTooth.Model.Control.Filters;
 
 namespace RoboTooth.Model.Control
 {
+
+    public class MotorCalibration
+    {
+        public MotorCalibration(float MaxMovementVelocity, float MaxRotationVelocityDegrees)
+        {
+            this.MaxMovementVelocity = MaxMovementVelocity;
+            this.MaxRotationVelocityDegrees = MaxRotationVelocityDegrees;
+        }
+
+        public readonly float MaxMovementVelocity;
+        public readonly float MaxRotationVelocityDegrees;
+    }
+
     /// <summary>
     /// Object responsible for controlling the robot and dealing with the data retrieved from it
     /// </summary>
@@ -36,8 +49,11 @@ namespace RoboTooth.Model.Control
             _motorsController = new MotorsController(_messagingService, _motorsSimulator);
             _messageSorter.ActionCompletedMessages.MessageReceived += _motorsController.HandleActionCompletedMessage;
 
+            var calibration = new MotorCalibration(MaxMovementVelocity: 10, 
+                                                   MaxRotationVelocityDegrees: 280);
+
             _motionHistory = motionHistory;
-            _solver = new SolverNaive(10, 40);
+            _solver = new SolverNaive(calibration.MaxMovementVelocity, calibration.MaxRotationVelocityDegrees);
  
             _kinematicsModel = new KinematicsModel(_motorsSimulator, _solver);
             _locomotionPlanner = new LocomotionPlanner(_solver, _kinematicsModel, _motorsSimulator, _motorsController, 5.0f, Angle.CreateFromDegrees(5.0));
@@ -51,6 +67,9 @@ namespace RoboTooth.Model.Control
             // Set up the sensors
             _echoDistanceSensor = new EchoDistanceSensor(_kinematicsModel, new RunningAverageFilter(3), Vector2.Zero);
             _messageSorter.EchoDistanceMessages.MessageReceived += _echoDistanceSensor.HandleRawSensorDataReceived;
+
+            _magnetometer = new Magnetometer();
+            _messageSorter.MagnetometerOrientationMessages.MessageReceived += _magnetometer.HandleRawSensorDataReceived;
 
             StartExploration();
         }
@@ -214,7 +233,7 @@ namespace RoboTooth.Model.Control
         private NavigationPlanner _navigationPlanner;
 
         private EchoDistanceSensor _echoDistanceSensor;
-
+        private Magnetometer _magnetometer;
         #endregion
     }
 }

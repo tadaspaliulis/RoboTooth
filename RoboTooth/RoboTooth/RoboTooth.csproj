@@ -83,6 +83,7 @@
     <Compile Include="Model\Control\RobotAction.cs" />
     <Compile Include="Model\Control\RobotActionQueue.cs" />
     <Compile Include="Model\Control\Sensors\EchoDistanceSensor.cs" />
+    <Compile Include="Model\Control\Sensors\Magnetometer.cs" />
     <Compile Include="Model\Duration.cs" />
     <Compile Include="Model\ICommunicationInterface.cs" />
     <Compile Include="Model\Kinematics\Angle.cs" />

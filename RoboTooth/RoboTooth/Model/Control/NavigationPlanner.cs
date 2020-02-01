@@ -25,12 +25,15 @@ namespace RoboTooth.Model.Control
 
         public void Test()
         {
-            MoveToPosition(new Vector2(0, 50), 1.0f);
-            MoveToPosition(new Vector2(15, 15), 1.0f);
-            MoveToPosition(new Vector2(-10, -10), 1.0f);
-            MoveToPosition(new Vector2(-15, 0), 1.0f);
-            MoveToPosition(new Vector2(68, 90), 1.0f);
-            MoveToPosition(new Vector2(-12, -90), 1.0f);
+            /*MoveToPosition(new Vector2(0, 5), 1.0f);
+            MoveToPosition(new Vector2(3, 3), 1.0f);
+            MoveToPosition(new Vector2(-1, -1), 1.0f);
+            MoveToPosition(new Vector2(-1, 0), 1.0f);
+            MoveToPosition(new Vector2(2, 5), 1.0f);
+            MoveToPosition(new Vector2(-1, -1), 1.0f);
+            MoveToPosition(new Vector2(0, 0), 1.0f);*/
+
+            MoveToPosition(new Vector2(0, -10), 1.0f);
             MoveToPosition(new Vector2(0, 0), 1.0f);
         }
 
