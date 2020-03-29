@@ -80,7 +80,8 @@ void messagingService<SerialInterface>::initialise()
 {
 	//Set BAUD rate
 	serialInterface->begin( 9600 );
-  	//Set up Wifi connection name
+
+  	//Set up Bluetooth connection name
   	serialInterface->write("AT+NAMERoboTooth");
   	delay(400);
 }
@@ -88,10 +89,8 @@ void messagingService<SerialInterface>::initialise()
 template<class SerialInterface>
 void messagingService<SerialInterface>::receiveIncomingData()
 {	
-	char output[6];
-	while ( serialInterface->available() > 0)
+	while (serialInterface->available() > 0)
     {
-  		//Store receied data in a buffer.
 		inboundDataQueue.tryAdd(serialInterface->read());
     }
 }

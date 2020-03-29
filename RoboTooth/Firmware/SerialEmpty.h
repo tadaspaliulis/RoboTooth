@@ -17,3 +17,6 @@ public:
 };
 
 static SerialEmpty Serial;
+static SerialEmpty Serial1;
+static SerialEmpty Serial2;
+static SerialEmpty Serial3;
