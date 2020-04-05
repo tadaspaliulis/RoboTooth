@@ -2,7 +2,7 @@
 #ifdef VS_TESTBED
 //If this is being built for Visual Studio testing, use the empty function definitions.
 
-//Adding this in to make sprintf's work, which have been for debugging throughout.
+//Adding this in to make sprintf's work, which have been used for debugging throughout.
 #define _CRT_SECURE_NO_WARNINGS
 #include "ArduinoEmptyFunctions.h"
 #else

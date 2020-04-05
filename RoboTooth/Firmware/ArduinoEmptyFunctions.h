@@ -13,6 +13,8 @@ typedef unsigned char byte;
 #include "SerialEmpty.h"
 #endif
 
+#pragma region Basic Arduino operations
+
 void delay(int x);
 void delayMicroseconds(int x);
 int millis();
@@ -22,6 +24,20 @@ void digitalWrite(int x, int y);
 
 void analogWrite(int x, char y);
 char pulseIn(int x, int y);
+
+#pragma endregion
+
+#pragma region Interrupt operations
+
+int digitalPinToInterrupt(int p);
+
+void attachInterrupt(int interruptPin, void (*interruptService)(), int mode);
+
+const int CHANGE = 2;
+const int RISING = 3;
+const int FALLING = 4;
+
+#pragma endregion
 
 //Create our own definitions of the various arduino constants.
 const int HIGH = 1;

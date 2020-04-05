@@ -9,3 +9,7 @@ void digitalWrite(int x, int y) {}
 
 void analogWrite(int x, char y) {}
 char pulseIn(int x, int y) { return 0; }
+
+int digitalPinToInterrupt(int p ) { return p; }
+
+void attachInterrupt(int interruptPin, void (*interruptService)(), int mode) {}
