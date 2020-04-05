@@ -45,3 +45,4 @@ const int LOW = 0;
 
 const int OUTPUT = 1;
 const int INPUT = 0;
+const int INPUT_PULLUP = 2;
