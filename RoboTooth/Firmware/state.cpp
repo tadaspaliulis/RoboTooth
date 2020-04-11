@@ -120,14 +120,16 @@ void state::initialise()
 
 motorState* state::getMotor( motor motorNode )
 {
-  //Illegal value
-  if ( motorNode >= eMOTOR_NUM_MAX )
-    return NULL;
+    //Illegal value
+    if ( motorNode >= eMOTOR_NUM_MAX )
+        return nullptr;
 
-  if( motorNode == eMotorLeft )
-    return &leftMotor;
-  else if ( motorNode == eMotorRight )
-    return &rightMotor;
+    if( motorNode == eMotorLeft )
+        return &leftMotor;
+    else if ( motorNode == eMotorRight )
+        return &rightMotor;
+
+    return nullptr;
 }
 
 void state::moveForward(byte movementSpeed)
@@ -245,7 +247,7 @@ void state::printEncoderCounters()
 }
 
 //===========Magnetometer sensor implementation
-magnetometerSensor::magnetometerSensor() : lastReadX(0.0f), lastReadY(0.0f), lastReadZ(0.0f), deviceAddress(0x0e)
+magnetometerSensor::magnetometerSensor() : lastReadX(0), lastReadY(0), lastReadZ(0), deviceAddress(0x0e)
 {
 }
 
