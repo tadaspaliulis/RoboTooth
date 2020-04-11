@@ -124,10 +124,12 @@
     <ClInclude Include="constants.h" />
     <ClInclude Include="controller.h" />
     <ClInclude Include="Debug.h" />
+    <ClInclude Include="interruptHandler.h" />
     <ClInclude Include="message.h" />
     <ClInclude Include="messagingService.h" />
     <ClInclude Include="motorAction.h" />
     <ClInclude Include="queue.h" />
+    <ClInclude Include="rotaryEncoderSensor.h" />
     <ClInclude Include="SerialEmpty.h" />
     <ClInclude Include="serialInterfaceMock.h" />
     <ClInclude Include="state.h" />
@@ -138,6 +140,7 @@
   <ItemGroup>
     <ClCompile Include="ArduinoEmptyFunctions.cpp" />
     <ClCompile Include="controller.cpp" />
+    <ClCompile Include="interruptHandler.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="motorAction.cpp" />
     <ClCompile Include="serialInterfaceMock.cpp" />

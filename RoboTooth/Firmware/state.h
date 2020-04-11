@@ -3,6 +3,7 @@
 #include "constants.h"
 #include "messagingService.h"
 #include "ArduinoSerialInteface.h"
+#include "rotaryEncoderSensor.h"
 
 enum motorStateEnum
 {
@@ -100,7 +101,7 @@ class state
     void moveBack(byte movementSpeed);
     void turnLeft(byte movementSpeed);
     void turnRight(byte movementSpeed);
-	  void stop(byte movementSpeed);
+    void stop(byte movementSpeed);
     void setAllMotorSpeed( byte speed );
 
     float getDistance();
@@ -110,6 +111,8 @@ class state
 
     void updateDistanceMeasurement();
     void updateMagnetometerMeasurement();
+
+    void printEncoderCounters();
 
     messagingService<arduinoSerialInterface>* getMessenger() { return messagingService<arduinoSerialInterface>::getMessenger(); }
 
@@ -121,5 +124,7 @@ class state
 
     motorState leftMotor;
     motorState rightMotor;
-};
 
+    rotaryEncoderSensor leftWheelEncoder;
+    rotaryEncoderSensor rightWheelEncoder;
+};

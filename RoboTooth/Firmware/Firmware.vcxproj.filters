@@ -24,6 +24,12 @@
     <Filter Include="Firmware\Header Files\DeviceSpecificIncludes">
       <UniqueIdentifier>{810dadef-5766-48c9-9bd9-b2e9943ee949}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Firmware\Header Files\Sensors">
+      <UniqueIdentifier>{cf6ed4a9-2e9e-453f-9d4e-5b0cda8a5394}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Firmware\Source Files\Sensors">
+      <UniqueIdentifier>{43211b51-d75a-4a92-8f4a-517a52e88482}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="actionQueue.h">
@@ -77,6 +83,12 @@
     <ClInclude Include="message.h">
       <Filter>Firmware\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="interruptHandler.h">
+      <Filter>Firmware\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rotaryEncoderSensor.h">
+      <Filter>Firmware\Header Files\Sensors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -99,6 +111,9 @@
     </ClCompile>
     <ClCompile Include="serialInterfaceMock.cpp">
       <Filter>Testbed\Mocks</Filter>
+    </ClCompile>
+    <ClCompile Include="interruptHandler.cpp">
+      <Filter>Firmware\Source Files\Sensors</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

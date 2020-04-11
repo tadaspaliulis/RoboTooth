@@ -21,6 +21,16 @@ struct pinMappingStruct
 	  const static byte echoTrig = 7;
       const static byte echoReceive = 8;
     } sensors;
+
+    struct interruptConstants
+    {
+        const static int interrupt1 = 2;
+        const static int interrupt2 = 3;
+        const static int interrupt3 = 21;
+        const static int interrupt4 = 20;
+        const static int interrupt5 = 19;
+        const static int interrupt6 = 18;
+    } interrupts;
  };
 
  struct constantsStruct
@@ -35,6 +45,7 @@ struct pinMappingStruct
     {
       const static unsigned int echoDistancePeriod = 100; //10Hz or every 100ms
       const static unsigned int magnetometerPeriod = 200; //5Hz or every 200ms
+      const static unsigned int rotaryEncoderPeriod = 200; //5Hz or every 200ms
     } timers;
 
     struct messageIdTxConstants

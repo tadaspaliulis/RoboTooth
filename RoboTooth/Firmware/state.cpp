@@ -1,5 +1,6 @@
 #include "state.h"
 #include "WireFunctionallity.h" //I2C library
+#include "Debug.h"
 #include <string.h>
 
 /* Ultra sound distance sensor */
@@ -101,19 +102,20 @@ void motorState::setMotorSpeed ( byte MotorSpeed )
 
 state::state()
 {
-
 }
 
 void state::initialise()
 {
-	//Start the bluetooth service
-	getMessenger()->initialise();
+    //Start the bluetooth service
+    getMessenger()->initialise();
 
-	//Map classes to hardware pins
-	leftMotor.initialise( pinMapping.motors.leftLogic1, pinMapping.motors.leftLogic2, pinMapping.motors.leftSpeed );
-	rightMotor.initialise( pinMapping.motors.rightLogic1, pinMapping.motors.rightLogic2, pinMapping.motors.rightSpeed );
-	distanceUltraSoundSensor.initialise( pinMapping.sensors.echoTrig, pinMapping.sensors.echoReceive );
-	magnetometer.initialise();
+    //Map classes to hardware pins
+    leftMotor.initialise(pinMapping.motors.leftLogic1, pinMapping.motors.leftLogic2, pinMapping.motors.leftSpeed);
+    rightMotor.initialise(pinMapping.motors.rightLogic1, pinMapping.motors.rightLogic2, pinMapping.motors.rightSpeed);
+    distanceUltraSoundSensor.initialise(pinMapping.sensors.echoTrig, pinMapping.sensors.echoReceive);
+    magnetometer.initialise();
+    rightWheelEncoder.initialise(pinMapping.interrupts.interrupt1);
+    leftWheelEncoder.initialise(pinMapping.interrupts.interrupt2);
 }
 
 motorState* state::getMotor( motor motorNode )
@@ -232,6 +234,16 @@ int state::getMagnetometerOrientationZ()
 	return magnetometer.getLastReadingZ();
 }
 
+void state::printEncoderCounters()
+{
+    unsigned int counterLeft = leftWheelEncoder.getCounter();
+    unsigned int counterRight = rightWheelEncoder.getCounter();
+    char debugString[100];
+
+    sprintf(debugString, "Left wheel count: %d, Right wheel count: %d", counterLeft, counterRight);
+    Serial.println(debugString);
+}
+
 //===========Magnetometer sensor implementation
 magnetometerSensor::magnetometerSensor() : lastReadX(0.0f), lastReadY(0.0f), lastReadZ(0.0f), deviceAddress(0x0e)
 {
@@ -248,7 +260,7 @@ void magnetometerSensor::initialise()
 	Wire.write((byte)0x10);
 
 	//Set up the device behaviour here
-	//OR[2;0]=100/5Hz	
+	//OR[2;0]=100/5Hz
 	//OSR[1;0]=00/16
 	//FR=0
 	//TM=0
@@ -257,7 +269,6 @@ void magnetometerSensor::initialise()
 	controlByte = (1 << 7) | 1; //Only need to enable 2 bits!
 	Wire.write(controlByte); 
 	Wire.endTransmission();
-	
 }
 
 void magnetometerSensor::updateMeasurement()

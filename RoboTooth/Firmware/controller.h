@@ -37,6 +37,7 @@ private:
 
 	countdownTimer echoSensorCountdown;
 	countdownTimer magnetometerSensorCountdown;
+    countdownTimer rotaryEncoderSensorCountdown;
 	
 	state* pState;
 

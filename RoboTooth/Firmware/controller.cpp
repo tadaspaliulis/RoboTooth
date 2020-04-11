@@ -44,32 +44,39 @@ void controller::act()
 
 void controller::updateSensorData()
 {
-	//Time elapsed since last sensor update
-	unsigned int elapsedTime = sensorTimer.timeStamp();
-	getState()->getMessenger()->receiveIncomingData();
-	
-	if( echoSensorCountdown.updateTimer( elapsedTime ) ) //If true, countdown time over, do the operation and reset
-	{
-		getState()->updateDistanceMeasurement();
-		echoSensorCountdown.resetTimer( constants.timers.echoDistancePeriod );
+    //Time elapsed since last sensor update
+    unsigned int elapsedTime = sensorTimer.timeStamp();
+    getState()->getMessenger()->receiveIncomingData();
 
-		//Send message to the master to let it know the ultrasound sensor distance
-		float distance = getState()->getDistance();
-		sendEchoDistanceData(distance);
-	}
-	
-	if( magnetometerSensorCountdown.updateTimer( elapsedTime ) )
-	{
-		getState()->updateMagnetometerMeasurement();
-		magnetometerSensorCountdown.resetTimer( constants.timers.magnetometerPeriod );
+    //If true, countdown time over, do the operation and reset
+    if (echoSensorCountdown.updateTimer(elapsedTime))
+    {
+        getState()->updateDistanceMeasurement();
+        echoSensorCountdown.resetTimer(constants.timers.echoDistancePeriod);
 
-		//DO SOMETHING WITH THE DATA HERE
-		int orientationX = getState()->getMagnetometerOrientationX();
-		int orientationY = getState()->getMagnetometerOrientationY();
-		int orientationZ = getState()->getMagnetometerOrientationZ();
+        //Send message to the master to let it know the ultrasound sensor distance
+        float distance = getState()->getDistance();
+        sendEchoDistanceData(distance);
+    }
 
-		sendMagnetometerData(orientationX, orientationY, orientationZ);
-	}
+    if (magnetometerSensorCountdown.updateTimer(elapsedTime))
+    {
+        getState()->updateMagnetometerMeasurement();
+        magnetometerSensorCountdown.resetTimer(constants.timers.magnetometerPeriod);
+
+        //DO SOMETHING WITH THE DATA HERE
+        int orientationX = getState()->getMagnetometerOrientationX();
+        int orientationY = getState()->getMagnetometerOrientationY();
+        int orientationZ = getState()->getMagnetometerOrientationZ();
+
+        sendMagnetometerData(orientationX, orientationY, orientationZ);
+    }
+
+    if (rotaryEncoderSensorCountdown.updateTimer(elapsedTime))
+    {
+        rotaryEncoderSensorCountdown.resetTimer(constants.timers.rotaryEncoderPeriod);
+        getState()->printEncoderCounters();
+    }
 }
 
 state* controller::getState() { return pState; }

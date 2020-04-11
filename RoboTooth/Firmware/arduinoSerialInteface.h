@@ -7,6 +7,7 @@ class arduinoSerialInterface
 public:
 	void begin(int x)
 	{
+        Serial.begin(x);
 		Serial3.begin(x);
 		
 		// The serial 3 RX pin needs to be pulled up,
