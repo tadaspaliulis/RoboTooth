@@ -3,11 +3,16 @@
 #include "Debug.h"
 #include "constants.h"
 
-interruptHandler* interruptService::handlers[MAX_NUMBER_OF_INTERRUPTS];
+interruptService::interruptData interruptService::interrupts[MAX_NUMBER_OF_INTERRUPTS];
 
 void interruptService::addHandler(int interruptPin, interruptHandler* handler, int mode)
 {
-    auto serviceRoutine = setupServiceRoutineForHandler(interruptPin, handler);
+    addHandlerWithDebounce(interruptPin, handler, mode, 0);
+}
+
+void interruptService::addHandlerWithDebounce(int interruptPin, interruptHandler* handler, int mode, int debounceMs)
+{
+    auto serviceRoutine = setupServiceRoutineForHandler(interruptPin, handler, debounceMs);
 
     if (serviceRoutine == nullptr)
     {
@@ -15,40 +20,49 @@ void interruptService::addHandler(int interruptPin, interruptHandler* handler, i
         return;
     }
 
-    attachInterrupt(digitalPinToInterrupt(interruptPin), 
+    attachInterrupt(digitalPinToInterrupt(interruptPin),
                     serviceRoutine,
                     mode);
 }
 
-interruptService::interruptServiceRoutine interruptService::setupServiceRoutineForHandler(int pin, interruptHandler* handler)
+interruptService::interruptServiceRoutine interruptService::setupServiceRoutineForHandler(int pin, interruptHandler* handler, int debounceMs)
 {
+    interruptData* interruptForPin;
     switch (pin)
     {
     case pinMapping.interrupts.interrupt1:
-        handlers[0] = handler;
+        interruptForPin = &interrupts[0];
         return []() { interruptService::handleInterrupt(0); };
     case pinMapping.interrupts.interrupt2:
-        handlers[1] = handler;
+        interruptForPin = &interrupts[1];
         return []() { interruptService::handleInterrupt(1); };
     case pinMapping.interrupts.interrupt3:
-        handlers[2] = handler;
+        interruptForPin = &interrupts[2];
         return []() { interruptService::handleInterrupt(2); };
     case pinMapping.interrupts.interrupt4:
-        handlers[3] = handler;
+        interruptForPin = &interrupts[3];
         return []() { interruptService::handleInterrupt(3); };
     case pinMapping.interrupts.interrupt5:
-        handlers[4] = handler;
+        interruptForPin = &interrupts[4];
         return []() { interruptService::handleInterrupt(4); };
     case pinMapping.interrupts.interrupt6:
-        handlers[5] = handler;
+        interruptForPin = &interrupts[5];
         return []() { interruptService::handleInterrupt(5); };
+    default:
+        return nullptr;
     }
 
-    //Invalid pin
-    return nullptr;
+    interruptForPin->handler = handler;
+    interruptForPin->debounceMs = debounceMs;
 }
 
 void interruptService::handleInterrupt(int pin)
 {
-    handlers[pin]->handleInterrupt();
+    auto currentTime = millis();
+    auto timeSinceLastValidInterrupt = currentTime - interrupts[pin].lastValidInterruptTime;
+    if (timeSinceLastValidInterrupt >= interrupts[pin].debounceMs)
+    {
+        interrupts[pin].handler->handleInterrupt();
+        interrupts[pin].lastValidInterruptTime = currentTime;
+    }
 }

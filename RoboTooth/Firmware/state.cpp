@@ -112,10 +112,12 @@ void state::initialise()
     //Map classes to hardware pins
     leftMotor.initialise(pinMapping.motors.leftLogic1, pinMapping.motors.leftLogic2, pinMapping.motors.leftSpeed);
     rightMotor.initialise(pinMapping.motors.rightLogic1, pinMapping.motors.rightLogic2, pinMapping.motors.rightSpeed);
+
     distanceUltraSoundSensor.initialise(pinMapping.sensors.echoTrig, pinMapping.sensors.echoReceive);
     magnetometer.initialise();
-    rightWheelEncoder.initialise(pinMapping.interrupts.interrupt1);
-    leftWheelEncoder.initialise(pinMapping.interrupts.interrupt2);
+
+    rightWheelEncoder.initialise(pinMapping.interrupts.interrupt1, 5);
+    leftWheelEncoder.initialise(pinMapping.interrupts.interrupt2, 5);
 }
 
 motorState* state::getMotor( motor motorNode )

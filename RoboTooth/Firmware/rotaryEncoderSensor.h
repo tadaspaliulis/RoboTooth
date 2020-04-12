@@ -11,9 +11,9 @@ public:
 
     void handleInterrupt() { counter += 1; }
 
-    void initialise(int interruptPin)
+    void initialise(int interruptPin, int debounceMs)
     {
-        interruptService::addHandler(interruptPin, this, FALLING);
+        interruptService::addHandlerWithDebounce(interruptPin, this, FALLING, debounceMs);
     }
 
 private:
