@@ -31,10 +31,6 @@ namespace RoboTooth.Model
                 ConnectionStatus = ConnecStatusEnum.EAttemptingConnection
             });
 
-            //Need to dynamically determine MAC address here
-            byte[] address = { 0xCF, 0x06, 0xEA, 0xDD, 0xC2, 0x28, 0x00, 0x00 };
-            BluetoothAddress macAddress = new BluetoothAddress(address);            
-            BluetoothEndPoint endPoint = new BluetoothEndPoint(macAddress, BluetoothService.BluetoothBase/*new Guid("00001101-0000-1000-8000-00805F9B34FB")*//*BluetoothService.SerialPort*/);
             _bluetoothClient = new BluetoothClient();
             _localComponent = new BluetoothComponent(_bluetoothClient);
 
