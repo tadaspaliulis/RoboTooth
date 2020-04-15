@@ -126,11 +126,7 @@ namespace RoboTooth.Model
 
         private void OnConnectionEvent(ConnectionEvent e)
         {
-            var handler = ConnectionEvent;
-            if(handler != null)
-            {
-                handler(this, e);
-            }
+            ConnectionEvent?.Invoke(this, e);
         }
 
         #endregion
