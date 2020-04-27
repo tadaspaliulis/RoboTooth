@@ -28,32 +28,36 @@ void interruptService::addHandlerWithDebounce(int interruptPin, interruptHandler
 interruptService::interruptServiceRoutine interruptService::setupServiceRoutineForHandler(int pin, interruptHandler* handler, int debounceMs)
 {
     interruptData* interruptForPin;
+    interruptServiceRoutine interruptFunction;
+
     switch (pin)
     {
     case pinMapping.interrupts.interrupt1:
         interruptForPin = &interrupts[0];
-        return []() { interruptService::handleInterrupt(0); };
+        interruptFunction = []() { interruptService::handleInterrupt(0); };
     case pinMapping.interrupts.interrupt2:
         interruptForPin = &interrupts[1];
-        return []() { interruptService::handleInterrupt(1); };
+        interruptFunction = []() { interruptService::handleInterrupt(1); };
     case pinMapping.interrupts.interrupt3:
         interruptForPin = &interrupts[2];
-        return []() { interruptService::handleInterrupt(2); };
+        interruptFunction = []() { interruptService::handleInterrupt(2); };
     case pinMapping.interrupts.interrupt4:
         interruptForPin = &interrupts[3];
-        return []() { interruptService::handleInterrupt(3); };
+        interruptFunction = []() { interruptService::handleInterrupt(3); };
     case pinMapping.interrupts.interrupt5:
         interruptForPin = &interrupts[4];
-        return []() { interruptService::handleInterrupt(4); };
+        interruptFunction = []() { interruptService::handleInterrupt(4); };
     case pinMapping.interrupts.interrupt6:
         interruptForPin = &interrupts[5];
-        return []() { interruptService::handleInterrupt(5); };
+        interruptFunction = []() { interruptService::handleInterrupt(5); };
     default:
         return nullptr;
     }
 
     interruptForPin->handler = handler;
     interruptForPin->debounceMs = debounceMs;
+
+    return interruptFunction;
 }
 
 void interruptService::handleInterrupt(int pin)
