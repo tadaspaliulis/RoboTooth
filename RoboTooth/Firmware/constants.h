@@ -6,20 +6,20 @@ struct pinMappingStruct
 {
     struct motorsConstants
     {
-	  const static byte leftLogic1 = 51; // Digital Pin 51
-	  const static byte leftLogic2 = 50; // Digital Pin 50
-	  const static byte leftSpeed = 4; // Digital Pin 4 (PWM)
-      
-	  const static byte rightLogic1 = 53; // Digital Pin 53
-	  const static byte rightLogic2 = 52; // Digital Pin 52
-      const static byte rightSpeed = 5; // Digital Pin 5 (PWM)
+        const static byte leftLogic1 = 51; // Digital Pin 51
+        const static byte leftLogic2 = 50; // Digital Pin 50
+        const static byte leftSpeed = 4; // Digital Pin 4 (PWM)
+
+        const static byte rightLogic1 = 52; // Digital Pin 52
+        const static byte rightLogic2 = 53; // Digital Pin 53
+        const static byte rightSpeed = 5; // Digital Pin 5 (PWM)
 
     } motors;
 
     struct sensorsConstants
     {
-	  const static byte echoTrig = 7;
-      const static byte echoReceive = 8;
+        const static byte echoTrig = 7;
+        const static byte echoReceive = 8;
     } sensors;
 
     struct interruptConstants
