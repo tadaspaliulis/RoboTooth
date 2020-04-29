@@ -15,6 +15,9 @@ namespace RoboTooth.ViewModel.DataDisplayVM
             _MagnetometerOrientationXValue = "N/A";
             _MagnetometerOrientationYValue = "N/A";
             _MagnetometerOrientationZValue = "N/A";
+
+            _targetPositionX = 0;
+            _targetPositionY = 0;
         }
 
         #region Position
@@ -37,6 +40,28 @@ namespace RoboTooth.ViewModel.DataDisplayVM
             set
             {
                 _positionY = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private float _targetPositionX;
+        public float TargetPositionX
+        {
+            get { return _targetPositionX; }
+            set
+            {
+                _targetPositionX = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private float _targetPositionY;
+        public float TargetPositionY
+        {
+            get { return _targetPositionY; }
+            set
+            {
+                _targetPositionY = value;
                 NotifyPropertyChanged();
             }
         }

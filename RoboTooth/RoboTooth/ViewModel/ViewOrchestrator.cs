@@ -66,6 +66,10 @@ namespace RoboTooth.ViewModel
             MoveBackwardsButton = new ObservableButton(new Command((a) => { return true; }, (a) => { }), null);
             MoveStopButton = new ObservableButton(new Command((a) => { return true; }, (a) => { }), null);
 
+            SetMovementTargetButton = new ObservableButton(new AsyncCommand((a) => { return true; }, 
+                (a) => { _mainController.GetRoboController().MoveToLocation(_intDataDisplay.TargetPositionX, _intDataDisplay.TargetPositionY); }),
+                null);
+
             //Set up the Canvas drawing
             IntialiseCanvasAndDependants();
 
@@ -170,6 +174,20 @@ namespace RoboTooth.ViewModel
             }
         }
 
+        private InternalDataDisplay _intDataDisplay;
+        public InternalDataDisplay IntDataDisplay
+        {
+            get
+            {
+                return _intDataDisplay;
+            }
+            set
+            {
+                _intDataDisplay = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         #region Movement buttons
 
         private ObservableButton _moveLeftButton;
@@ -242,19 +260,20 @@ namespace RoboTooth.ViewModel
             }
         }
 
-        private InternalDataDisplay _intDataDisplay;
-        public InternalDataDisplay IntDataDisplay
+        private ObservableButton _setMovementTargetButton;
+        public ObservableButton SetMovementTargetButton
         {
             get
             {
-                return _intDataDisplay;
+                return _setMovementTargetButton;
             }
             set
             {
-                _intDataDisplay = value;
+                _setMovementTargetButton = value;
                 NotifyPropertyChanged();
             }
         }
+
         #endregion 
 
         #endregion

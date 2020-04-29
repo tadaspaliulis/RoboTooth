@@ -79,6 +79,12 @@ namespace RoboTooth.Model.Control
             _navigationPlanner.Test();
         }
 
+        public void MoveToLocation(float targetX, float targetY)
+        {
+            //TODO: WARNING. This currently has no syncronisation with other movement stuff.
+            _navigationPlanner.MoveToPosition(new Vector2(targetX, targetY), 1.0f);
+        }
+
         #region Robot Message handlers
 
         private void handleMagnetometerOrientationMessage(object sender, MagnetometerOrientationMessage message)
