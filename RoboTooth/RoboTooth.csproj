@@ -122,6 +122,9 @@
     <Compile Include="View\BasicControls\BasicButton.xaml.cs">
       <DependentUpon>BasicButton.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\BasicControls\LabelledTextBox.xaml.cs">
+      <DependentUpon>LabelledTextBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Converters\RankedPreferenceConverter.cs" />
     <Compile Include="View\BasicControls\SectionMarker.xaml.cs">
       <DependentUpon>SectionMarker.xaml</DependentUpon>
@@ -142,6 +145,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\BasicControls\BasicButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\BasicControls\LabelledTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

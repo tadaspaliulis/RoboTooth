@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="RoboTooth.View.BasicControls.LabelledTextBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="50" d:DesignWidth="200">
+
+    <StackPanel Orientation="Horizontal">
+        <Label Content="{Binding LabelText, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+        <TextBox MinWidth="{Binding TextBoxWidth, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                 VerticalContentAlignment="Center"
+                 IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                 Text="{Binding TextBoxContent, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+    </StackPanel>
+</UserControl>

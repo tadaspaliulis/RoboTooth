@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:RoboTooth"
         mc:Ignorable="d"
         Title="RoboController" Height="850" Width="600"
         xmlns:ViewModel="clr-namespace:RoboTooth.ViewModel"
@@ -40,7 +39,9 @@
         </StackPanel>
 
         <StackPanel Grid.Column="1" Margin="2">
-            <BasicControls:SectionMarker Text="Communcations"/>
+
+            <!-- Communications -->
+            <BasicControls:SectionMarker Text="Communications"/>
             <!-- Received message list view-->
             <ListView  Height="200" HorizontalAlignment="Stretch" MaxWidth="1000" Margin="5,5,5,5" SelectionMode="Single" ItemsSource="{Binding Path=RawMessageList, UpdateSourceTrigger=PropertyChanged}">
                 <ListView.View>
@@ -59,22 +60,18 @@
                 </ListView.View>
             </ListView>
 
+            <!-- Sensor Data -->
             <BasicControls:SectionMarker Text="Sensor Data"/>
 
-            <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
-                <Label Content="Distance:"/>
-                <TextBox IsReadOnly="True" MinWidth="40" VerticalContentAlignment="Center" Text="{Binding IntDataDisplay.EchoDistanceValue}"/>
+            <BasicControls:LabelledTextBox LabelText="Distance:" TextBoxContent="{Binding IntDataDisplay.EchoDistanceValue}" TextBoxWidth="40"  IsReadOnly="True"/>
+
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                <BasicControls:LabelledTextBox LabelText="X:" TextBoxContent="{Binding IntDataDisplay.MagnetometerOrientationXValue}" IsReadOnly="True"/>
+                <BasicControls:LabelledTextBox LabelText="Y:" TextBoxContent="{Binding IntDataDisplay.MagnetometerOrientationYValue}" IsReadOnly="True"/>
+                <BasicControls:LabelledTextBox LabelText="Z:" TextBoxContent="{Binding IntDataDisplay.MagnetometerOrientationZValue}" IsReadOnly="True"/>
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
-                <Label Content="X:"/>
-                <TextBox IsReadOnly="True" MinWidth="20" VerticalContentAlignment="Center" Text="{Binding IntDataDisplay.MagnetometerOrientationXValue}"/>
-                <Label Content="Y:"/>
-                <TextBox IsReadOnly="True" MinWidth="20" VerticalContentAlignment="Center" Text="{Binding IntDataDisplay.MagnetometerOrientationYValue}"/>
-                <Label Content="Z:"/>
-                <TextBox IsReadOnly="True" MinWidth="20" VerticalContentAlignment="Center" Text="{Binding IntDataDisplay.MagnetometerOrientationZValue}"/>
-            </StackPanel>
-
+            <!-- Basic Controls -->
             <BasicControls:SectionMarker Text="Basic Controls"/>
 
             <BasicControls:BasicButton Text="Movement Sequence Test"
@@ -84,25 +81,47 @@
 
             <!-- Position Controls -->
             <StackPanel Orientation="Horizontal">
-                <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Right">
-                    <Label Content="Internal Position X:" HorizontalAlignment="Right"  Margin="0,2,0,2"/>
-                    <Label Content="Target Position X:" HorizontalAlignment="Right"  Margin="0,2,0,0"/>
-                </StackPanel>
-                <StackPanel Orientation="Vertical" Margin="0,4,0,4">
-                    <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
-                        <TextBox IsReadOnly="True" MinWidth="40" VerticalContentAlignment="Center" Text="{Binding IntDataDisplay.PositionX}"/>
-                        <Label Content="Y:"/>
-                        <TextBox IsReadOnly="True" MinWidth="40" VerticalContentAlignment="Center" Text="{Binding IntDataDisplay.PositionY}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBox MinWidth="40" VerticalContentAlignment="Center" Text="{Binding IntDataDisplay.TargetPositionX}"/>
-                        <Label Content="Y:"/>
-                        <TextBox MinWidth="40" VerticalContentAlignment="Center" Text="{Binding IntDataDisplay.TargetPositionY}"/>
-                    </StackPanel>
-                </StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Column="0" Grid.Row="0" Content="Internal Position" HorizontalAlignment="Left" Margin="0,2,0,2"/>
+                    <Label Grid.Column="0" Grid.Row="1" Content="Target Position" HorizontalAlignment="Left" Margin="0,2,0,0"/>
+
+                    <!-- X Column -->
+                    <BasicControls:LabelledTextBox Grid.Column="1" Grid.Row="0"
+                                                   LabelText="X:"
+                                                   TextBoxWidth="40" Margin="2"
+                                                   TextBoxContent="{Binding IntDataDisplay.PositionX}"
+                                                   IsReadOnly="True"/>
+                    <BasicControls:LabelledTextBox Grid.Column="1" Grid.Row="1"
+                                                   LabelText="X:"
+                                                   TextBoxWidth="40" Margin="2"
+                                                   TextBoxContent="{Binding IntDataDisplay.TargetPositionX}"
+                                                   IsReadOnly="False"/>
+                    <!-- Y Column -->
+                    <BasicControls:LabelledTextBox Grid.Column="2" Grid.Row="0"
+                                                   LabelText="Y:"
+                                                   TextBoxWidth="40" Margin="2"
+                                                   TextBoxContent="{Binding IntDataDisplay.PositionY}"
+                                                   IsReadOnly="True"/>
+                    <BasicControls:LabelledTextBox Grid.Column="2" Grid.Row="1"
+                                                   LabelText="Y:" Margin="2"
+                                                   TextBoxWidth="40"
+                                                   TextBoxContent="{Binding IntDataDisplay.TargetPositionY}"
+                                                   IsReadOnly="False"/>
+                </Grid>
+
                 <BasicControls:BasicButton Text="Set Target"
                         Button="{Binding SetMovementTargetButton}"
-                        Margin="8" VerticalAlignment="Stretch"/>
+                        Margin="4" VerticalAlignment="Stretch"/>
             </StackPanel>
 
             <View:WorldCanvas Margin="5" Canvas="{Binding Canvas}"/>
