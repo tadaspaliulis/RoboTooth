@@ -1,21 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 using RoboTooth.Model.MessagingService.Messages.RxMessages;
+
 namespace RoboTooth.ViewModel.DataDisplayVM
 {
     public class InternalDataDisplay : ObservableObject
     {
+        private const string NOT_APPLICABLE = "N/A";
+
         public InternalDataDisplay()
         {
-            _echoDistanceValue = "N/A";
-            _MagnetometerOrientationXValue = "N/A";
-            _MagnetometerOrientationYValue = "N/A";
-            _MagnetometerOrientationZValue = "N/A";
+            _echoDistanceValue = NOT_APPLICABLE;
+            _MagnetometerOrientationXValue = NOT_APPLICABLE;
+            _MagnetometerOrientationYValue = NOT_APPLICABLE;
+            _MagnetometerOrientationZValue = NOT_APPLICABLE;
 
+            _positionX = NOT_APPLICABLE;
+            _positionY = NOT_APPLICABLE;
             _targetPositionX = 0;
             _targetPositionY = 0;
         }
@@ -78,6 +79,8 @@ namespace RoboTooth.ViewModel.DataDisplayVM
 
         #endregion
 
+        #region Echo Distance
+
         private string _echoDistanceValue;
         public String EchoDistanceValue
         {
@@ -101,8 +104,12 @@ namespace RoboTooth.ViewModel.DataDisplayVM
             });
         }
 
+        #endregion
+
+        #region Magnetometer
+
         private string _MagnetometerOrientationXValue;
-        public String MagnetometerOrientationXValue
+        public string MagnetometerOrientationXValue
         {
             get
             {
@@ -116,7 +123,7 @@ namespace RoboTooth.ViewModel.DataDisplayVM
         }
 
         private string _MagnetometerOrientationYValue;
-        public String MagnetometerOrientationYValue
+        public string MagnetometerOrientationYValue
         {
             get
             {
@@ -130,7 +137,7 @@ namespace RoboTooth.ViewModel.DataDisplayVM
         }
 
         private string _MagnetometerOrientationZValue;
-        public String MagnetometerOrientationZValue
+        public string MagnetometerOrientationZValue
         {
             get
             {
@@ -153,5 +160,7 @@ namespace RoboTooth.ViewModel.DataDisplayVM
                 MagnetometerOrientationZValue = message.GetZ().ToString();
             });
         }
+
+        #endregion
     }
 }

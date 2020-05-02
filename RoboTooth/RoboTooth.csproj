@@ -129,6 +129,9 @@
     <Compile Include="View\BasicControls\SectionMarker.xaml.cs">
       <DependentUpon>SectionMarker.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\PositionDisplay.xaml.cs">
+      <DependentUpon>PositionDisplay.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\WorldCanvas.xaml.cs">
       <DependentUpon>WorldCanvas.xaml</DependentUpon>
     </Compile>
@@ -153,6 +156,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\BasicControls\SectionMarker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PositionDisplay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

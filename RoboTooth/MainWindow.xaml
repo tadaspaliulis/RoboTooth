@@ -81,43 +81,7 @@
 
             <!-- Position Controls -->
             <StackPanel Orientation="Horizontal">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-
-                    <Label Grid.Column="0" Grid.Row="0" Content="Internal Position" HorizontalAlignment="Left" Margin="0,2,0,2"/>
-                    <Label Grid.Column="0" Grid.Row="1" Content="Target Position" HorizontalAlignment="Left" Margin="0,2,0,0"/>
-
-                    <!-- X Column -->
-                    <BasicControls:LabelledTextBox Grid.Column="1" Grid.Row="0"
-                                                   LabelText="X:"
-                                                   TextBoxWidth="40" Margin="2"
-                                                   TextBoxContent="{Binding IntDataDisplay.PositionX}"
-                                                   IsReadOnly="True"/>
-                    <BasicControls:LabelledTextBox Grid.Column="1" Grid.Row="1"
-                                                   LabelText="X:"
-                                                   TextBoxWidth="40" Margin="2"
-                                                   TextBoxContent="{Binding IntDataDisplay.TargetPositionX}"
-                                                   IsReadOnly="False"/>
-                    <!-- Y Column -->
-                    <BasicControls:LabelledTextBox Grid.Column="2" Grid.Row="0"
-                                                   LabelText="Y:"
-                                                   TextBoxWidth="40" Margin="2"
-                                                   TextBoxContent="{Binding IntDataDisplay.PositionY}"
-                                                   IsReadOnly="True"/>
-                    <BasicControls:LabelledTextBox Grid.Column="2" Grid.Row="1"
-                                                   LabelText="Y:" Margin="2"
-                                                   TextBoxWidth="40"
-                                                   TextBoxContent="{Binding IntDataDisplay.TargetPositionY}"
-                                                   IsReadOnly="False"/>
-                </Grid>
+                <View:PositionDisplay InternalData="{Binding IntDataDisplay}"/>
 
                 <BasicControls:BasicButton Text="Set Target"
                         Button="{Binding SetMovementTargetButton}"

@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-
 using RoboTooth.ViewModel.Drawing;
+
 namespace RoboTooth.View
 {
     /// <summary>
@@ -17,7 +17,7 @@ namespace RoboTooth.View
         #region Canvas property
         public static readonly DependencyProperty CanvasProperty =
         DependencyProperty.Register(
-            "Canvas", typeof(CanvasVM), typeof(WorldCanvas));
+            nameof(Canvas), typeof(CanvasVM), typeof(WorldCanvas));
 
         public CanvasVM Canvas
         {
