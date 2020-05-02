@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         Title="RoboController" Height="850" Width="600"
         xmlns:ViewModel="clr-namespace:RoboTooth.ViewModel"
-        xmlns:View="clr-namespace:RoboTooth.View">
+        xmlns:View="clr-namespace:RoboTooth.View"
+        xmlns:BasicControls="clr-namespace:RoboTooth.View.BasicControls">
 
     <Window.Resources>
         <Style TargetType="Border" x:Key="HeaderBorderStyle">
@@ -32,15 +33,16 @@
                        Text="{Binding Path=ConnectionManagement.TextStatus, UpdateSourceTrigger=PropertyChanged}"
                        HorizontalAlignment="Left"
                        Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="58" Width="117"/>
-            <View:BasicButton Button="{Binding ConnectionManagement.ConnectionButton}"
+            <BasicControls:BasicButton Button="{Binding ConnectionManagement.ConnectionButton}"
                               HorizontalAlignment="Stretch"
                               Margin="5"
                               MinHeight="15"/>
         </StackPanel>
 
         <StackPanel Grid.Column="1" Margin="2">
+            <BasicControls:SectionMarker Text="Communcations"/>
             <!-- Received message list view-->
-            <ListView  Height="200" HorizontalAlignment="Stretch" MaxWidth="1000" Margin="0,5,5,5" SelectionMode="Single" ItemsSource="{Binding Path=RawMessageList, UpdateSourceTrigger=PropertyChanged}">
+            <ListView  Height="200" HorizontalAlignment="Stretch" MaxWidth="1000" Margin="5,5,5,5" SelectionMode="Single" ItemsSource="{Binding Path=RawMessageList, UpdateSourceTrigger=PropertyChanged}">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="ID" Width="Auto">
@@ -57,10 +59,7 @@
                 </ListView.View>
             </ListView>
 
-            <DockPanel Height="25">
-                <Label DockPanel.Dock="Left" Content="Sensor Data"/>
-                <Separator/>
-            </DockPanel>
+            <BasicControls:SectionMarker Text="Sensor Data"/>
 
             <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
                 <Label Content="Distance:"/>
@@ -76,12 +75,9 @@
                 <TextBox IsReadOnly="True" MinWidth="20" VerticalContentAlignment="Center" Text="{Binding IntDataDisplay.MagnetometerOrientationZValue}"/>
             </StackPanel>
 
-            <DockPanel Height="25">
-                <Label DockPanel.Dock="Left" Content="Basic Controls"/>
-                <Separator/>
-            </DockPanel>
+            <BasicControls:SectionMarker Text="Basic Controls"/>
 
-            <View:BasicButton Text="Movement Sequence Test"
+            <BasicControls:BasicButton Text="Movement Sequence Test"
                     HorizontalAlignment="Left"
                     Margin="5"
                     Button="{Binding MovementSequenceTestButton}"/>
@@ -104,12 +100,12 @@
                         <TextBox MinWidth="40" VerticalContentAlignment="Center" Text="{Binding IntDataDisplay.TargetPositionY}"/>
                     </StackPanel>
                 </StackPanel>
-                <View:BasicButton Text="Set Target"
+                <BasicControls:BasicButton Text="Set Target"
                         Button="{Binding SetMovementTargetButton}"
                         Margin="8" VerticalAlignment="Stretch"/>
             </StackPanel>
 
-            <View:WorldCanvas Canvas="{Binding Canvas}"/>
+            <View:WorldCanvas Margin="5" Canvas="{Binding Canvas}"/>
         </StackPanel>
     </Grid>
 </Window>

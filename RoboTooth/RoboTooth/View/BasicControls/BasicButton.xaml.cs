@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace RoboTooth.View
+namespace RoboTooth.View.BasicControls
 {
     /// <summary>
     /// Interaction logic for BasicButton.xaml
