@@ -36,8 +36,8 @@ namespace RoboTooth.View
 
         public string Text
         {
-            get { return (string)GetValue(ButtonProperty); }
-            set { SetValue(ButtonProperty, value); }
+            get { return (string)GetValue(TextProperty); }
+            set { SetValue(TextProperty, value); }
         }
         #endregion
     }
