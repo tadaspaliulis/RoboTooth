@@ -1,9 +1,4 @@
 ﻿using RoboTooth.Model.Control;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using RoboTooth.Model.MessagingService.Messages;
 using System.Collections.ObjectModel;
 using RoboTooth.ViewModel.DataDisplayVM;
@@ -59,15 +54,16 @@ namespace RoboTooth.ViewModel
             _rawMessageList = new ObservableCollection<MessageListItem>();
             _mainController.GetMessageSorter().UnfilteredMessages += HandleReceivedMessages;
 
-            MoveLeftButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => { _mainController.GetRoboController().Test(); }), null);
-            MoveRightButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => { }), null);
-            MoveForwardButton = new ObservableButton(new AsyncCommand((a) => { return true; }, (a) => { }), null);
-            //The two actions below need fixing!
-            MoveBackwardsButton = new ObservableButton(new Command((a) => { return true; }, (a) => { }), null);
-            MoveStopButton = new ObservableButton(new Command((a) => { return true; }, (a) => { }), null);
+            MovementSequenceTestButton = new ObservableButton(
+                new AsyncCommand(
+                    (a) => { return true; }, 
+                    (a) => { _mainController.GetRoboController().Test(); }),
+                null);
 
-            SetMovementTargetButton = new ObservableButton(new AsyncCommand((a) => { return true; }, 
-                (a) => { _mainController.GetRoboController().MoveToLocation(_intDataDisplay.TargetPositionX, _intDataDisplay.TargetPositionY); }),
+            SetMovementTargetButton = new ObservableButton(
+                new AsyncCommand(
+                    (a) => { return true; }, 
+                    (a) => { _mainController.GetRoboController().MoveToLocation(_intDataDisplay.TargetPositionX, _intDataDisplay.TargetPositionY); }),
                 null);
 
             //Set up the Canvas drawing
@@ -190,16 +186,16 @@ namespace RoboTooth.ViewModel
 
         #region Movement buttons
 
-        private ObservableButton _moveLeftButton;
-        public ObservableButton MoveLeftButton
+        private ObservableButton _movementSequenceTestButton;
+        public ObservableButton MovementSequenceTestButton
         {
             get
             {
-                return _moveLeftButton;
+                return _movementSequenceTestButton;
             }
             set
             {
-                _moveLeftButton = value;
+                _movementSequenceTestButton = value;
                 NotifyPropertyChanged();
             }
         }

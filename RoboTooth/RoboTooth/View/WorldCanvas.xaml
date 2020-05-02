@@ -107,10 +107,6 @@
                             </Canvas>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
-                    <!-- What's the drawing order here? -->
-                    <!--<ItemsControl.ItemTemplate>
-                    </ItemsControl.ItemTemplate>-->
-
                 </ItemsControl>
             </Border>
         </Grid>
