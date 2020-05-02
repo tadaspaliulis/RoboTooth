@@ -13,7 +13,7 @@ namespace RoboTooth.View.BasicControls
             InitializeComponent();
         }
 
-        #region Label Text Property property
+        #region Label Text property
         public static readonly DependencyProperty LabelTextProperty =
                 DependencyProperty.Register(nameof(LabelText),
                                             typeof(string),

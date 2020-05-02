@@ -5,21 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="RoboController" Height="850" Width="600"
-        xmlns:ViewModel="clr-namespace:RoboTooth.ViewModel"
         xmlns:View="clr-namespace:RoboTooth.View"
         xmlns:BasicControls="clr-namespace:RoboTooth.View.BasicControls">
-
-    <Window.Resources>
-        <Style TargetType="Border" x:Key="HeaderBorderStyle">
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="BorderBrush" Value="Black"/>
-        </Style>
-        <Style TargetType="Border" x:Key="CellBorderStyle">
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="BorderBrush" Value="Gray"/>
-        </Style>
-        <ViewModel:IdColourValueConverter x:Key="IdColourValueConverter"/>
-    </Window.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -39,31 +26,13 @@
         </StackPanel>
 
         <StackPanel Grid.Column="1" Margin="2">
-
             <!-- Communications -->
             <BasicControls:SectionMarker Text="Communications"/>
-            <!-- Received message list view-->
-            <ListView  Height="200" HorizontalAlignment="Stretch" MaxWidth="1000" Margin="5,5,5,5" SelectionMode="Single" ItemsSource="{Binding Path=RawMessageList, UpdateSourceTrigger=PropertyChanged}">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="ID" Width="Auto">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Grid Margin="-6,0,-6,0" Background="{Binding Id, Converter={StaticResource IdColourValueConverter}}">
-                                        <TextBlock Text="{Binding Id}" Margin="6,0,6,0"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Raw Data" DisplayMemberBinding="{Binding RawData}" Width="200"/>
-                    </GridView>
-                </ListView.View>
-            </ListView>
+            <View:RawMessageList MessagesList="{Binding Path=RawMessageList}" Height="200" Margin="5" HorizontalAlignment="Stretch" />
 
             <!-- Sensor Data -->
             <BasicControls:SectionMarker Text="Sensor Data"/>
-
-            <BasicControls:LabelledTextBox LabelText="Distance:" TextBoxContent="{Binding IntDataDisplay.EchoDistanceValue}" TextBoxWidth="40"  IsReadOnly="True"/>
+            <BasicControls:LabelledTextBox LabelText="Distance:" TextBoxContent="{Binding IntDataDisplay.EchoDistanceValue}" TextBoxWidth="40" IsReadOnly="True"/>
 
             <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
                 <BasicControls:LabelledTextBox LabelText="X:" TextBoxContent="{Binding IntDataDisplay.MagnetometerOrientationXValue}" IsReadOnly="True"/>
@@ -73,7 +42,6 @@
 
             <!-- Basic Controls -->
             <BasicControls:SectionMarker Text="Basic Controls"/>
-
             <BasicControls:BasicButton Text="Movement Sequence Test"
                     HorizontalAlignment="Left"
                     Margin="5"

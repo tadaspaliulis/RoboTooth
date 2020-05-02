@@ -132,6 +132,9 @@
     <Compile Include="View\PositionDisplay.xaml.cs">
       <DependentUpon>PositionDisplay.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\RawMessageList.xaml.cs">
+      <DependentUpon>RawMessageList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\WorldCanvas.xaml.cs">
       <DependentUpon>WorldCanvas.xaml</DependentUpon>
     </Compile>
@@ -160,6 +163,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\PositionDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\RawMessageList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
