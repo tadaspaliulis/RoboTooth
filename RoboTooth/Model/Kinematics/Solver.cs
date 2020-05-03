@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Numerics;
+﻿using System.Numerics;
 
 namespace RoboTooth.Model.Kinematics
 {
@@ -70,7 +65,7 @@ namespace RoboTooth.Model.Kinematics
         public Vector2 CalculateMovementVector(Vector2 orientation, float motorSpeedPercent, Duration duration)
         {
             //TODO: This will need calibration etc.
-            return orientation * duration.Seconds * motorSpeedPercent *_maximumMovementSpeed;
+            return orientation * duration.Seconds * motorSpeedPercent * _maximumMovementSpeed;
         }
 
         public DirectionalAngle CalculateDeltaRotation(float speedPercentage, Duration deltaTime, bool clockwise)

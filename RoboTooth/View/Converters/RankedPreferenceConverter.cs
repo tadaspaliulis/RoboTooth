@@ -10,8 +10,8 @@ namespace RoboTooth.View.Converters
     /// </summary>
     public class RankedPreferenceConverter : IMultiValueConverter
     {
-        public object Convert(object[] values, 
-                              Type targetType, 
+        public object Convert(object[] values,
+                              Type targetType,
                               object parameter,
                               CultureInfo culture)
         {
@@ -22,9 +22,9 @@ namespace RoboTooth.View.Converters
             return values.FirstOrDefault(v => v != null);
         }
 
-        public object[] ConvertBack(object value, 
-                                    Type[] targetTypes, 
-                                    object parameter, 
+        public object[] ConvertBack(object value,
+                                    Type[] targetTypes,
+                                    object parameter,
                                     CultureInfo culture)
         {
             throw new NotImplementedException();

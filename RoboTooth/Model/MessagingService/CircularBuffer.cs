@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RoboTooth.Model.MessagingService
 {
     internal class CircularBuffer<T> : IEnumerable<T>
     {
-        private T[] buffer;
+        private readonly T[] buffer;
         private int startOfBuffer;
         private int endOfBuffer;
 

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Numerics;
-using RoboTooth.Model.Control;
+﻿using RoboTooth.Model.Control;
 using RoboTooth.Model.Simulation;
+using System;
+using System.Numerics;
 
 namespace RoboTooth.Model.Kinematics
 {
@@ -21,8 +17,8 @@ namespace RoboTooth.Model.Kinematics
         private Vector2 _currentPosition;
         private Vector2 _currentOrientation;
 
-        private IMotorState _motorState;
-        private ISolver _solver;
+        private readonly IMotorState _motorState;
+        private readonly ISolver _solver;
 
         #endregion
 
@@ -93,7 +89,7 @@ namespace RoboTooth.Model.Kinematics
 
         #endregion
 
-        private object _simulationLock = new object();
+        private readonly object _simulationLock = new object();
 
         /// <summary>
         /// Should run this continuously and update based on time passed/correct using odometry
@@ -136,12 +132,12 @@ namespace RoboTooth.Model.Kinematics
                         throw new NotSupportedException("Unexpected MoveDirection: " + _motorState.GetCurrentDirection().ToString());
                 }
 
-                if(!deltaDistance.Equals(Vector2.Zero))
+                if (!deltaDistance.Equals(Vector2.Zero))
                 {
                     UpdateCurrentPosition(GetCurrentPosition() + deltaDistance);
                 }
 
-                if(degreesOfRotation.Degrees > float.Epsilon)
+                if (degreesOfRotation.Degrees > float.Epsilon)
                 {
                     var updatedOrientation = Vector2.Normalize(Trigonometry.RotateVectorByAngle(GetCurrentOrientation(), degreesOfRotation));
                     UpdateCurrentOrientation(updatedOrientation);

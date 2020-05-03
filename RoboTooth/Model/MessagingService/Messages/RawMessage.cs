@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RoboTooth.Model.MessagingService.Messages
 {
@@ -60,7 +56,7 @@ namespace RoboTooth.Model.MessagingService.Messages
                 s += string.Format("{0:X2}", rawData[i]) + " ";
             }
             s += string.Format("{0:X2}", rawData[rawData.Length - 1]);
-            
+
             return s;
         }
 

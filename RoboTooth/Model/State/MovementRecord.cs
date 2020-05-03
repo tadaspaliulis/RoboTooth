@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Numerics;
+﻿using System.Numerics;
 
 namespace RoboTooth.Model.State
 {
@@ -11,7 +6,7 @@ namespace RoboTooth.Model.State
     {
         public readonly ushort RelativeTime;
         public readonly Vector2 StartPosition;
-        
+
         private bool _isPlannedOnly;
 
         /// <summary>

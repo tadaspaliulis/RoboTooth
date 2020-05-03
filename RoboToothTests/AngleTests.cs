@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
-using System;
 using RoboTooth.Model.Kinematics;
+using System;
 
 namespace RoboToothTests
 {
@@ -44,7 +44,7 @@ namespace RoboToothTests
         #endregion
 
         #region CreateFromDegrees
-    
+
         [Test]
         public void CreateFromDegreesZero()
         {

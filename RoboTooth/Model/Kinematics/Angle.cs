@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RoboTooth.Model.Kinematics
 {
@@ -90,9 +86,9 @@ namespace RoboTooth.Model.Kinematics
         /// <returns>A non-directional angle</returns>
         public Angle CreateNonDirectionalAngle()
         {
-            if(IsClockwise)
+            if (IsClockwise)
             {
-                if(_degrees.HasValue)
+                if (_degrees.HasValue)
                 {
                     return CreateFromDegrees(-_degrees.Value);
                 }

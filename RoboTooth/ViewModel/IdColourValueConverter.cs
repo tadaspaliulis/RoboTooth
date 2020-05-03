@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using RoboTooth.Model.MessagingService.Messages;
+using System;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
-using RoboTooth.Model.MessagingService.Messages;
 using System.Windows.Media;
 
 namespace RoboTooth.ViewModel
@@ -19,7 +15,7 @@ namespace RoboTooth.ViewModel
 
             var Id = (int)value;
             Color c;
-            switch((RxMessageIdsEnum)Id)
+            switch ((RxMessageIdsEnum)Id)
             {
                 case RxMessageIdsEnum.EEchoDistance:
                     c = Colors.Peru;

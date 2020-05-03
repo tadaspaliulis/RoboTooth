@@ -1,6 +1,6 @@
-﻿using System.Windows;
+﻿using RoboTooth.ViewModel.DataDisplayVM;
+using System.Windows;
 using System.Windows.Controls;
-using RoboTooth.ViewModel.DataDisplayVM;
 
 namespace RoboTooth.View
 {

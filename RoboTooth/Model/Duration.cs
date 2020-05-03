@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RoboTooth.Model
 {
@@ -60,7 +56,7 @@ namespace RoboTooth.Model
             {
                 _seconds -= other.Seconds;
             }
-            else if(_miliseconds.HasValue)
+            else if (_miliseconds.HasValue)
             {
                 return CreateFromMiliSeconds(_miliseconds.Value - other.Miliseconds);
             }

@@ -13,7 +13,7 @@ namespace RoboTooth.Model.Simulation
         /// <param name="motorState">Motor state interface</param>
         /// <param name="speedCalibrationMovement">Calibration multiplier for movement speed</param>
         /// <param name="speedCalibrationRotation">Calibration multiplier for rotation speed</param>
-        public VelocityEstimator(IMotorState motorState, 
+        public VelocityEstimator(IMotorState motorState,
                                  float speedCalibrationMovement,
                                  float speedCalibrationRotation)
         {
@@ -40,8 +40,8 @@ namespace RoboTooth.Model.Simulation
             return _motorState.GetCurrentSpeedPercentage() * _speedCalibrationRotation;
         }
 
-        private IMotorState _motorState;
-        private float _speedCalibrationMovement;
-        private float _speedCalibrationRotation;
+        private readonly IMotorState _motorState;
+        private readonly float _speedCalibrationMovement;
+        private readonly float _speedCalibrationRotation;
     }
 }

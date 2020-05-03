@@ -1,7 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using RoboTooth.ViewModel;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using RoboTooth.ViewModel;
 
 namespace RoboTooth.View
 {

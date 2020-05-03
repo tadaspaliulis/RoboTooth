@@ -2,10 +2,7 @@
 using RoboTooth.Model.State;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RoboTooth.Model.Control
 {
@@ -67,7 +64,7 @@ namespace RoboTooth.Model.Control
 
         #region Private variables
 
-        private Queue<MovementCommand> _movementCommandQueue = new Queue<MovementCommand>();
+        private readonly Queue<MovementCommand> _movementCommandQueue = new Queue<MovementCommand>();
         private MovementCommand _currentlyExecutedAction = null;
 
         private readonly IPositionState _kinematicsModel;

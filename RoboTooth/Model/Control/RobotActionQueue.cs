@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RoboTooth.Model.Control
 {
@@ -47,8 +44,8 @@ namespace RoboTooth.Model.Control
 
         public byte GetQueueId() { return _queueId; }
 
-        private Queue<RobotAction> _actionQueue = new Queue<RobotAction>();
+        private readonly Queue<RobotAction> _actionQueue = new Queue<RobotAction>();
         private byte _nextActionId; //Id that will be assigned to the next action
-        private byte _queueId; //A way to differentiate between different queues
+        private readonly byte _queueId; //A way to differentiate between different queues
     }
 }

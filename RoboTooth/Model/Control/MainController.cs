@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RoboTooth.Model.MessagingService;
+﻿using RoboTooth.Model.MessagingService;
 using RoboTooth.Model.State;
 
 namespace RoboTooth.Model.Control
@@ -50,12 +45,12 @@ namespace RoboTooth.Model.Control
             return _motionHistory;
         }
 
-        private MessagingService.MessagingService _messagingService;
-        private ICommunicationInterface _communicationInterface;
-        private MessageSorter _messageSorter;
+        private readonly MessagingService.MessagingService _messagingService;
+        private readonly ICommunicationInterface _communicationInterface;
+        private readonly MessageSorter _messageSorter;
 
-        private MotionHistory _motionHistory;
+        private readonly MotionHistory _motionHistory;
 
-        private RoboController _roboController;
+        private readonly RoboController _roboController;
     }
 }

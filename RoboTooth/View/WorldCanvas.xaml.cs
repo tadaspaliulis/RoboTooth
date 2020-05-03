@@ -1,6 +1,6 @@
-﻿using System.Windows;
+﻿using RoboTooth.ViewModel.Drawing;
+using System.Windows;
 using System.Windows.Controls;
-using RoboTooth.ViewModel.Drawing;
 
 namespace RoboTooth.View
 {

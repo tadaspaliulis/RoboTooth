@@ -30,7 +30,7 @@ namespace RoboTooth.ViewModel
             connectionCommand.AddCanExecuteChangedTrigger(canExecuteTrigger);
 
             //External event monitor for potential can execute changes
-            ConnectionEventOccured += canExecuteTrigger.HandleEventReceived; 
+            ConnectionEventOccured += canExecuteTrigger.HandleEventReceived;
 
             ConnectionButton = new ObservableButton(connectionCommand, null);
             ConnectionButton.Content = "Connect";
@@ -43,7 +43,7 @@ namespace RoboTooth.ViewModel
 
         private void ConnectionEventHandler(object sender, ConnectionEvent e)
         {
-            switch(e.ConnectionStatus)
+            switch (e.ConnectionStatus)
             {
                 case ConnecStatusEnum.Connected:
                     IsConnected = true;

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using RoboTooth.Model.State;
+using RoboTooth.ViewModel.Drawing;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls.Primitives;
-using RoboTooth.Model.State;
-using RoboTooth.ViewModel.Drawing;
 
 namespace RoboTooth.ViewModel.WorldMap
 {
@@ -43,7 +39,7 @@ namespace RoboTooth.ViewModel.WorldMap
         {
             Application.Current?.Dispatcher?.Invoke(delegate
             {
-                if(Lines.Count == 0)
+                if (Lines.Count == 0)
                 {
                     //TODO: Is this exception going to be lost since it's in a different thread.
                     throw new InvalidOperationException("Attempted to update a line when the list of lines was empty.");
@@ -70,6 +66,6 @@ namespace RoboTooth.ViewModel.WorldMap
             }
         }
 
-        private CanvasVM _canvas;
+        private readonly CanvasVM _canvas;
     }
 }

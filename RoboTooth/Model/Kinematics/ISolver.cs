@@ -13,9 +13,9 @@ namespace RoboTooth.Model.Kinematics
 
         Duration CalculateMovementDurationForDeltaDistance(Vector2 deltaDistance, float motorSpeedPercentage);
         Vector2 CalculateMovementVector(Vector2 orientation, float motorSpeedPercent, Duration duration);
-        Duration CalculateRotationDurationForNewOrientation(Vector2 initialOrientation, 
-                                                            Vector2 newOrientation, 
-                                                            float motoSpeedPercentage, 
+        Duration CalculateRotationDurationForNewOrientation(Vector2 initialOrientation,
+                                                            Vector2 newOrientation,
+                                                            float motoSpeedPercentage,
                                                             out bool rotateClockwise);
 
         DirectionalAngle CalculateDeltaRotation(float speedPercentage, Duration deltaTime, bool clockwise);

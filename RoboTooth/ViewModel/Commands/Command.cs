@@ -44,7 +44,7 @@ namespace RoboTooth.ViewModel.Commands
         }
 
         protected Action<object> _execute;
-        private Func<object, bool> _canExecute;
-        private List<CanExecuteEvaluationTrigger> _canExecuteEvaluationTriggers = new List<CanExecuteEvaluationTrigger>();
+        private readonly Func<object, bool> _canExecute;
+        private readonly List<CanExecuteEvaluationTrigger> _canExecuteEvaluationTriggers = new List<CanExecuteEvaluationTrigger>();
     }
 }

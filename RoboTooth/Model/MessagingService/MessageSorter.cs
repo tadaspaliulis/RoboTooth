@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RoboTooth.Model.MessagingService.Messages;
+﻿using RoboTooth.Model.MessagingService.Messages;
 using RoboTooth.Model.MessagingService.Messages.RxMessages;
+using System;
+using System.Collections.Generic;
 
 namespace RoboTooth.Model.MessagingService
 {
@@ -39,7 +36,7 @@ namespace RoboTooth.Model.MessagingService
         }
 
         //Convert from RawMessage to 
-        private Func<RawMessage, T> _preprocessor;
+        private readonly Func<RawMessage, T> _preprocessor;
 
         public event EventHandler<T> MessageReceived;
     }
@@ -56,11 +53,11 @@ namespace RoboTooth.Model.MessagingService
 
             Initialise();
         }
-        
+
         private void Initialise()
         {
             //Initialisation of all the recognisers here
-            AddRecogniser(EchoDistanceMessages = new MessageRecogniser<EchoDistanceMessage>((byte)RxMessageIdsEnum.EEchoDistance, 
+            AddRecogniser(EchoDistanceMessages = new MessageRecogniser<EchoDistanceMessage>((byte)RxMessageIdsEnum.EEchoDistance,
                 (RawMessage m) => { return new EchoDistanceMessage(m); }));
             AddRecogniser(MagnetometerOrientationMessages = new MessageRecogniser<MagnetometerOrientationMessage>((byte)RxMessageIdsEnum.EMagnetometerOrientation,
                 (RawMessage m) => { return new MagnetometerOrientationMessage(m); }));
@@ -109,7 +106,7 @@ namespace RoboTooth.Model.MessagingService
             _recognisers.Add(recogniser);
         }
 
-        private MessageRecogniser<RawMessage> _unrecognisedMessageHandler;
+        private readonly MessageRecogniser<RawMessage> _unrecognisedMessageHandler;
 
         /// <summary>
         /// Invoked whenever a message is not recognised by any of the recognisers
@@ -125,8 +122,8 @@ namespace RoboTooth.Model.MessagingService
         /// <summary>
         /// Event for receiving all the messages after they get converted.
         /// </summary>
-        public event EventHandler<RawMessage> UnfilteredMessages; 
+        public event EventHandler<RawMessage> UnfilteredMessages;
 
-        private List<MessageRecogniserBase> _recognisers;
+        private readonly List<MessageRecogniserBase> _recognisers;
     }
 }

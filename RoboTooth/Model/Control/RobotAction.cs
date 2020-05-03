@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RoboTooth.Model.Control
+﻿namespace RoboTooth.Model.Control
 {
     /// <summary>
     /// An action that will be executed by the robot.
@@ -19,7 +13,7 @@ namespace RoboTooth.Model.Control
             ActionMessage = moveMessage;
         }
 
-        private byte _queueId;
+        private readonly byte _queueId;
         public byte ActionId { get; private set; }
         public IActionInitiationMessage ActionMessage { get; private set; } //Is this the best way of doing this?
     }

@@ -1,10 +1,6 @@
 ﻿using RoboTooth.Model.Kinematics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RoboTooth.Model.Control
 {
@@ -73,7 +69,7 @@ namespace RoboTooth.Model.Control
             bool isRotationNeeded = StartRotationIfNecessary(requiredOrientationForMovement, movement.Speed);
 
             //If the robot is already facing the right way, just start moving in that direction.
-            if(!isRotationNeeded)
+            if (!isRotationNeeded)
             {
                 StartMovement(movement.Move, movement.Speed);
             }
@@ -100,11 +96,11 @@ namespace RoboTooth.Model.Control
                 //TODO: FIGURE OUT ROTATION DIRECTION STUFF HERE
                 if (rotateClockwise)
                 {
-                   _orientationActionId = _movementController.TurnClockwise(rotationDuration, speedPercentage);
+                    _orientationActionId = _movementController.TurnClockwise(rotationDuration, speedPercentage);
                 }
                 else
                 {
-                   _orientationActionId = _movementController.TurnCounterClockwise(rotationDuration, speedPercentage);
+                    _orientationActionId = _movementController.TurnCounterClockwise(rotationDuration, speedPercentage);
                 }
 
                 return true;
@@ -154,7 +150,7 @@ namespace RoboTooth.Model.Control
 
                 //Inform listeners that we've reached the destination.
                 MovementCommandComplete?.Invoke(this, EventArgs.Empty);
-  
+
             }
             else
             {
@@ -194,7 +190,7 @@ namespace RoboTooth.Model.Control
         /// <param name="actionId">The ID of the action that was completed.</param>
         private void OnMovementActionCompleted(object sender, byte actionId)
         {
-            if(_movementActionId.HasValue && _movementActionId.Value == actionId)
+            if (_movementActionId.HasValue && _movementActionId.Value == actionId)
             {
                 _movementActionId = null;
                 HandleMovementActionComplete();
@@ -224,10 +220,10 @@ namespace RoboTooth.Model.Control
         private readonly float _allowedDistanceError;
         private readonly Angle _allowedOrientationError;
 
-        private IPositionState _positionState;
-        private IMovementController _movementController;
-        private IMotorState _motorState;
-        private ISolver _solver;
+        private readonly IPositionState _positionState;
+        private readonly IMovementController _movementController;
+        private readonly IMotorState _motorState;
+        private readonly ISolver _solver;
 
         /// <summary>
         /// Target motor speed to be used for various motions.

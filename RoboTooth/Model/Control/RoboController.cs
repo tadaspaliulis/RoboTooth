@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using RoboTooth.Model.Control.Filters;
+using RoboTooth.Model.Control.Sensors;
 using RoboTooth.Model.Kinematics;
 using RoboTooth.Model.MessagingService;
 using RoboTooth.Model.MessagingService.Messages.RxMessages;
 using RoboTooth.Model.MessagingService.Messages.TxMessages;
-using RoboTooth.Model.State;
 using RoboTooth.Model.Simulation;
-using RoboTooth.Model.Control.Sensors;
-using RoboTooth.Model.Control.Filters;
+using RoboTooth.Model.State;
+using System;
+using System.Diagnostics;
+using System.Numerics;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace RoboTooth.Model.Control
 {
@@ -41,7 +38,7 @@ namespace RoboTooth.Model.Control
 
             //Subscribe to various message events from the message sorter.
             _messageSorter = messageSorter;
-            
+
             _messageSorter.MagnetometerOrientationMessages.MessageReceived += handleMagnetometerOrientationMessage;
             _messageSorter.DebugStringMessages.MessageReceived += handleDebugStringMessage;
 
@@ -49,12 +46,12 @@ namespace RoboTooth.Model.Control
             _motorsController = new MotorsController(_messagingService, _motorsSimulator);
             _messageSorter.ActionCompletedMessages.MessageReceived += _motorsController.HandleActionCompletedMessage;
 
-            var calibration = new MotorCalibration(MaxMovementVelocity: 10, 
+            var calibration = new MotorCalibration(MaxMovementVelocity: 10,
                                                    MaxRotationVelocityDegrees: 280);
 
             _motionHistory = motionHistory;
             _solver = new SolverNaive(calibration.MaxMovementVelocity, calibration.MaxRotationVelocityDegrees);
- 
+
             _kinematicsModel = new KinematicsModel(_motorsSimulator, _solver);
             _locomotionPlanner = new LocomotionPlanner(_solver, _kinematicsModel, _motorsSimulator, _motorsController, 5.0f, Angle.CreateFromDegrees(5.0));
             _navigationPlanner = new NavigationPlanner(_kinematicsModel, _locomotionPlanner, _motionHistory);
@@ -89,7 +86,7 @@ namespace RoboTooth.Model.Control
 
         private void handleMagnetometerOrientationMessage(object sender, MagnetometerOrientationMessage message)
         {
-            var val = Math.Atan2(message.GetY() -1800, message.GetZ() + 600);
+            var val = Math.Atan2(message.GetY() - 1800, message.GetZ() + 600);
             //if (val < 0)
             //    val = -val;
 
@@ -125,7 +122,7 @@ namespace RoboTooth.Model.Control
         public void MoveForwardIndefinite()
         {
             performRobotMovementAction(new IndefiniteMoveMessage(MoveDirection.EForward, 255));
-           _navigationPlanner.Test();
+            _navigationPlanner.Test();
         }
 
         public void MoveBackwardsIndefinite()
@@ -186,7 +183,7 @@ namespace RoboTooth.Model.Control
         {
             var stopWatch = new Stopwatch();
             stopWatch.Start();
-            while(true)
+            while (true)
             {
                 //if (token.IsCancellationRequested)
                 //   break;
@@ -195,7 +192,7 @@ namespace RoboTooth.Model.Control
                 //because it might blow up due to floating point inaccuracy accumulation
                 //and hog the processing time.
                 var deltaTime = Duration.CreateFromMiliSeconds(stopWatch.ElapsedMilliseconds);
-                if(deltaTime.Miliseconds < 5)
+                if (deltaTime.Miliseconds < 5)
                 {
                     Thread.Sleep(1);
                     continue;
@@ -222,24 +219,24 @@ namespace RoboTooth.Model.Control
 
         const float _timeToDo360MicroSeconds = 3600; //Todo, need to figure out what this value actually is
 
-        private MessagingService.MessagingService _messagingService;
-        private MessageSorter _messageSorter;
+        private readonly MessagingService.MessagingService _messagingService;
+        private readonly MessageSorter _messageSorter;
 
-        private MotorSimulator _motorsSimulator;
-        private MotorsController _motorsController;
+        private readonly MotorSimulator _motorsSimulator;
+        private readonly MotorsController _motorsController;
 
-        private MotionHistory _motionHistory;
+        private readonly MotionHistory _motionHistory;
 
-        private ISolver _solver;
+        private readonly ISolver _solver;
 
-        private KinematicsModel _kinematicsModel;
+        private readonly KinematicsModel _kinematicsModel;
 
-        private LocomotionPlanner _locomotionPlanner;
+        private readonly LocomotionPlanner _locomotionPlanner;
 
-        private NavigationPlanner _navigationPlanner;
+        private readonly NavigationPlanner _navigationPlanner;
 
-        private EchoDistanceSensor _echoDistanceSensor;
-        private Magnetometer _magnetometer;
+        private readonly EchoDistanceSensor _echoDistanceSensor;
+        private readonly Magnetometer _magnetometer;
         #endregion
     }
 }

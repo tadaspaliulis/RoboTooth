@@ -1,9 +1,6 @@
 ﻿using RoboTooth.Model.Control;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RoboTooth.Model.Simulation
 {
@@ -41,7 +38,7 @@ namespace RoboTooth.Model.Simulation
             var deltaTimeInner = new Duration(deltaTime);
             while (_actionQueue.Count != 0)
             {
-                var currentAction  = _actionQueue.Peek();
+                var currentAction = _actionQueue.Peek();
                 deltaTimeInner = currentAction.AdvanceTime(deltaTimeInner);
                 if (currentAction.IsComplete())
                 {
@@ -72,7 +69,7 @@ namespace RoboTooth.Model.Simulation
         /// </summary>
         public event EventHandler<byte> MovementActionCompleted;
 
-        private Queue<MotorAction> _actionQueue = new Queue<MotorAction>();
+        private readonly Queue<MotorAction> _actionQueue = new Queue<MotorAction>();
 
         private class MotorAction
         {
@@ -84,7 +81,7 @@ namespace RoboTooth.Model.Simulation
             public Duration AdvanceTime(Duration deltaTime)
             {
                 Duration leftOver = null;
-                if(deltaTime.Miliseconds >= StartsIn.Miliseconds)
+                if (deltaTime.Miliseconds >= StartsIn.Miliseconds)
                 {
                     StartsIn = Duration.CreateFromMiliSeconds(0);
                     leftOver = deltaTime.Substract(StartsIn);

@@ -1,6 +1,6 @@
-﻿using System;
+﻿using RoboTooth.Model.MessagingService.Messages.RxMessages;
+using System;
 using System.Numerics;
-using RoboTooth.Model.MessagingService.Messages.RxMessages;
 
 namespace RoboTooth.ViewModel.DataDisplayVM
 {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RoboTooth.ViewModel.Drawing
+﻿namespace RoboTooth.ViewModel.Drawing
 {
     /// <summary>
     /// A readonly ViewPortSettings interface to be used
@@ -13,7 +7,7 @@ namespace RoboTooth.ViewModel.Drawing
     /// </summary>
     public interface IViewPortSettingsReadonly
     {
-        float MapScaling { get;  }
+        float MapScaling { get; }
         float PanX { get; }
         float PanY { get; }
     }

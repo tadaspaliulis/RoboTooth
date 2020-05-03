@@ -85,7 +85,8 @@ namespace RoboTooth.Model.MessagingService
                     Thread.Sleep(50);
                 }
                 //Maybe callback here on completion?
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
                 //Exception handling, is this even necessary?

@@ -1,7 +1,7 @@
-﻿using RoboTooth.Model.Mapping;
-using System;
-using Extensions;
+﻿using Extensions;
+using RoboTooth.Model.Mapping;
 using RoboTooth.ViewModel.Drawing;
+using System;
 using System.ComponentModel;
 
 namespace RoboTooth.ViewModel.WorldMap
@@ -53,15 +53,15 @@ namespace RoboTooth.ViewModel.WorldMap
             var innerShadowOffset = -wall.FaceNormal * LINE_GAP;
             var startPointInnerShadow = leftFacing * INNER_SHADOW_SCALING *
                 wall.LengthLeft + wall.Position + innerShadowOffset;
-            var endPointInnerShadow = rightFacing * INNER_SHADOW_SCALING * 
+            var endPointInnerShadow = rightFacing * INNER_SHADOW_SCALING *
                 wall.LengthRight + wall.Position + innerShadowOffset;
 
             ShadowLineInner = new Line(startPointInnerShadow, endPointInnerShadow);
 
             var outerShadowOffset = -wall.FaceNormal * LINE_GAP * 2;
-            var startPointOuterShadow = leftFacing * OUTER_SHADOW_SCALING * 
+            var startPointOuterShadow = leftFacing * OUTER_SHADOW_SCALING *
                 wall.LengthLeft + wall.Position + outerShadowOffset;
-            var endPointOuterShadow = rightFacing * OUTER_SHADOW_SCALING * 
+            var endPointOuterShadow = rightFacing * OUTER_SHADOW_SCALING *
                 wall.LengthRight + wall.Position + outerShadowOffset;
 
             ShadowLineOuter = new Line(startPointOuterShadow, endPointOuterShadow);

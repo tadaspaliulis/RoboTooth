@@ -16,7 +16,7 @@ namespace RoboTooth.Model.Control.Filters
         public void HandleNewDataReceived(float newData)
         {
             _currentValues.Add(newData);
-            if( _currentValues.Count >= _valuesRequiredForAverage )
+            if (_currentValues.Count >= _valuesRequiredForAverage)
             {
                 AveragedDataAvailable(this, CalculateAverage());
                 Reset();
@@ -40,13 +40,11 @@ namespace RoboTooth.Model.Control.Filters
             return sum / _currentValues.Count;
         }
 
-        private 
-
         #endregion
 
         #region Private variables
 
-        List<float> _currentValues = new List<float>();
+        private readonly List<float> _currentValues = new List<float>();
 
         public readonly int _valuesRequiredForAverage;
 

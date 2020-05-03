@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RoboTooth.Model.State
 {
@@ -26,13 +22,13 @@ namespace RoboTooth.Model.State
     /// <summary>
     /// Keeps track of sensor recordings taken at any given point in time/space.
     /// </summary>
-    public class SensorHistory<Reading> where Reading: ISensorReading 
+    public class SensorHistory<Reading> where Reading : ISensorReading
     {
         public void HandleNewReadingAvailable(object sender, Reading newReading)
         {
             _readings.Add(newReading);
         }
 
-        private List<Reading> _readings = new List<Reading>();
+        private readonly List<Reading> _readings = new List<Reading>();
     }
 }

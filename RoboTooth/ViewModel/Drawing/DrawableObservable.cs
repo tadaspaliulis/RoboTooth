@@ -9,7 +9,7 @@ namespace RoboTooth.ViewModel.Drawing
     public abstract class DrawableObservable : ObservableObject
     {
         public abstract void HandleViewPortChange(object sender, PropertyChangedEventArgs e);
-        
+
         public virtual void SetViewPortSettings(ViewPortSettings viewPortSettings)
         {
             viewPortSettings.PropertyChanged += HandleViewPortChange;

@@ -2,10 +2,6 @@
 using RoboTooth.Model.MessagingService.Messages.TxMessages;
 using RoboTooth.Model.Simulation;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RoboTooth.Model.Control
 {
@@ -159,7 +155,7 @@ namespace RoboTooth.Model.Control
             }
 
             var timedMoveMessage = currentAction as TimedMoveMessage;
-            if(timedMoveMessage == null)
+            if (timedMoveMessage == null)
             {
                 throw new InvalidOperationException("Wrong Message type in the motor action queue:" + _motorActionQueue.GetCurrentAction().GetType().ToString());
             }
@@ -169,14 +165,14 @@ namespace RoboTooth.Model.Control
             _currentState = ConvertMoveDirectionToMotorState(timedMoveMessage.Direction);
             Console.WriteLine(string.Format("Updated MotorState: {0} at speed: {1}", _currentState, _currentMotorSpeedPercentage));
         }
-        
+
         #endregion
 
         private MotorState _currentState = MotorState.Idle;
         private float _currentMotorSpeedPercentage = 0.0f;
 
-        private MessagingService.MessagingService _messagingService;
-        private MotorSimulator _motorSimulator;
-        private RobotActionQueue _motorActionQueue = new RobotActionQueue(0);
+        private readonly MessagingService.MessagingService _messagingService;
+        private readonly MotorSimulator _motorSimulator;
+        private readonly RobotActionQueue _motorActionQueue = new RobotActionQueue(0);
     }
 }

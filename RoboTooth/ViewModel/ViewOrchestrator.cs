@@ -1,12 +1,12 @@
 ﻿using RoboTooth.Model.Control;
 using RoboTooth.Model.MessagingService.Messages;
-using System.Collections.ObjectModel;
-using RoboTooth.ViewModel.DataDisplayVM;
-using RoboTooth.ViewModel.WorldMap;
-using RoboTooth.ViewModel.Drawing;
 using RoboTooth.ViewModel.Commands;
-using System;
 using RoboTooth.ViewModel.Commands.CanExecuteEvalTriggers;
+using RoboTooth.ViewModel.DataDisplayVM;
+using RoboTooth.ViewModel.Drawing;
+using RoboTooth.ViewModel.WorldMap;
+using System;
+using System.Collections.ObjectModel;
 
 namespace RoboTooth.ViewModel
 {
@@ -34,7 +34,7 @@ namespace RoboTooth.ViewModel
             }
         }
 
-        private RawMessage _message;
+        private readonly RawMessage _message;
     }
 
     /// <summary>
@@ -43,7 +43,7 @@ namespace RoboTooth.ViewModel
     class ViewOrchestrator : ObservableObject
     {
         public ViewOrchestrator()
-        {   
+        {
             InitialiseControllers();
 
             _connectionManagement = new ConnectionManagementView(_mainController.GetCommunicationInterface());
@@ -115,7 +115,8 @@ namespace RoboTooth.ViewModel
 
         private ObservableCollection<MessageListItem> _rawMessageList;
         public ObservableCollection<MessageListItem> RawMessageList
-        {   get
+        {
+            get
             {
                 return _rawMessageList;
             }

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RoboTooth.Model.Control;
+﻿using RoboTooth.Model.Control;
+using System;
 namespace RoboTooth.Model.MessagingService.Messages.TxMessages
 {
     public enum MoveDirection : byte
@@ -25,8 +21,8 @@ namespace RoboTooth.Model.MessagingService.Messages.TxMessages
 
     public class TimedMoveMessage : RawMessage, IActionInitiationMessage
     {
-        public TimedMoveMessage(MoveDirection moveDirection, byte speed, ushort timeInMiliseconds, byte actionId = 0) 
-            : base((byte)TxMessageIdsEnum.EMoveControlAction, CreateRawData(moveDirection, speed, timeInMiliseconds, actionId)){ }
+        public TimedMoveMessage(MoveDirection moveDirection, byte speed, ushort timeInMiliseconds, byte actionId = 0)
+            : base((byte)TxMessageIdsEnum.EMoveControlAction, CreateRawData(moveDirection, speed, timeInMiliseconds, actionId)) { }
 
         /// <summary>
         /// Creates the raw data to be used by base constructor

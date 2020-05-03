@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RoboTooth.Model.MessagingService.Messages
+﻿namespace RoboTooth.Model.MessagingService.Messages
 {
     /// <summary>
     /// Ids for received messages

@@ -1,7 +1,7 @@
-﻿using NUnit.Framework;
+﻿using Extensions;
+using NUnit.Framework;
 using RoboTooth.Model.Kinematics;
 using System.Numerics;
-using Extensions;
 
 namespace RoboToothTests
 {
@@ -147,7 +147,7 @@ namespace RoboToothTests
             var v1 = new Vector2(0.0f, 1.0f);
             var rotatedVector = Trigonometry.RotateVectorByAngle(v1, Angle.CreateFromDegrees(90));
 
-            Assert.IsTrue(rotatedVector.EqualsWithinDelta(new Vector2(-1.0f, 0.0f), float.Epsilon) );
+            Assert.IsTrue(rotatedVector.EqualsWithinDelta(new Vector2(-1.0f, 0.0f), float.Epsilon));
         }
 
         [Test]

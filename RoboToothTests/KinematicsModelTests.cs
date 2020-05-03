@@ -1,14 +1,9 @@
-﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Moq;
-using RoboTooth.Model.Kinematics;
-using RoboTooth.Model.Control;
-using System.Numerics;
+﻿using Moq;
+using NUnit.Framework;
 using RoboTooth.Model;
+using RoboTooth.Model.Control;
+using RoboTooth.Model.Kinematics;
+using System.Numerics;
 
 namespace RoboToothTests
 {

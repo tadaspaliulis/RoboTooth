@@ -2,11 +2,7 @@
 using RoboTooth.Model.Kinematics;
 using RoboTooth.Model.MessagingService.Messages.RxMessages;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RoboTooth.Model.Control.Sensors
 {
@@ -87,11 +83,11 @@ namespace RoboTooth.Model.Control.Sensors
         private void HandleFilterResultGenerated(object sender, float result)
         {
             var measurementOrientation = _robotPosition.GetCurrentOrientation();
-            if(_angleFromFront != null)
+            if (_angleFromFront != null)
             {
                 measurementOrientation = Trigonometry.RotateVectorByAngle(_robotPosition.GetCurrentOrientation(), _angleFromFront);
             }
-             
+
             var measuredDistance = measurementOrientation * result;
             var measurementPosition = _robotPosition.GetCurrentPosition() + _offsetFromCenter;
 
@@ -102,7 +98,7 @@ namespace RoboTooth.Model.Control.Sensors
 
         #region Private variables
 
-        private IPositionState _robotPosition;
+        private readonly IPositionState _robotPosition;
 
         /// <summary>
         /// Sensors location in relation to the 'center'
@@ -114,9 +110,9 @@ namespace RoboTooth.Model.Control.Sensors
         /// Sensors orientation in relation to the front
         /// of the robot
         /// </summary>
-        private DirectionalAngle _angleFromFront;
+        private readonly DirectionalAngle _angleFromFront;
 
-        private IFilter<float> _filter;
+        private readonly IFilter<float> _filter;
 
         #endregion
     }

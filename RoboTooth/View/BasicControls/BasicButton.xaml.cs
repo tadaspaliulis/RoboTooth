@@ -16,7 +16,7 @@ namespace RoboTooth.View.BasicControls
 
         #region Button property
         public static readonly DependencyProperty ButtonProperty =
-                DependencyProperty.Register(nameof(Button), 
+                DependencyProperty.Register(nameof(Button),
                                             typeof(ObservableButton),
                                             typeof(BasicButton));
 

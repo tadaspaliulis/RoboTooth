@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RoboTooth.Model.Kinematics
 {
@@ -90,7 +86,7 @@ namespace RoboTooth.Model.Kinematics
         public static Vector2 BuildVector2Rounded(float x, float y)
         {
             var midpointRounding = MidpointRounding.ToEven;
-            return new Vector2((float)Math.Round(x, VectorOperationSignificantDigits, midpointRounding), 
+            return new Vector2((float)Math.Round(x, VectorOperationSignificantDigits, midpointRounding),
                                (float)Math.Round(y, VectorOperationSignificantDigits, midpointRounding));
         }
     }

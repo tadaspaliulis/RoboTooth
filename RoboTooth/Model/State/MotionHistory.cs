@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Numerics;
 
 namespace RoboTooth.Model.State
@@ -96,11 +94,11 @@ namespace RoboTooth.Model.State
         /// <summary>
         /// Keeps track of the movements actually made (or movements that we believe were made).
         /// </summary>
-        private List<MovementRecord> _history = new List<MovementRecord>();
+        private readonly List<MovementRecord> _history = new List<MovementRecord>();
 
         /// <summary>
         /// Keeps track of the robot plans.
         /// </summary>
-        private List<MovementRecord> _plans = new List<MovementRecord>();
+        private readonly List<MovementRecord> _plans = new List<MovementRecord>();
     }
 }

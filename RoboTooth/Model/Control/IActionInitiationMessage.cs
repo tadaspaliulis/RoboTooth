@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RoboTooth.Model.Control
+﻿namespace RoboTooth.Model.Control
 {
     /// <summary>
     /// An interface that needs to be implement by messages that would be used in the RobotActionQueue

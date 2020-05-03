@@ -13,7 +13,7 @@ namespace RoboTooth.Model
         private BluetoothClient _bluetoothClient;
         private BluetoothComponent _localComponent;
 
-        private List<BluetoothDeviceInfo> _discoveredDevices;
+        private readonly List<BluetoothDeviceInfo> _discoveredDevices;
 
         /// <summary>
         /// The pin used to authenticate the connection.
@@ -84,7 +84,7 @@ namespace RoboTooth.Model
             foreach (var device in e.Devices)
             {
                 Console.WriteLine($"Discovered device: {device.DeviceName} ({device.DeviceAddress})");
-                if(device.DeviceName.Equals(DeviceName))
+                if (device.DeviceName.Equals(DeviceName))
                 {
                     BeginConnectionAttempt(device);
                     return;

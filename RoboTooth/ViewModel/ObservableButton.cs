@@ -42,7 +42,7 @@ namespace RoboTooth.ViewModel
             }
         }
 
-        private ICommand _buttonCommand;
-        private object _stateObject;
+        private readonly ICommand _buttonCommand;
+        private readonly object _stateObject;
     }
 }

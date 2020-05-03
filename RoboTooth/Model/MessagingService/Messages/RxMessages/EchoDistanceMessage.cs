@@ -4,7 +4,7 @@ namespace RoboTooth.Model.MessagingService.Messages.RxMessages
 {
     public class EchoDistanceMessage : RawMessage
     {
-        public EchoDistanceMessage(byte[] rawData) : base( (byte)RxMessageIdsEnum.EEchoDistance, rawData )
+        public EchoDistanceMessage(byte[] rawData) : base((byte)RxMessageIdsEnum.EEchoDistance, rawData)
         {
 
         }
