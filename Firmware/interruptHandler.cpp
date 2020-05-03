@@ -35,21 +35,27 @@ interruptService::interruptServiceRoutine interruptService::setupServiceRoutineF
     case pinMapping.interrupts.interrupt1:
         interruptForPin = &interrupts[0];
         interruptFunction = []() { interruptService::handleInterrupt(0); };
+        break;
     case pinMapping.interrupts.interrupt2:
         interruptForPin = &interrupts[1];
         interruptFunction = []() { interruptService::handleInterrupt(1); };
+        break;
     case pinMapping.interrupts.interrupt3:
         interruptForPin = &interrupts[2];
         interruptFunction = []() { interruptService::handleInterrupt(2); };
+        break;
     case pinMapping.interrupts.interrupt4:
         interruptForPin = &interrupts[3];
         interruptFunction = []() { interruptService::handleInterrupt(3); };
+        break;
     case pinMapping.interrupts.interrupt5:
         interruptForPin = &interrupts[4];
         interruptFunction = []() { interruptService::handleInterrupt(4); };
+        break;
     case pinMapping.interrupts.interrupt6:
         interruptForPin = &interrupts[5];
         interruptFunction = []() { interruptService::handleInterrupt(5); };
+        break;
     default:
         return nullptr;
     }
