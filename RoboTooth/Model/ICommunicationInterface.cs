@@ -8,6 +8,7 @@ namespace RoboTooth.Model
         NotConnected,
         AttemptingConnection,
         DeviceNotFound,
+        PlatformNotAvailable,
         Connected,
         ConnectionLost
     }

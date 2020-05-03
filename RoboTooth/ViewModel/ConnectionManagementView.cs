@@ -49,7 +49,7 @@ namespace RoboTooth.ViewModel
             {
                 case ConnecStatusEnum.Connected:
                     _isConnectionInProgress = false;
-                    TextStatus = "Connected to Robot.";
+                    TextStatus = "Connected to the Robot.";
                     break;
                 case ConnecStatusEnum.AttemptingConnection:
                     _isConnectionInProgress = true;
@@ -58,6 +58,10 @@ namespace RoboTooth.ViewModel
                 case ConnecStatusEnum.DeviceNotFound:
                     _isConnectionInProgress = false;
                     TextStatus = "Could not find the device.";
+                    break;
+                case ConnecStatusEnum.PlatformNotAvailable:
+                    _isConnectionInProgress = false;
+                    TextStatus = "Connection stack not available.";
                     break;
                 default:
                     _isConnectionInProgress = false;

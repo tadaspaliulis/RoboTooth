@@ -40,18 +40,21 @@ namespace RoboTooth.Model
                 ConnectionStatus = ConnecStatusEnum.AttemptingConnection
             });
 
-            InitialiseBluetoothIfNecessary();
+            try
+            {
+                InitialiseBluetoothIfNecessary();
+            }
+            catch (PlatformNotSupportedException)
+            {
+                InvokeConnectionEvent(new ConnectionEvent
+                {
+                    ConnectionStatus = ConnecStatusEnum.PlatformNotAvailable
+                });
+
+                return;
+            }
 
             ScanForConnections();
-        }
-
-        private void InitialiseBluetoothIfNecessary()
-        {
-            if(_bluetoothClient == null || _localComponent == null)
-            {
-                _bluetoothClient = new BluetoothClient();
-                _localComponent = new BluetoothComponent(_bluetoothClient);
-            }
         }
 
         public Stream GetConnectionStream()
@@ -60,6 +63,15 @@ namespace RoboTooth.Model
         }
 
         #region Private methods
+
+        private void InitialiseBluetoothIfNecessary()
+        {
+            if (_bluetoothClient == null || _localComponent == null)
+            {
+                _bluetoothClient = new BluetoothClient();
+                _localComponent = new BluetoothComponent(_bluetoothClient);
+            }
+        }
 
         private void ScanForConnections()
         {
@@ -83,6 +95,8 @@ namespace RoboTooth.Model
             {
                 ConnectionStatus = ConnecStatusEnum.DeviceNotFound
             });
+
+            DestroyBluetoothObjects();
         }
 
         private void BeginConnectionAttempt(BluetoothDeviceInfo device)
@@ -109,6 +123,12 @@ namespace RoboTooth.Model
                 });
                 Console.WriteLine("Successfully connected to RoboTooth.");
             }
+        }
+
+        private void DestroyBluetoothObjects()
+        {
+            _bluetoothClient = null;
+            _localComponent = null;
         }
 
         private void InvokeConnectionEvent(ConnectionEvent e)
