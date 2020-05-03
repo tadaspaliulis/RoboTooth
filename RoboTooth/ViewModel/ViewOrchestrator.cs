@@ -5,6 +5,8 @@ using RoboTooth.ViewModel.DataDisplayVM;
 using RoboTooth.ViewModel.WorldMap;
 using RoboTooth.ViewModel.Drawing;
 using RoboTooth.ViewModel.Commands;
+using System;
+using RoboTooth.ViewModel.Commands.CanExecuteEvalTriggers;
 
 namespace RoboTooth.ViewModel
 {
@@ -54,17 +56,7 @@ namespace RoboTooth.ViewModel
             _rawMessageList = new ObservableCollection<MessageListItem>();
             _mainController.GetMessageSorter().UnfilteredMessages += HandleReceivedMessages;
 
-            MovementSequenceTestButton = new ObservableButton(
-                new AsyncCommand(
-                    (a) => { return true; }, 
-                    (a) => { _mainController.GetRoboController().Test(); }),
-                null);
-
-            SetMovementTargetButton = new ObservableButton(
-                new AsyncCommand(
-                    (a) => { return true; }, 
-                    (a) => { _mainController.GetRoboController().MoveToLocation(_intDataDisplay.TargetPositionX, _intDataDisplay.TargetPositionY); }),
-                null);
+            InitialiseButtons(_connectionManagement, _intDataDisplay, _mainController.GetRoboController());
 
             //Set up the Canvas drawing
             IntialiseCanvasAndDependants();
@@ -72,10 +64,25 @@ namespace RoboTooth.ViewModel
             _mainController.GetMotionHistory().NewMovementRecordAdded += MovementMap.HandleNewMovementRecordAdded;
             _mainController.GetMotionHistory().LastMovementRecordUpdated += MovementMap.HandleLastMovementRecordUpdated;
         }
-        
+
         private void InitialiseControllers()
         {
             _mainController = new MainController();
+        }
+
+        private void InitialiseButtons(ConnectionManagementView connection, InternalDataDisplay internalData, RoboController roboController)
+        {
+            MovementSequenceTestButton = CreateConnectionEnabledAsyncButton(connection, (a) => roboController.Test());
+
+            SetMovementTargetButton = CreateConnectionEnabledAsyncButton(connection,
+                (a) => roboController.MoveToLocation(internalData.TargetPositionX, internalData.TargetPositionY));
+        }
+
+        private static ObservableButton CreateConnectionEnabledAsyncButton(ConnectionManagementView connection, Action<object> buttonAction)
+        {
+            var command = new AsyncCommand((a) => { return connection.IsConnected; }, buttonAction);
+            command.AddCanExecuteChangedTrigger(new PropertyChangedCanExecuteTrigger(nameof(connection.IsConnected), connection));
+            return new ObservableButton(command, null);
         }
 
         /// <summary>

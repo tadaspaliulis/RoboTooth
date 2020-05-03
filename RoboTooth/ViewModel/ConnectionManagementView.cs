@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RoboTooth.Model;
+﻿using RoboTooth.Model;
 using RoboTooth.ViewModel.Commands;
 using RoboTooth.ViewModel.Commands.CanExecuteEvalTriggers;
+using System;
 
 namespace RoboTooth.ViewModel
 {
     public class ConnectionManagementView : ObservableObject
     {
+        #region Private variables
+
         private readonly ICommunicationInterface _comms;
         private bool _isConnectionInProgress = false;
 
+        #endregion
 
         public event EventHandler ConnectionEventOccured;
 
@@ -44,26 +43,30 @@ namespace RoboTooth.ViewModel
 
         private void ConnectionEventHandler(object sender, ConnectionEvent e)
         {
-            IsConnected = e.ConnectionStatus == ConnecStatusEnum.Connected;
             switch(e.ConnectionStatus)
             {
                 case ConnecStatusEnum.Connected:
+                    IsConnected = true;
                     _isConnectionInProgress = false;
                     TextStatus = "Connected to the Robot.";
                     break;
                 case ConnecStatusEnum.AttemptingConnection:
+                    IsConnected = false;
                     _isConnectionInProgress = true;
                     TextStatus = "Attempting connection.";
                     break;
                 case ConnecStatusEnum.DeviceNotFound:
+                    IsConnected = false;
                     _isConnectionInProgress = false;
                     TextStatus = "Could not find the device.";
                     break;
                 case ConnecStatusEnum.PlatformNotAvailable:
+                    IsConnected = false;
                     _isConnectionInProgress = false;
                     TextStatus = "Connection stack not available.";
                     break;
                 default:
+                    IsConnected = false;
                     _isConnectionInProgress = false;
                     TextStatus = "Default case. Wot Happened?";
                     break;
