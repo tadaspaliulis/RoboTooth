@@ -24,7 +24,7 @@ namespace RoboTooth.Model
 
         #endregion
 
-        public bool IsConnected { get; private set; }
+        public bool IsConnected { get; private set; } = false;
 
         public event EventHandler<ConnectionEvent> ConnectionEvent;
 
@@ -117,6 +117,7 @@ namespace RoboTooth.Model
             result.AsyncWaitHandle.WaitOne();
             if (result.IsCompleted)
             {
+                IsConnected = true;
                 InvokeConnectionEvent(new ConnectionEvent
                 {
                     ConnectionStatus = ConnecStatusEnum.Connected,
@@ -129,6 +130,7 @@ namespace RoboTooth.Model
         {
             _bluetoothClient = null;
             _localComponent = null;
+            IsConnected = false;
         }
 
         private void InvokeConnectionEvent(ConnectionEvent e)

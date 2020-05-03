@@ -1,37 +1,62 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RoboTooth.Model.MessagingService.Messages;
+using System;
 using System.IO;
-using System.Collections;
 using System.Threading;
-using RoboTooth.Model.MessagingService.Messages;
+using System.Threading.Tasks;
 
 namespace RoboTooth.Model.MessagingService
 {
     public class MessagingService
     {
+        #region Private variables
+
+        private readonly ICommunicationInterface _communicationInterface;
+
+        private readonly CircularBuffer<byte> _receivedDataBuffer;
+
+        private readonly object _sendMessageLock = new object();
+
+        #endregion
+
+        public event EventHandler<RawMessage> MessageReceivedEvent;
+
+        public bool EnableReceiving { get; set; }
+
         public MessagingService(ICommunicationInterface communicationInterface)
         {
-            this.communicationInterface = communicationInterface;
+            _communicationInterface = communicationInterface;
             communicationInterface.ConnectionEvent += ConnectionEventHandler;
 
             _receivedDataBuffer = new CircularBuffer<byte>(1024); //1kB
             EnableReceiving = true;
         }
 
-        public event EventHandler<RawMessage> MessageReceivedEvent;
-
-        public bool EnableReceiving { get; set; }
-
-        public void ConnectionEventHandler(object sender, ConnectionEvent e)
+        /// <summary>
+        /// Blocking method for sending messages to the robot
+        /// </summary>
+        /// <param name="message">Message to be sent to the robot</param>
+        public void SendMessage(RawMessage message)
         {
-            if(e.ConnectionStatus == ConnecStatusEnum.Connected)
+            lock (_sendMessageLock)
+            {
+                if (!_communicationInterface.IsConnected)
+                {
+                    //Don't actually send anything if we're not connected.
+                    return;
+                }
+
+                Stream dataStream = _communicationInterface.GetConnectionStream();
+                var rawMessageData = message.ToByteArray();
+                dataStream.Write(rawMessageData, 0, rawMessageData.Length);
+            }
+        }
+
+        private void ConnectionEventHandler(object sender, ConnectionEvent e)
+        {
+            if (e.ConnectionStatus == ConnecStatusEnum.Connected)
                 ProcessReceivedData();
         }
 
-        private readonly object _receivedDataLock = new object();
         private void ProcessReceivedData()
         {
             //Only want a single instance of this running at any time
@@ -46,14 +71,11 @@ namespace RoboTooth.Model.MessagingService
         {
             try
             {
-                Stream dataStream = communicationInterface.GetConnectionStream();
-                byte[] bytes = new byte[/*dataStream.Length +*/ 100];
+                Stream dataStream = _communicationInterface.GetConnectionStream();
+                byte[] bytes = new byte[100];
 
-
-                //TODO: Fix this too! (somehow)
-                while (EnableReceiving && communicationInterface.IsConnected)
+                while (EnableReceiving && _communicationInterface.IsConnected)
                 {
-                    // Read may return anything from 0 to 10.
                     int numBytesRead = dataStream.Read(bytes, 0, 15);
 
                     _receivedDataBuffer.Add(bytes, numBytesRead);
@@ -68,11 +90,6 @@ namespace RoboTooth.Model.MessagingService
                 Console.WriteLine(e.ToString());
                 //Exception handling, is this even necessary?
             }
-        }
-
-        private void OnMessageFound(RawMessage message)
-        {
-            MessageReceivedEvent?.Invoke(this, message);
         }
 
         /// <summary>
@@ -111,7 +128,7 @@ namespace RoboTooth.Model.MessagingService
             _receivedDataBuffer.discardData(readLocation + messageLength);
 
             //Inform subscribers that a message was found
-            OnMessageFound(message);
+            InvokeMessageReceivedEvent(message);
         }
 
         /// <summary>
@@ -135,30 +152,9 @@ namespace RoboTooth.Model.MessagingService
             return -1;
         }
 
-        private readonly object _sendMessageLock = new object();
-        /// <summary>
-        /// Locking method for sending messages to the robot
-        /// </summary>
-        /// <param name="message">Message to be sent to the robot</param>
-        public void SendMessage(RawMessage message)
+        private void InvokeMessageReceivedEvent(RawMessage message)
         {
-            lock (_sendMessageLock)
-            {
-                //TODO: FIX THIS PROPERLY.
-                if(!communicationInterface.IsConnected)
-                {
-                    //Don't actually send anything if we're not connected.
-                    return;
-                }
-
-                Stream dataStream = communicationInterface.GetConnectionStream();
-                var rawMessageData = message.ToByteArray();
-                dataStream.Write(rawMessageData, 0, rawMessageData.Length);
-            }
+            MessageReceivedEvent?.Invoke(this, message);
         }
-
-        private ICommunicationInterface communicationInterface;
-
-        private CircularBuffer<byte> _receivedDataBuffer;
     }
 }

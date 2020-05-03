@@ -18,12 +18,14 @@ namespace RoboTooth.Model
         public ConnecStatusEnum ConnectionStatus;
     }
 
+    /// <summary> Interface for low level data communications with the Robot </summary>
     public interface ICommunicationInterface
     {
         bool IsConnected { get; }
 
-        Stream GetConnectionStream();
         void EstablishConnection();
+
+        Stream GetConnectionStream();
 
         event EventHandler<ConnectionEvent> ConnectionEvent;
     }
