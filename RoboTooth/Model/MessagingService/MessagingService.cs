@@ -27,7 +27,7 @@ namespace RoboTooth.Model.MessagingService
 
         public void ConnectionEventHandler(object sender, ConnectionEvent e)
         {
-            if(e.ConnectionStatus == ConnecStatusEnum.EConnected)
+            if(e.ConnectionStatus == ConnecStatusEnum.Connected)
                 ProcessReceivedData();
         }
 

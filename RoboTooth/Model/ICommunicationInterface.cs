@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 
 namespace RoboTooth.Model
 {
     public enum ConnecStatusEnum
     {
-        ENotConnected,
-        EAttemptingConnection,
-        EConnected,
-        EConnectionLost
+        NotConnected,
+        AttemptingConnection,
+        DeviceNotFound,
+        Connected,
+        ConnectionLost
     }
 
     public class ConnectionEvent

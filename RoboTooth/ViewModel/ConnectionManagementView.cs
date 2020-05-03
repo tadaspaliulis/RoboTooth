@@ -11,12 +11,17 @@ namespace RoboTooth.ViewModel
 {
     public class ConnectionManagementView : ObservableObject
     {
+        private readonly ICommunicationInterface _comms;
+        private bool _isConnectionInProgress = false;
+
+
+        public event EventHandler ConnectionEventOccured;
+
         public ConnectionManagementView(ICommunicationInterface comms)
         {
             _comms = comms;
             TextStatus = "No connection yet.";
             _isConnected = false;
-            _currentConnectionStatus = ConnecStatusEnum.ENotConnected;
             //Hook up connection events to the Comms
             comms.ConnectionEvent += ConnectionEventHandler;
 
@@ -34,22 +39,28 @@ namespace RoboTooth.ViewModel
 
         private bool CanExecuteConnectButton(object a)
         {
-            return _currentConnectionStatus == ConnecStatusEnum.ENotConnected;
+            return !IsConnected && !_isConnectionInProgress;
         }
 
         private void ConnectionEventHandler(object sender, ConnectionEvent e)
         {
-            _currentConnectionStatus = e.ConnectionStatus;
-            IsConnected = e.ConnectionStatus == ConnecStatusEnum.EConnected;
+            IsConnected = e.ConnectionStatus == ConnecStatusEnum.Connected;
             switch(e.ConnectionStatus)
             {
-                case ConnecStatusEnum.EConnected:
+                case ConnecStatusEnum.Connected:
+                    _isConnectionInProgress = false;
                     TextStatus = "Connected to Robot.";
                     break;
-                case ConnecStatusEnum.EAttemptingConnection:
-                    TextStatus = "Attempting connection";
+                case ConnecStatusEnum.AttemptingConnection:
+                    _isConnectionInProgress = true;
+                    TextStatus = "Attempting connection.";
+                    break;
+                case ConnecStatusEnum.DeviceNotFound:
+                    _isConnectionInProgress = false;
+                    TextStatus = "Could not find the device.";
                     break;
                 default:
+                    _isConnectionInProgress = false;
                     TextStatus = "Default case. Wot Happened?";
                     break;
             }
@@ -59,22 +70,19 @@ namespace RoboTooth.ViewModel
             ConnectionEventOccured.Invoke(this, new EventArgs());
         }
 
-        private ConnecStatusEnum _currentConnectionStatus;
-        private ICommunicationInterface _comms;
-
-        public event EventHandler ConnectionEventOccured;
+        #region Properties
 
         public bool _isConnected;
         public bool IsConnected
         {
+            get
+            {
+                return _isConnected;
+            }
             private set
             {
                 _isConnected = value;
                 NotifyPropertyChanged();
-            }
-            get
-            {
-                return _isConnected;
             }
         }
 
@@ -105,5 +113,7 @@ namespace RoboTooth.ViewModel
                 NotifyPropertyChanged();
             }
         }
+
+        #endregion
     }
 }
