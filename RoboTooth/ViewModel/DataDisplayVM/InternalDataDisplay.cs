@@ -162,5 +162,47 @@ namespace RoboTooth.ViewModel.DataDisplayVM
         }
 
         #endregion
+
+        #region Rotary Encoders
+
+        private uint _rotaryEncoderCounterLeft;
+        public uint RotaryEncoderCounterLeft
+        {
+            get
+            {
+                return _rotaryEncoderCounterLeft;
+            }
+            set
+            {
+                _rotaryEncoderCounterLeft = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private uint _rotaryEncoderCounterRight;
+        public uint RotaryEncoderCounterRight
+        {
+            get
+            {
+                return _rotaryEncoderCounterRight;
+            }
+            set
+            {
+                _rotaryEncoderCounterRight = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public void HandleRotaryEncodersMessage(object sender, RotaryEncodersMessage message)
+        {
+            //Switch to UI thread
+            App.Current?.Dispatcher?.Invoke(delegate
+            {
+                RotaryEncoderCounterLeft = message.GetLeftWheelCounter();
+                RotaryEncoderCounterRight = message.GetRightWheelCounter();
+            });
+        }
+
+        #endregion
     }
 }

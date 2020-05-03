@@ -51,6 +51,7 @@ namespace RoboTooth.ViewModel
             _intDataDisplay = new InternalDataDisplay();
             _mainController.GetMessageSorter().EchoDistanceMessages.MessageReceived += IntDataDisplay.HandleEchoDistanceMessage;
             _mainController.GetMessageSorter().MagnetometerOrientationMessages.MessageReceived += IntDataDisplay.HandleMagnetometerOrientationMessage;
+            _mainController.GetMessageSorter().RotaryEncodersMessages.MessageReceived += IntDataDisplay.HandleRotaryEncodersMessage;
             _mainController.GetRoboController().GetPositionState().CurrentPositionUpdated += IntDataDisplay.HandlePositionUpdated;
 
             _rawMessageList = new ObservableCollection<MessageListItem>();

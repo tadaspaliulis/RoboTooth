@@ -22,6 +22,5 @@ namespace RoboTooth.Model.MessagingService.Messages.RxMessages
         {
             return BitConverter.ToSingle(rawData, 0);
         }
-
     }
 }

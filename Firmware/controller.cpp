@@ -75,6 +75,10 @@ void controller::updateSensorData()
     if (rotaryEncoderSensorCountdown.updateTimer(elapsedTime))
     {
         rotaryEncoderSensorCountdown.resetTimer(constants.timers.rotaryEncoderPeriod);
+
+        sendRotaryEncodersData(getState()->getRotaryEncoderCount(eMotorLeft), getState()->getRotaryEncoderCount(eMotorRight));
+
+        //Temporary serial output for debugging purposes
         getState()->printEncoderCounters();
     }
 }
@@ -153,6 +157,18 @@ void controller::sendMagnetometerData(int x, int y, int z)
 	memcpy(magnetoMessage.messageData + sizeof(int) * 2, &z, sizeof(int));
 
 	getState()->getMessenger()->sendMessage(magnetoMessage);
+}
+
+void controller::sendRotaryEncodersData(unsigned int leftWheelCounter, unsigned int rightWheelCounter)
+{
+    message encodersData;
+    encodersData.id = constants.messageIdTx.rotaryEncodersMsg;
+    encodersData.dataLength = sizeof(unsigned int) * 2;
+
+    memcpy(encodersData.messageData, &leftWheelCounter, sizeof(unsigned int));
+    memcpy(encodersData.messageData + sizeof(unsigned int), &rightWheelCounter, sizeof(unsigned int));
+
+    getState()->getMessenger()->sendMessage(encodersData);
 }
 
 void controller::sendActionQueueActionCompleted(byte queueId, byte actionId)

@@ -65,6 +65,8 @@ namespace RoboTooth.Model.MessagingService
                 (RawMessage m) => { return new ActionCompletedMessage(m); }));
             AddRecogniser(DebugStringMessages = new MessageRecogniser<DebugStringMessage>((byte)RxMessageIdsEnum.EDebugString,
                 (RawMessage m) => { return new DebugStringMessage(m); }));
+            AddRecogniser(RotaryEncodersMessages = new MessageRecogniser<RotaryEncodersMessage>((byte)RxMessageIdsEnum.ERotaryEncoders,
+                (RawMessage m) => { return new RotaryEncodersMessage(m); }));
         }
 
         #region Message recognisers
@@ -76,6 +78,8 @@ namespace RoboTooth.Model.MessagingService
         public MessageRecogniser<ActionCompletedMessage> ActionCompletedMessages { get; private set; }
 
         public MessageRecogniser<DebugStringMessage> DebugStringMessages { get; private set; }
+
+        public MessageRecogniser<RotaryEncodersMessage> RotaryEncodersMessages { get; private set; }
 
         #endregion
 

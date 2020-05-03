@@ -238,6 +238,19 @@ int state::getMagnetometerOrientationZ()
 	return magnetometer.getLastReadingZ();
 }
 
+unsigned int state::getRotaryEncoderCount(motor motorNode)
+{
+    switch (motorNode)
+    {
+    case eMotorLeft:
+        return leftWheelEncoder.getCounter();
+    case eMotorRight:
+        return rightWheelEncoder.getCounter();
+    default:
+        return 0;
+    }
+}
+
 void state::printEncoderCounters()
 {
     unsigned int counterLeft = leftWheelEncoder.getCounter();

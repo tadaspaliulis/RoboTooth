@@ -32,13 +32,33 @@
 
             <!-- Sensor Data -->
             <BasicControls:SectionMarker Text="Sensor Data"/>
-            <BasicControls:LabelledTextBox LabelText="Distance:" TextBoxContent="{Binding IntDataDisplay.EchoDistanceValue}" TextBoxWidth="40" IsReadOnly="True"/>
 
-            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
-                <BasicControls:LabelledTextBox LabelText="X:" TextBoxContent="{Binding IntDataDisplay.MagnetometerOrientationXValue}" IsReadOnly="True"/>
-                <BasicControls:LabelledTextBox LabelText="Y:" TextBoxContent="{Binding IntDataDisplay.MagnetometerOrientationYValue}" IsReadOnly="True"/>
-                <BasicControls:LabelledTextBox LabelText="Z:" TextBoxContent="{Binding IntDataDisplay.MagnetometerOrientationZValue}" IsReadOnly="True"/>
-            </StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Vertical">
+                    <BasicControls:LabelledTextBox LabelText="Distance:"
+                                                   TextBoxContent="{Binding IntDataDisplay.EchoDistanceValue}"
+                                                   TextBoxWidth="40" IsReadOnly="True"/>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                        <BasicControls:LabelledTextBox LabelText="X:" TextBoxContent="{Binding IntDataDisplay.MagnetometerOrientationXValue}" IsReadOnly="True"/>
+                        <BasicControls:LabelledTextBox LabelText="Y:" TextBoxContent="{Binding IntDataDisplay.MagnetometerOrientationYValue}" IsReadOnly="True"/>
+                        <BasicControls:LabelledTextBox LabelText="Z:" TextBoxContent="{Binding IntDataDisplay.MagnetometerOrientationZValue}" IsReadOnly="True"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Vertical">
+                    <BasicControls:LabelledTextBox LabelText="Left Wheel Counter:"
+                                                   TextBoxContent="{Binding IntDataDisplay.RotaryEncoderCounterLeft}"
+                                                   IsReadOnly="True" Margin="2"/>
+                    <BasicControls:LabelledTextBox LabelText="Right Wheel Counter:"
+                                                   TextBoxContent="{Binding IntDataDisplay.RotaryEncoderCounterRight}"
+                                                   IsReadOnly="True" Margin="2"/>
+                </StackPanel>
+            </Grid>
 
             <!-- Basic Controls -->
             <BasicControls:SectionMarker Text="Basic Controls"/>

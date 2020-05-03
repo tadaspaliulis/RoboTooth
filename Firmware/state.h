@@ -112,6 +112,8 @@ class state
     void updateDistanceMeasurement();
     void updateMagnetometerMeasurement();
 
+    unsigned int getRotaryEncoderCount(motor motorNode);
+
     void printEncoderCounters();
 
     messagingService<arduinoSerialInterface>* getMessenger() { return messagingService<arduinoSerialInterface>::getMessenger(); }

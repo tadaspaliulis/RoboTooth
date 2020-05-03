@@ -9,6 +9,7 @@
         EMagnetometerOrientation = 1,
         EActionCompleted = 2,
         EDebugString = 3,
+        ERotaryEncoders = 4,
     }
 
     /// <summary>

@@ -90,6 +90,7 @@
     <Compile Include="Model\MessagingService\Messages\RxMessages\MagnetometerOrientationMessage.cs" />
     <Compile Include="Model\MessagingService\Messages\MessageIdsEnum.cs" />
     <Compile Include="Model\MessagingService\Messages\RawMessage.cs" />
+    <Compile Include="Model\MessagingService\Messages\RxMessages\RotaryEncodersMessage.cs" />
     <Compile Include="Model\MessagingService\Messages\TxMessages\IndefiniteMoveMessage.cs" />
     <Compile Include="Model\MessagingService\MessagingService.cs" />
     <Compile Include="Model\BluetoothCommunicationInterface.cs" />
