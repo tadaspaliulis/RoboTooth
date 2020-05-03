@@ -6,11 +6,11 @@
              mc:Ignorable="d"
              d:DesignHeight="50" d:DesignWidth="200">
 
-    <StackPanel Orientation="Horizontal">
+    <DockPanel>
         <Label Content="{Binding LabelText, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
         <TextBox MinWidth="{Binding TextBoxWidth, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                 VerticalContentAlignment="Center"
+                 VerticalContentAlignment="Center" HorizontalAlignment="Right"
                  IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource AncestorType=UserControl}}"
                  Text="{Binding TextBoxContent, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
-    </StackPanel>
+    </DockPanel>
 </UserControl>
