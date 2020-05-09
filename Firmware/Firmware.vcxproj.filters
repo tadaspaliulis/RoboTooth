@@ -89,6 +89,9 @@
     <ClInclude Include="rotaryEncoderSensor.h">
       <Filter>Firmware\Header Files\Sensors</Filter>
     </ClInclude>
+    <ClInclude Include="debouncer.h">
+      <Filter>Firmware\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">

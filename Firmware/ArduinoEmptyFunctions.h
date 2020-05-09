@@ -17,7 +17,7 @@ typedef unsigned char byte;
 
 void delay(int x);
 void delayMicroseconds(int x);
-int millis();
+unsigned long millis();
 
 void pinMode(int x, int y);
 void digitalWrite(int x, int y);

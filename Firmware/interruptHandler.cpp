@@ -2,6 +2,7 @@
 #include "ArduinoFunctionallity.h"
 #include "Debug.h"
 #include "constants.h"
+#include "debouncer.h"
 
 interruptService::interruptData interruptService::interrupts[MAX_NUMBER_OF_INTERRUPTS];
 
@@ -61,7 +62,10 @@ interruptService::interruptServiceRoutine interruptService::setupServiceRoutineF
     }
 
     interruptForPin->handler = handler;
-    interruptForPin->debounceMs = debounceMs;
+    if (debounceMs != 0)
+    {
+        interruptForPin->debounceHandler = debouncer(debounceMs);
+    }
 
     return interruptFunction;
 }
@@ -69,10 +73,8 @@ interruptService::interruptServiceRoutine interruptService::setupServiceRoutineF
 void interruptService::handleInterrupt(int pin)
 {
     auto currentTime = millis();
-    auto timeSinceLastValidInterrupt = currentTime - interrupts[pin].lastValidInterruptTime;
-    if (timeSinceLastValidInterrupt >= interrupts[pin].debounceMs)
+    if (interrupts[pin].debounceHandler.isInterruptValid(currentTime))
     {
         interrupts[pin].handler->handleInterrupt();
-        interrupts[pin].lastValidInterruptTime = currentTime;
     }
 }

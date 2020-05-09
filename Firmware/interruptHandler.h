@@ -1,5 +1,7 @@
 #pragma once
 
+#include "debouncer.h"
+
 class interruptHandler
 {
 public:
@@ -21,8 +23,7 @@ private:
     struct interruptData
     {
         interruptHandler* handler;
-        unsigned int debounceMs;
-        unsigned int lastValidInterruptTime;
+        debouncer debounceHandler;
     };
 
     static interruptServiceRoutine setupServiceRoutineForHandler(int pin, interruptHandler* handler, int debounceMs);

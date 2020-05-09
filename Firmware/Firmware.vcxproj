@@ -123,6 +123,7 @@
     <ClInclude Include="arduinoSerialInteface.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="controller.h" />
+    <ClInclude Include="debouncer.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="interruptHandler.h" />
     <ClInclude Include="message.h" />
