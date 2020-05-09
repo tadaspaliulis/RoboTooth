@@ -30,6 +30,12 @@
     <Filter Include="Firmware\Source Files\Sensors">
       <UniqueIdentifier>{43211b51-d75a-4a92-8f4a-517a52e88482}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Firmware\Header Files\Utilities">
+      <UniqueIdentifier>{8992e40e-0d65-43df-aaed-cf4f8f8c47cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Firmware\Source Files\Utilities">
+      <UniqueIdentifier>{bb5a457f-1e7b-4454-b222-d567d39c6c1e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="actionQueue.h">
@@ -98,6 +104,9 @@
     <ClInclude Include="echoSensor.h">
       <Filter>Firmware\Header Files\Sensors</Filter>
     </ClInclude>
+    <ClInclude Include="serializer.h">
+      <Filter>Firmware\Header Files\Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -129,6 +138,9 @@
     </ClCompile>
     <ClCompile Include="echoSensor.cpp">
       <Filter>Firmware\Source Files\Sensors</Filter>
+    </ClCompile>
+    <ClCompile Include="serializer.cpp">
+      <Filter>Firmware\Source Files\Utilities</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

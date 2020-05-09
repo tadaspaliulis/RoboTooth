@@ -3,6 +3,8 @@
 #include "actionQueue.h"
 #include "motorAction.h"
 #include "Debug.h"
+#include "serializer.h"
+
 /**** controller implementation ****/
 
 controller::controller() : pState( NULL ), motorActionQueue(0)
@@ -137,49 +139,60 @@ bool controller::handleMoveMessage( message* msg )
 
 void controller::sendEchoDistanceData(float& distance)
 {
-	//Send message to the master to let it know the ultrasound sensor distance
-	message messageDistance;
-	messageDistance.id = constants.messageIdTx.echoDistanceMsg;
-	messageDistance.dataLength = sizeof(float);
+    message distanceMessage;
+    distanceMessage.id = constants.messageIdTx.echoDistanceMsg;
 
-	memcpy(messageDistance.messageData, &distance, sizeof(float));
-	getState()->getMessenger()->sendMessage(messageDistance);
+    serializer writer(distanceMessage.messageData);
+
+    writer.serializeFloat(distance);
+
+    distanceMessage.dataLength = writer.getDataLength();
+
+    getState()->getMessenger()->sendMessage(distanceMessage);
 }
 
 void controller::sendMagnetometerData(int x, int y, int z)
 {
-	message magnetoMessage;
-	magnetoMessage.id = constants.messageIdTx.magnetometerDataMsg;
-	magnetoMessage.dataLength = sizeof(int) * 3; //xyz, hence times 3
+    message magnetoMessage;
+    magnetoMessage.id = constants.messageIdTx.magnetometerDataMsg;
 
-	memcpy(magnetoMessage.messageData, &x, sizeof(int));
-	memcpy(magnetoMessage.messageData + sizeof(int), &y, sizeof(int));
-	memcpy(magnetoMessage.messageData + sizeof(int) * 2, &z, sizeof(int));
+    serializer writer(magnetoMessage.messageData);
 
-	getState()->getMessenger()->sendMessage(magnetoMessage);
+    writer.serializeInt(x);
+    writer.serializeInt(y);
+    writer.serializeInt(z);
+
+    magnetoMessage.dataLength = writer.getDataLength();
+
+    getState()->getMessenger()->sendMessage(magnetoMessage);
 }
 
 void controller::sendRotaryEncodersData(unsigned int leftWheelCounter, unsigned int rightWheelCounter)
 {
     message encodersData;
     encodersData.id = constants.messageIdTx.rotaryEncodersMsg;
-    encodersData.dataLength = sizeof(unsigned int) * 2;
 
-    memcpy(encodersData.messageData, &leftWheelCounter, sizeof(unsigned int));
-    memcpy(encodersData.messageData + sizeof(unsigned int), &rightWheelCounter, sizeof(unsigned int));
+    serializer writer(encodersData.messageData);
+
+    writer.serializeInt(leftWheelCounter);
+    writer.serializeInt(rightWheelCounter);
+
+    encodersData.dataLength = writer.getDataLength();
 
     getState()->getMessenger()->sendMessage(encodersData);
 }
 
 void controller::sendActionQueueActionCompleted(byte queueId, byte actionId)
 {
-	message actionCompletedMessage;
-	actionCompletedMessage.id = constants.messageIdTx.actionCompletedMsg;
-	actionCompletedMessage.dataLength = sizeof(byte) * 2;
+    message actionCompletedMessage;
+    actionCompletedMessage.id = constants.messageIdTx.actionCompletedMsg;
 
-	memcpy(actionCompletedMessage.messageData, &queueId, sizeof(byte));
-	memcpy(actionCompletedMessage.messageData + sizeof(byte), &actionId, sizeof(byte));
+    serializer writer(actionCompletedMessage.messageData);
 
+    writer.serializeByte(queueId);
+    writer.serializeByte(actionId);
 
-	getState()->getMessenger()->sendMessage(actionCompletedMessage);
+    actionCompletedMessage.dataLength = writer.getDataLength();
+
+    getState()->getMessenger()->sendMessage(actionCompletedMessage);
 }

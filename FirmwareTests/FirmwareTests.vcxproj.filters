@@ -8,6 +8,9 @@
     <ClCompile Include="queueTests.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="serializerTests.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

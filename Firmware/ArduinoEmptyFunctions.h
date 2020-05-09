@@ -23,7 +23,7 @@ void pinMode(int x, int y);
 void digitalWrite(int x, int y);
 
 void analogWrite(int x, char y);
-char pulseIn(int x, int y);
+unsigned long pulseIn(int x, int y);
 
 #pragma endregion
 
