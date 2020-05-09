@@ -4,6 +4,8 @@
 #include "messagingService.h"
 #include "ArduinoSerialInteface.h"
 #include "rotaryEncoderSensor.h"
+#include "magnetometerSensor.h"
+#include "echoSensor.h"
 
 enum motorStateEnum
 {
@@ -20,23 +22,6 @@ enum motor
   eMotorLeft = 0,
   eMotorRight,
   eMOTOR_NUM_MAX
-};
-
-//Ultrasound distance sensor
-class echoSensor
-{
-  public:
-   echoSensor( );
-   void initialise( byte TriggerPin, byte EchoPin );
-
-   //Perform 
-   float measureDistance();
-   float getLastDistanceReading();
-
- private:
-   byte triggerPin;
-   byte echoPin;
-   float lastDistanceReading;
 };
 
 /* Class tracking the state of an individual motor. */
@@ -65,28 +50,6 @@ class motorState
     byte logicPin1;
     byte logicPin2;
     byte speedPin;
-};
-
-/*Class for controlling MAG3110 magnetometer*/
-class magnetometerSensor
-{
-public:
-  magnetometerSensor();
-  void initialise();
-  void updateMeasurement();
-
-  int getLastReadingX() { return lastReadX; }
-  int getLastReadingY() { return lastReadY; }
-  int getLastReadingZ() { return lastReadZ; }
-
-  const int deviceAddress;
-private:
-  //Helper function, to read 2 sequential bytes out of the i2c bus
-  int read2Bytes(bool& dataAvailable);
-
-  int lastReadX;
-  int lastReadY;
-  int lastReadZ;
 };
 
 /* Class tracking the state of  the robot. */

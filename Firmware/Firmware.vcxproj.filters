@@ -92,6 +92,12 @@
     <ClInclude Include="debouncer.h">
       <Filter>Firmware\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="magnetometerSensor.h">
+      <Filter>Firmware\Header Files\Sensors</Filter>
+    </ClInclude>
+    <ClInclude Include="echoSensor.h">
+      <Filter>Firmware\Header Files\Sensors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -116,6 +122,12 @@
       <Filter>Testbed\Mocks</Filter>
     </ClCompile>
     <ClCompile Include="interruptHandler.cpp">
+      <Filter>Firmware\Source Files\Sensors</Filter>
+    </ClCompile>
+    <ClCompile Include="magnetometerSensor.cpp">
+      <Filter>Firmware\Source Files\Sensors</Filter>
+    </ClCompile>
+    <ClCompile Include="echoSensor.cpp">
       <Filter>Firmware\Source Files\Sensors</Filter>
     </ClCompile>
   </ItemGroup>
