@@ -77,8 +77,8 @@ void state::initialise()
     distanceUltraSoundSensor.initialise(pinMapping.sensors.echoTrig, pinMapping.sensors.echoReceive);
     magnetometer.initialise();
 
-    rightWheelEncoder.initialise(pinMapping.interrupts.interrupt1, 5);
-    leftWheelEncoder.initialise(pinMapping.interrupts.interrupt2, 5);
+    rightWheelEncoder.initialise(pinMapping.interrupts.interrupt1, 20);
+    leftWheelEncoder.initialise(pinMapping.interrupts.interrupt2, 20);
 }
 
 motorState* state::getMotor( motor motorNode )
